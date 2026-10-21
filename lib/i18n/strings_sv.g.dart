@@ -1754,6 +1754,9 @@ class _Translations$playlists$sv extends Translations$playlists$en {
 	@override String get errorAdding => 'Det gick inte att lägga till objektet i spellistan';
 	@override String get errorReordering => 'Det gick inte att flytta objektet i spellistan';
 	@override String get errorRemoving => 'Det gick inte att ta bort objektet från spellistan';
+	@override String get rename => 'Byt namn på spellista';
+	@override String get renamed => 'Spellista har bytt namn';
+	@override String get errorRenaming => 'Kunde inte byta namn på spellista';
 }
 
 // Path: music
@@ -4994,6 +4997,9 @@ extension on TranslationsSv {
 			'playlists.errorAdding' => 'Det gick inte att lägga till objektet i spellistan',
 			'playlists.errorReordering' => 'Det gick inte att flytta objektet i spellistan',
 			'playlists.errorRemoving' => 'Det gick inte att ta bort objektet från spellistan',
+			'playlists.rename' => 'Byt namn på spellista',
+			'playlists.renamed' => 'Spellista har bytt namn',
+			'playlists.errorRenaming' => 'Kunde inte byta namn på spellista',
 			'music.goToAlbum' => 'Gå till album',
 			'music.goToArtist' => 'Gå till artist',
 			'music.instantMix' => 'Snabbmix',
@@ -5449,11 +5455,11 @@ extension on TranslationsSv {
 			'performanceOverlay.decoderAndroidHw' => 'Android HW',
 			'performanceOverlay.decoderNvidiaHw' => 'NVIDIA HW',
 			'performanceOverlay.decoderQualcommHw' => 'Qualcomm HW',
+			_ => null,
+		} ?? switch (path) {
 			'performanceOverlay.decoderMediatekHw' => 'MediaTek HW',
 			'performanceOverlay.decoderExynosHw' => 'Exynos HW',
 			'performanceOverlay.decoderSoftware' => 'Programvara',
-			_ => null,
-		} ?? switch (path) {
 			'performanceOverlay.decoderHardware' => 'Maskinvara',
 			'performanceOverlay.tunnelingActive' => 'Aktiv',
 			'performanceOverlay.dvRpuFailed' => ({required Object converted, required Object failures}) => '${converted} (${failures} misslyckades)',

@@ -3,18 +3,26 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import '../../database/app_database.dart';
+import '../../database/custom_playlist_operations.dart';
+import '../../utils/dialogs.dart';
+import '../../utils/library_refresh_notifier.dart';
 import '../../focus/focusable_action_bar.dart';
 import '../../media/library_query.dart';
 import '../../media/media_item.dart';
+import '../../media/media_kind.dart';
 import '../../media/media_playlist.dart';
 import '../../services/media_list_playback_launcher.dart';
+import '../../services/music/music_playback_service.dart';
 import '../../services/playlist_items_loader.dart';
 import '../../utils/app_logger.dart';
 import '../../utils/error_message_utils.dart';
 import '../../utils/continuation_pagination_coordinator.dart';
+import '../../utils/media_navigation_helper.dart';
 import '../../utils/music_navigation.dart';
 import '../../widgets/app_icon.dart';
 import '../../widgets/desktop_app_bar.dart';
+import '../../widgets/rename_custom_playlist_dialog.dart';
 import '../../focus/dpad_navigator.dart';
 import '../../focus/dpad_select_long_press_controller.dart';
 import '../../focus/input_mode_tracker.dart';
@@ -52,8 +60,10 @@ class _PlaylistDetailScreenState extends BaseMediaListDetailScreen<PlaylistDetai
   @override
   Object get mediaItem => widget.playlist;
 
+  late String _currentTitle = widget.playlist.title;
+
   @override
-  String get title => widget.playlist.title;
+  String get title => _currentTitle;
 
   @override
   String get emptyMessage => t.playlists.emptyPlaylist;
@@ -74,10 +84,24 @@ class _PlaylistDetailScreenState extends BaseMediaListDetailScreen<PlaylistDetai
   bool get _isAudioPlaylist => widget.playlist.playlistType == 'audio';
 
   @override
-  Future<void> playItems() => _isAudioPlaylist ? _playAudioPlaylist(shuffle: false) : super.playItems();
+  Future<void> playItems() async {
+    if (_isAudioPlaylist) {
+      await _playAudioPlaylist(shuffle: false);
+    } else {
+      await super.playItems();
+    }
+    _restoreListFocusAfterNavigation();
+  }
 
   @override
-  Future<void> shufflePlayItems() => _isAudioPlaylist ? _playAudioPlaylist(shuffle: true) : super.shufflePlayItems();
+  Future<void> shufflePlayItems() async {
+    if (_isAudioPlaylist) {
+      await _playAudioPlaylist(shuffle: true);
+    } else {
+      await super.shufflePlayItems();
+    }
+    _restoreListFocusAfterNavigation();
+  }
 
   /// Uses the already-loaded items when the playlist is fully paged in;
   /// otherwise fetches the full item list (one loader round-trip) so the
@@ -85,6 +109,16 @@ class _PlaylistDetailScreenState extends BaseMediaListDetailScreen<PlaylistDetai
   Future<void> _playAudioPlaylist({required bool shuffle, MediaItem? startTrack}) async {
     if (items.isEmpty) {
       showAppSnackBar(context, emptyMessage);
+      return;
+    }
+    if (widget.playlist.isCustom) {
+      await playTracks(
+        context,
+        tracks: items,
+        startTrack: startTrack,
+        shuffle: shuffle,
+        playContext: MusicPlayContext(title: widget.playlist.title, kind: MusicPlayContextKind.playlist),
+      );
       return;
     }
     await playAudioPlaylist(
@@ -101,6 +135,21 @@ class _PlaylistDetailScreenState extends BaseMediaListDetailScreen<PlaylistDetai
 
   @override
   List<FocusableAction> getAppBarActions() {
+    if (widget.playlist.isCustom) {
+      return [
+        if (items.isNotEmpty) ...[
+          FocusableAction(icon: Symbols.play_arrow_rounded, tooltip: t.common.play, onPressed: playItems),
+          FocusableAction(icon: Symbols.shuffle_rounded, tooltip: t.common.shuffle, onPressed: shufflePlayItems),
+        ],
+        FocusableAction(
+          icon: Symbols.delete_rounded,
+          tooltip: t.playlists.delete,
+          onPressed: _deletePlaylist,
+          iconColor: Colors.red,
+        ),
+      ];
+    }
+
     // Video AND audio playlists download (tracks queue through the same list
     // pipeline); photo/mixed playlists keep the affordance hidden.
     final isDownloadablePlaylist = widget.playlist.playlistType == 'video' || _isAudioPlaylist;
@@ -122,6 +171,13 @@ class _PlaylistDetailScreenState extends BaseMediaListDetailScreen<PlaylistDetai
         showDownload: isDownloadablePlaylist && (items.isNotEmpty || hasRule),
         onDownload: _downloadPlaylist,
       ),
+      // Rename for custom playlists
+      if (widget.playlist.isCustom)
+        FocusableAction(
+          icon: Symbols.edit_rounded,
+          tooltip: t.playlists.rename,
+          onPressed: _renamePlaylist,
+        ),
       // Delete works on both backends now (Jellyfin uses /Items/{id} DELETE,
       // wrapped in the neutral [MediaServerClient.deletePlaylist]). Smart
       // playlists are still skipped — they're a Plex concept and are
@@ -172,7 +228,8 @@ class _PlaylistDetailScreenState extends BaseMediaListDetailScreen<PlaylistDetai
         appLogger.w('Failed to finish loading playlist items', error: error, stackTrace: stackTrace),
   );
 
-  bool get _isPlaylistFullyLoaded => _continuation.totalCount != null && items.length >= _continuation.totalCount!;
+  bool get _isPlaylistFullyLoaded =>
+      widget.playlist.isCustom || (_continuation.totalCount != null && items.length >= _continuation.totalCount!);
 
   bool get _canEditPlaylist => !_isReadOnly && _isPlaylistFullyLoaded;
   bool get _canMutatePlaylist => _canEditPlaylist && !_isPlaylistMutationPending;
@@ -195,12 +252,34 @@ class _PlaylistDetailScreenState extends BaseMediaListDetailScreen<PlaylistDetai
         isLoading = true;
         errorMessage = null;
         items = [];
+        _cardKeys.clear();
         _focusedIndex = 0;
         _focusedColumn = 0;
         _movingIndex = null;
         _originalIndex = null;
         _originalOrder = null;
       });
+    }
+
+    if (widget.playlist.isCustom) {
+      try {
+        final db = context.read<AppDatabase>();
+        final loaded = await db.getCustomPlaylistItems(widget.playlist.id);
+        if (!mounted) return;
+        setState(() {
+          items = List.of(loaded);
+          isLoading = false;
+        });
+        _autoFocusAfterLoad();
+      } catch (e, stackTrace) {
+        final message = localizedLoadErrorMessage(e, stackTrace, context: widget.playlist.title);
+        if (!mounted) return;
+        setState(() {
+          errorMessage = message;
+          isLoading = false;
+        });
+      }
+      return;
     }
 
     try {
@@ -297,14 +376,58 @@ class _PlaylistDetailScreenState extends BaseMediaListDetailScreen<PlaylistDetai
     playlist: widget.playlist,
   );
 
-  Future<void> _deletePlaylist() => deletePlaylistWithConfirm(
-    context,
-    client: mediaClient,
-    playlist: widget.playlist,
-    confirmTitle: t.playlists.deleteConfirm,
-    // Signal the parent list to refresh.
-    onDeleted: () => Navigator.pop(context, true),
-  );
+  Future<void> _renamePlaylist() async {
+    final newName = await showRenameCustomPlaylistDialog(
+      context,
+      currentTitle: _currentTitle,
+    );
+    if (newName == null || newName.trim().isEmpty || newName.trim() == _currentTitle || !mounted) return;
+
+    try {
+      final db = context.read<AppDatabase>();
+      await db.updateCustomPlaylistTitle(playlistId: widget.playlist.id, title: newName.trim());
+      if (!mounted) return;
+      setState(() => _currentTitle = newName.trim());
+      showSuccessSnackBar(context, t.playlists.renamed);
+      LibraryRefreshNotifier().notifyPlaylistsChanged();
+    } catch (e, stackTrace) {
+      appLogger.e('Failed to rename custom playlist: $e', error: e, stackTrace: stackTrace);
+      if (!mounted) return;
+      showErrorSnackBar(context, t.playlists.errorRenaming);
+    }
+  }
+
+  Future<void> _deletePlaylist() async {
+    if (widget.playlist.isCustom) {
+      final confirmed = await showDeleteConfirmation(
+        context,
+        title: t.playlists.deleteConfirm,
+        message: t.playlists.deleteMessage(name: _currentTitle),
+      );
+      if (!confirmed || !mounted) return;
+      try {
+        final db = context.read<AppDatabase>();
+        await db.deleteCustomPlaylist(widget.playlist.id);
+        if (!mounted) return;
+        showSuccessSnackBar(context, t.playlists.deleted);
+        LibraryRefreshNotifier().notifyPlaylistsChanged();
+        Navigator.pop(context, true);
+      } catch (e) {
+        appLogger.e('Failed to delete custom playlist', error: e);
+        if (mounted) showErrorSnackBar(context, t.playlists.errorDeleting);
+      }
+      return;
+    }
+
+    await deletePlaylistWithConfirm(
+      context,
+      client: mediaClient,
+      playlist: widget.playlist,
+      confirmTitle: t.playlists.deleteConfirm,
+      // Signal the parent list to refresh.
+      onDeleted: () => Navigator.pop(context, true),
+    );
+  }
 
   /// The item that should sit immediately before the moved item at [newIndex],
   /// or null when moving to position 0. Pushes per-backend id-extraction down
@@ -349,6 +472,26 @@ class _PlaylistDetailScreenState extends BaseMediaListDetailScreen<PlaylistDetai
     required MediaItem? afterItem,
     required List<MediaItem> originalOrder,
   }) async {
+    if (widget.playlist.isCustom) {
+      try {
+        final db = context.read<AppDatabase>();
+        await db.reorderCustomPlaylistItems(
+          playlistId: widget.playlist.id,
+          oldIndex: originalIndex,
+          newIndex: newIndex,
+        );
+      } catch (e, stackTrace) {
+        appLogger.e('Failed to persist custom playlist move', error: e, stackTrace: stackTrace);
+        _restorePlaylistOrder(originalOrder, focusedIndex: originalIndex);
+        if (mounted) showErrorSnackBar(context, t.playlists.errorReordering);
+      } finally {
+        if (mounted) {
+          setState(() => _isPlaylistMutationPending = false);
+        }
+      }
+      return;
+    }
+
     appLogger.d('Persisting move from $originalIndex to $newIndex');
     Object? failure;
     var success = false;
@@ -386,6 +529,7 @@ class _PlaylistDetailScreenState extends BaseMediaListDetailScreen<PlaylistDetai
     if (items.isEmpty || index < 0 || index >= items.length) return;
     final originalOrder = List<MediaItem>.of(items);
     final item = items[index];
+    _cardKeys.remove(_itemKeyId(item));
     appLogger.d('Removing item ${item.title} from playlist');
 
     setState(() {
@@ -396,6 +540,33 @@ class _PlaylistDetailScreenState extends BaseMediaListDetailScreen<PlaylistDetai
         _focusedIndex = (items.length - 1).clamp(0, items.length);
       }
     });
+
+    if (widget.playlist.isCustom) {
+      try {
+        final db = context.read<AppDatabase>();
+        final rowId = switch (item) {
+          PlexMediaItem(:final playlistItemId?) => playlistItemId,
+          JellyfinMediaItem(:final playlistItemId?) => int.tryParse(playlistItemId),
+          _ => null,
+        };
+        if (rowId != null) {
+          await db.removeCustomPlaylistItem(playlistId: widget.playlist.id, customPlaylistItemId: rowId);
+        }
+        if (mounted) {
+          showSuccessSnackBar(context, t.playlists.itemRemoved);
+          LibraryRefreshNotifier().notifyPlaylistsChanged();
+        }
+      } catch (e, stackTrace) {
+        appLogger.e('Failed to remove custom playlist item', error: e, stackTrace: stackTrace);
+        _restorePlaylistOrder(originalOrder, focusedIndex: index);
+        if (mounted) showErrorSnackBar(context, t.playlists.errorRemoving);
+      } finally {
+        if (mounted) {
+          setState(() => _isPlaylistMutationPending = false);
+        }
+      }
+      return;
+    }
 
     Object? failure;
     var success = false;
@@ -447,9 +618,27 @@ class _PlaylistDetailScreenState extends BaseMediaListDetailScreen<PlaylistDetai
 
     final selectedItem = items[index];
     if (_isAudioPlaylist) {
+      if (selectedItem.kind == MediaKind.album) {
+        await navigateToAlbum(context, selectedItem);
+        _restoreListFocusAfterNavigation();
+        return;
+      }
+      if (selectedItem.kind == MediaKind.artist) {
+        await navigateToArtist(context, selectedItem);
+        _restoreListFocusAfterNavigation();
+        return;
+      }
       await _playAudioPlaylist(shuffle: false, startTrack: selectedItem);
+      _restoreListFocusAfterNavigation();
       return;
     }
+
+    if (selectedItem.kind == MediaKind.show || selectedItem.kind == MediaKind.season) {
+      await navigateToMediaItemDetails(context, selectedItem);
+      _restoreListFocusAfterNavigation();
+      return;
+    }
+
     final launcher = MediaListPlaybackLauncher.forItem(context, widget.playlist);
     await launcher.launchFromCollectionOrPlaylist(
       item: widget.playlist,
@@ -457,6 +646,22 @@ class _PlaylistDetailScreenState extends BaseMediaListDetailScreen<PlaylistDetai
       startItem: selectedItem,
       showLoadingIndicator: true,
     );
+    if (!mounted) return;
+    _restoreListFocusAfterNavigation();
+  }
+
+  void _restoreListFocusAfterNavigation() {
+    if (!mounted) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      if (InputModeTracker.isKeyboardMode(context) && !isAppBarFocused) {
+        if (_isReadOnly) {
+          firstItemFocusNode.requestFocus();
+        } else {
+          _listFocusNode.requestFocus();
+        }
+      }
+    });
   }
 
   /// Ensure the focused item is visible, measured from the laid-out rows so the
@@ -698,7 +903,7 @@ class _PlaylistDetailScreenState extends BaseMediaListDetailScreen<PlaylistDetai
           title: Column(
             crossAxisAlignment: .start,
             children: [
-              Text(widget.playlist.title, style: const TextStyle(fontSize: 16)),
+              Text(_currentTitle, style: const TextStyle(fontSize: 16)),
               if (widget.playlist.smart)
                 Row(
                   mainAxisSize: .min,

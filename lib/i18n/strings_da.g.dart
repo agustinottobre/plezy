@@ -1754,6 +1754,9 @@ class _Translations$playlists$da extends Translations$playlists$en {
 	@override String get errorAdding => 'Kunne ikke tilføje til playliste';
 	@override String get errorReordering => 'Kunne ikke ændre rækkefølge på playlisteelement';
 	@override String get errorRemoving => 'Kunne ikke fjerne fra playliste';
+	@override String get rename => 'Omdøb afspilningsliste';
+	@override String get renamed => 'Afspilningsliste omdøbt';
+	@override String get errorRenaming => 'Kunne ikke omdøbe afspilningsliste';
 }
 
 // Path: music
@@ -4994,6 +4997,9 @@ extension on TranslationsDa {
 			'playlists.errorAdding' => 'Kunne ikke tilføje til playliste',
 			'playlists.errorReordering' => 'Kunne ikke ændre rækkefølge på playlisteelement',
 			'playlists.errorRemoving' => 'Kunne ikke fjerne fra playliste',
+			'playlists.rename' => 'Omdøb afspilningsliste',
+			'playlists.renamed' => 'Afspilningsliste omdøbt',
+			'playlists.errorRenaming' => 'Kunne ikke omdøbe afspilningsliste',
 			'music.goToAlbum' => 'Gå til album',
 			'music.goToArtist' => 'Gå til kunstner',
 			'music.instantMix' => 'Direkte miks',
@@ -5449,11 +5455,11 @@ extension on TranslationsDa {
 			'performanceOverlay.decoderAndroidHw' => 'Android HW',
 			'performanceOverlay.decoderNvidiaHw' => 'NVIDIA HW',
 			'performanceOverlay.decoderQualcommHw' => 'Qualcomm HW',
+			_ => null,
+		} ?? switch (path) {
 			'performanceOverlay.decoderMediatekHw' => 'MediaTek HW',
 			'performanceOverlay.decoderExynosHw' => 'Exynos HW',
 			'performanceOverlay.decoderSoftware' => 'Software',
-			_ => null,
-		} ?? switch (path) {
 			'performanceOverlay.decoderHardware' => 'Hardware',
 			'performanceOverlay.tunnelingActive' => 'Aktiv',
 			'performanceOverlay.dvRpuFailed' => ({required Object converted, required Object failures}) => '${converted} (${failures} mislykkedes)',

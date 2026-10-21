@@ -11,6 +11,7 @@ import '../../../media/media_item_types.dart';
 import '../../../providers/playback_state_provider.dart';
 import '../../../services/settings_service.dart';
 import '../../../theme/mono_tokens.dart';
+import '../../../utils/playlist_action_helper.dart';
 import '../../../utils/provider_extensions.dart';
 import '../../../utils/scroll_utils.dart';
 import '../../../widgets/focusable_list_tile.dart';
@@ -94,7 +95,23 @@ class _QueueSheetState extends State<QueueSheet> {
                     maxLines: 1,
                     overflow: .ellipsis,
                   ),
-                  trailing: isCurrent ? AppIcon(Symbols.play_circle_rounded, fill: 1, color: primaryColor) : null,
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: const AppIcon(Symbols.playlist_add_rounded, size: 20),
+                        tooltip: t.common.addTo,
+                        onPressed: () {
+                          final client = context.tryGetMediaClientForServer(serverIdOrNull(item.serverId));
+                          showAddToPlaylistFlow(context, item, client: client);
+                        },
+                      ),
+                      if (isCurrent) ...[
+                        const SizedBox(width: 4),
+                        AppIcon(Symbols.play_circle_rounded, fill: 1, color: primaryColor),
+                      ],
+                    ],
+                  ),
                   onTap: () {
                     widget.onItemSelected(item);
                     OverlaySheetController.of(context).close();

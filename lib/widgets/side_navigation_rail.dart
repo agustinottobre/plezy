@@ -467,6 +467,7 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
   }
 
   static const _kHome = 'home';
+  static const _kPlaylists = 'playlists';
   static const _kExplore = 'explore';
   static const _kNowPlaying = 'nowPlaying';
   static const _kLibraries = 'libraries';
@@ -624,6 +625,8 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
     switch (widget.selectedTab) {
       case NavigationTabId.discover:
         return _kHome;
+      case NavigationTabId.playlists:
+        return _kPlaylists;
       case NavigationTabId.explore:
         return _kExplore;
       case NavigationTabId.libraries:
@@ -680,6 +683,7 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
   }) {
     return {
       _kHome,
+      _kPlaylists,
       if (hasNowPlaying) _kNowPlaying,
       _kLibraries,
       if (hasExplore) _kExplore,
@@ -764,6 +768,7 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
       if (widget.isOfflineMode && widget.onReconnect != null) _kReconnect,
       if (!widget.isOfflineMode) ...[
         _kHome,
+        _kPlaylists,
         if (hasNowPlaying) _kNowPlaying,
         _kLibraries,
         // Library rows render inside ExcludeFocus(excluding: !_librariesExpanded
@@ -1025,6 +1030,16 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
                                         isSelected: widget.selectedTab == NavigationTabId.discover,
                                         onTap: () => widget.onDestinationSelected(NavigationTabId.discover),
                                         focusNode: _focusTracker.get(_kHome),
+                                        isCollapsed: isCollapsed,
+                                      ),
+                                      const SizedBox(height: _itemGap),
+                                      _buildNavItem(
+                                        icon: Symbols.playlist_play_rounded,
+                                        selectedIcon: Symbols.playlist_play_rounded,
+                                        label: Translations.of(context).playlists.title,
+                                        isSelected: widget.selectedTab == NavigationTabId.playlists,
+                                        onTap: () => widget.onDestinationSelected(NavigationTabId.playlists),
+                                        focusNode: _focusTracker.get(_kPlaylists),
                                         isCollapsed: isCollapsed,
                                       ),
                                       const SizedBox(height: _itemGap),

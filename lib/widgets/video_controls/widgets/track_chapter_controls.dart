@@ -3,10 +3,13 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:flutter/services.dart';
 
 import '../../../focus/dpad_navigator.dart';
+import '../../../media/ids.dart';
 import '../../../mpv/mpv.dart';
 import '../../../media/media_source_info.dart';
 import '../../../services/sleep_timer_service.dart';
 import '../../../utils/platform_detector.dart';
+import '../../../utils/playlist_action_helper.dart';
+import '../../../utils/provider_extensions.dart';
 import '../../../utils/quality_preset_labels.dart';
 import '../../../i18n/strings.g.dart';
 import '../../../widgets/overlay_sheet.dart';
@@ -262,6 +265,30 @@ class TrackChapterControls extends StatelessWidget {
                 OverlaySheetController.of(context)
                     .show(builder: (_) => QueueSheet(onItemSelected: state.onQueueItemSelected!))
                     .whenComplete(() => state.onStartAutoHide?.call());
+              },
+            ),
+          );
+          buttonIndex++;
+        }
+
+        final currentMetadata = state.metadata;
+        if (!state.isLive && currentMetadata != null) {
+          final currentIndex = buttonIndex;
+          buttons.add(
+            _buildTrackButton(
+              buttonIndex: currentIndex,
+              icon: Symbols.playlist_add_rounded,
+              tooltip: t.common.addTo,
+              semanticLabel: t.common.addTo,
+              buttons: buttons,
+              onPressed: () async {
+                state.onCancelAutoHide?.call();
+                await showAddToPlaylistFlow(
+                  context,
+                  currentMetadata,
+                  client: context.tryGetMediaClientForServer(serverIdOrNull(currentMetadata.serverId ?? state.serverId)),
+                );
+                state.onStartAutoHide?.call();
               },
             ),
           );

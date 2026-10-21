@@ -18,6 +18,7 @@ import '../utils/media_server_http_client.dart';
 import '../utils/provider_extensions.dart';
 import '../utils/snackbar_helper.dart';
 import '../utils/video_player_navigation.dart';
+import 'custom_playlist_launcher.dart';
 import 'jellyfin_sequential_launcher.dart';
 import 'play_queue_launcher.dart';
 import 'settings_service.dart';
@@ -131,6 +132,9 @@ abstract class MediaListPlaybackLauncher {
   /// Pick the right implementation for [item]. Reads
   /// [MediaItem.backend] / [MediaPlaylist.backend].
   static MediaListPlaybackLauncher forItem(BuildContext context, Object item) {
+    if (item is MediaPlaylist && item.isCustom) {
+      return CustomPlaylistLauncher(context: context);
+    }
     final backend = _backendOf(item);
     if (backend.usesMediaBrowserApi) {
       return JellyfinSequentialLauncher(context: context);

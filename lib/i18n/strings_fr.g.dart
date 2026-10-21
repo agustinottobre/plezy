@@ -1754,6 +1754,9 @@ class _Translations$playlists$fr extends Translations$playlists$en {
 	@override String get errorAdding => 'Échec de l’ajout à la playlist';
 	@override String get errorReordering => 'Échec de la réorganisation de l’élément de la playlist';
 	@override String get errorRemoving => 'Échec du retrait de l’élément de la playlist';
+	@override String get rename => 'Renommer la liste de lecture';
+	@override String get renamed => 'Liste de lecture renommée';
+	@override String get errorRenaming => 'Échec du renommage de la liste de lecture';
 }
 
 // Path: music
@@ -4994,6 +4997,9 @@ extension on TranslationsFr {
 			'playlists.errorAdding' => 'Échec de l’ajout à la playlist',
 			'playlists.errorReordering' => 'Échec de la réorganisation de l’élément de la playlist',
 			'playlists.errorRemoving' => 'Échec du retrait de l’élément de la playlist',
+			'playlists.rename' => 'Renommer la liste de lecture',
+			'playlists.renamed' => 'Liste de lecture renommée',
+			'playlists.errorRenaming' => 'Échec du renommage de la liste de lecture',
 			'music.goToAlbum' => 'Aller à l\'album',
 			'music.goToArtist' => 'Aller à l\'artiste',
 			'music.instantMix' => 'Mix instantané',
@@ -5449,11 +5455,11 @@ extension on TranslationsFr {
 			'performanceOverlay.decoderAndroidHw' => 'Matériel Android',
 			'performanceOverlay.decoderNvidiaHw' => 'Matériel NVIDIA',
 			'performanceOverlay.decoderQualcommHw' => 'Matériel Qualcomm',
+			_ => null,
+		} ?? switch (path) {
 			'performanceOverlay.decoderMediatekHw' => 'Matériel MediaTek',
 			'performanceOverlay.decoderExynosHw' => 'Matériel Exynos',
 			'performanceOverlay.decoderSoftware' => 'Logiciel',
-			_ => null,
-		} ?? switch (path) {
 			'performanceOverlay.decoderHardware' => 'Matériel',
 			'performanceOverlay.tunnelingActive' => 'Actif',
 			'performanceOverlay.dvRpuFailed' => ({required Object converted, required Object failures}) => '${converted} (${failures} échecs)',
