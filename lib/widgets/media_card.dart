@@ -820,6 +820,9 @@ class _MediaCardList extends StatelessWidget {
     final current = item;
     if (current is MediaPlaylist) {
       final parts = <String>[];
+      if (current.isCustom) {
+        parts.add(t.playlists.customPlaylist);
+      }
       if (current.leafCount != null && current.leafCount! > 0) {
         parts.add(t.playlists.itemCount(count: current.leafCount!));
       }
@@ -1224,8 +1227,15 @@ class _MediaCardHelpers {
   static Widget _emptyCaption(BuildContext context) => _caption(context, '');
 
   static Widget buildPlaylistMeta(BuildContext context, MediaPlaylist playlist) {
+    final parts = <String>[];
+    if (playlist.isCustom) {
+      parts.add(t.playlists.customBadge);
+    }
     if (playlist.leafCount != null && playlist.leafCount! > 0) {
-      return _caption(context, t.playlists.itemCount(count: playlist.leafCount!));
+      parts.add(t.playlists.itemCount(count: playlist.leafCount!));
+    }
+    if (parts.isNotEmpty) {
+      return _caption(context, parts.join(' • '));
     }
     return _emptyCaption(context);
   }

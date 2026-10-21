@@ -404,6 +404,15 @@ abstract class BaseLibraryTabState<T, W extends BaseLibraryTab<T>> extends State
   /// Context string for error messages (e.g., "playlists", "collections")
   String get errorContext;
 
+  /// Optional action callback for empty state
+  VoidCallback? get onEmptyAction => null;
+
+  /// Optional label for the empty state action button
+  String? get emptyActionLabel => null;
+
+  /// Optional icon for the empty state action button
+  IconData? get emptyActionIcon => null;
+
   /// Optional refresh stream to listen for external refresh events
   /// Return null if no refresh stream is needed
   Stream<void>? getRefreshStream() => null;
@@ -569,6 +578,9 @@ abstract class BaseLibraryTabState<T, W extends BaseLibraryTab<T>> extends State
         items: _items,
         emptyIcon: emptyIcon,
         emptyMessage: emptyMessage,
+        onEmptyAction: onEmptyAction,
+        emptyActionLabel: emptyActionLabel,
+        emptyActionIcon: emptyActionIcon,
         onRetry: loadItems,
         builder: (items) => RefreshIndicator(onRefresh: loadItems, child: buildContent(items)),
       ),

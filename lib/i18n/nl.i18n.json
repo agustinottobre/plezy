@@ -1743,6 +1743,12 @@
   "playlists": {
     "title": "Afspeellijsten",
     "playlist": "Afspeellijst",
+    "customPlaylist": "",
+    "customPlaylists": "",
+    "createCustomPlaylist": "",
+    "serverPlaylists": "",
+    "createServerPlaylist": "",
+    "customBadge": "",
     "noPlaylists": "Geen afspeellijsten gevonden",
     "create": "Afspeellijst maken",
     "playlistName": "Naam van de afspeellijst",
@@ -1766,7 +1772,10 @@
     "errorLoading": "Afspeellijsten laden mislukt",
     "errorAdding": "Toevoegen aan afspeellijst mislukt",
     "errorReordering": "Afspeellijstitem herschikken mislukt",
-    "errorRemoving": "Verwijderen uit afspeellijst mislukt"
+    "errorRemoving": "Verwijderen uit afspeellijst mislukt",
+    "rename": "Afspeellijst hernoemen",
+    "renamed": "Afspeellijst hernoemd",
+    "errorRenaming": "Afspeellijst hernoemen mislukt"
   },
   "music": {
     "goToAlbum": "Ga naar album",

@@ -6,7 +6,7 @@ import '../i18n/strings.g.dart';
 import '../utils/platform_detector.dart';
 
 /// Navigation tab identifiers
-enum NavigationTabId { discover, explore, libraries, liveTv, search, downloads, settings }
+enum NavigationTabId { discover, playlists, explore, libraries, liveTv, search, downloads, settings }
 
 /// Represents a navigation tab with its configuration
 class NavigationTab {
@@ -82,6 +82,7 @@ class NavigationTab {
 /// once a server or catalog source provides them.
 const startupSectionTabs = [
   NavigationTabId.discover,
+  NavigationTabId.playlists,
   NavigationTabId.libraries,
   NavigationTabId.liveTv,
   NavigationTabId.explore,
@@ -90,6 +91,7 @@ const startupSectionTabs = [
 
 // Label getters (must be top-level for const constructor)
 String _getHomeLabel() => t.common.home;
+String _getPlaylistsLabel() => t.playlists.title;
 String _getExploreLabel() => t.navigation.explore;
 String _getLibrariesLabel() => t.navigation.libraries;
 String _getLiveTvLabel() => t.navigation.liveTv;
@@ -100,6 +102,12 @@ String _getSettingsLabel() => t.common.settings;
 /// All navigation tabs in display order
 const allNavigationTabs = [
   NavigationTab(id: NavigationTabId.discover, onlineOnly: true, icon: Symbols.home_rounded, getLabel: _getHomeLabel),
+  NavigationTab(
+    id: NavigationTabId.playlists,
+    onlineOnly: false,
+    icon: Symbols.playlist_play_rounded,
+    getLabel: _getPlaylistsLabel,
+  ),
   NavigationTab(
     id: NavigationTabId.libraries,
     onlineOnly: true,

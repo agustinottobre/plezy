@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../media/ids.dart';
 import 'package:plezy/widgets/app_icon.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import '../../media/media_item.dart';
 import '../../media/media_kind.dart';
 import '../../mixins/context_menu_tap_mixin.dart';
+import '../../providers/multi_server_provider.dart';
 import '../../providers/watch_state_store.dart';
 import '../../theme/mono_tokens.dart';
 import '../../utils/formatters.dart';
 import '../../utils/media_image_helper.dart';
 import '../../utils/provider_extensions.dart';
 import '../../i18n/strings.g.dart';
+import '../../widgets/backend_badge.dart';
 import '../../widgets/media_context_menu.dart';
 import '../../widgets/watched_indicator.dart';
 import '../../widgets/optimized_media_image.dart';
@@ -59,6 +62,13 @@ class PlaylistItemCardState extends State<PlaylistItemCard> with ContextMenuTapM
     final item = _effectiveItem(context);
     final colorScheme = Theme.of(context).colorScheme;
     final textMuted = tokens(context).textMuted;
+
+    final multiServer = Provider.of<MultiServerProvider?>(context, listen: false);
+    final serverId = item.serverId != null ? ServerId(item.serverId!) : null;
+    final backend = item.backend;
+    final serverName = item.serverName ??
+        (serverId != null ? multiServer?.serverManager.serverDisplayName(serverId) : null) ??
+        '';
 
     final isRowFocused = widget.isFocused && widget.focusedColumn == 0;
 
@@ -140,23 +150,44 @@ class PlaylistItemCardState extends State<PlaylistItemCard> with ContextMenuTapM
                         maxLines: 1,
                         overflow: .ellipsis,
                       ),
-
                       const SizedBox(height: 4),
-
                       Text(
                         _buildSubtitle(item),
                         style: TextStyle(fontSize: 13, color: textMuted),
                         maxLines: 1,
-                        overflow: .ellipsis,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),
                 ),
 
-                const SizedBox(width: 12),
+                if (serverName.isNotEmpty) ...[
+                  const SizedBox(width: 16),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      BackendBadge(backend: backend, size: 14, color: textMuted),
+                      const SizedBox(width: 6),
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 160),
+                        child: Text(
+                          serverName,
+                          style: TextStyle(fontSize: 13, color: textMuted, fontWeight: FontWeight.w500),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
 
-                if (item.durationMs != null)
-                  Text(formatDurationTextual(item.durationMs!), style: TextStyle(fontSize: 13, color: textMuted)),
+                if (item.durationMs != null) ...[
+                  const SizedBox(width: 16),
+                  Text(
+                    formatDurationTextual(item.durationMs!),
+                    style: TextStyle(fontSize: 13, color: textMuted),
+                  ),
+                ],
 
                 const SizedBox(width: 8),
 

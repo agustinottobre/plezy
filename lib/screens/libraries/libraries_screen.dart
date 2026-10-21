@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:plezy/widgets/app_icon.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
+import '../../database/app_database.dart';
+import '../../database/custom_playlist_operations.dart';
 import '../../focus/focusable_action_bar.dart';
 import '../../focus/dpad_navigator.dart';
 import '../../focus/input_mode_tracker.dart';
@@ -14,15 +16,19 @@ import '../../media/ids.dart';
 import '../../media/library_genre.dart';
 import '../../media/media_kind.dart';
 import '../../media/media_library.dart';
+import '../../profiles/active_profile_provider.dart';
 import '../../providers/hidden_libraries_provider.dart';
 import '../../providers/libraries_provider.dart';
 import '../../providers/multi_server_provider.dart';
 import '../../services/settings_service.dart';
 import '../../widgets/settings_builder.dart';
 import '../../utils/app_logger.dart';
+import '../../utils/library_refresh_notifier.dart';
 import '../../utils/platform_detector.dart';
+import '../../utils/snackbar_helper.dart';
 import '../../utils/content_utils.dart';
 import '../../widgets/app_menu.dart';
+import '../../widgets/create_custom_playlist_dialog.dart';
 import '../../widgets/desktop_app_bar.dart';
 import '../../widgets/focusable_tab_chip.dart';
 import '../../widgets/library_management_sheet.dart';
@@ -339,6 +345,29 @@ class _LibrariesScreenState extends State<LibrariesScreen>
     final tabState = _browseTabKey.currentState;
     if (tabState == null) return;
     (tabState as dynamic).showBrowseOptionsSheet();
+  }
+
+  Future<void> _showCreatePlaylistDialog() async {
+    final librariesProvider = context.read<LibrariesProvider>();
+    final selectedLibrary = librariesProvider.libraries
+        .where((lib) => lib.globalKey == _selectedLibraryGlobalKey)
+        .firstOrNull;
+    final defaultType = (selectedLibrary?.kind.isMusic ?? false) ? 'audio' : 'video';
+
+    final result = await showCreateCustomPlaylistDialog(
+      context,
+      initialType: defaultType,
+      allowTypeSelection: false,
+    );
+    if (result == null || !mounted) return;
+
+    final profileId = context.read<ActiveProfileProvider?>()?.activeId ?? '';
+    final db = context.read<AppDatabase?>();
+    if (db == null) return;
+    await db.createCustomPlaylist(profileId: profileId, title: result.name, playlistType: result.type);
+    if (!mounted) return;
+    showSuccessSnackBar(context, t.playlists.created);
+    LibraryRefreshNotifier().notifyPlaylistsChanged();
   }
 
   /// Handle when the browse tab's active-filter state changes
@@ -835,6 +864,12 @@ class _LibrariesScreenState extends State<LibrariesScreen>
           icon: Symbols.edit_rounded,
           tooltip: t.libraries.manageLibraries,
           onPressed: _showLibraryManagementSheet,
+        ),
+      if (currentTabType == LibraryTabType.playlists)
+        FocusableAction(
+          icon: Symbols.add_rounded,
+          tooltip: t.playlists.createCustomPlaylist,
+          onPressed: _showCreatePlaylistDialog,
         ),
       if (showBrowseOptionsAction)
         FocusableAction(

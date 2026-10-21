@@ -1733,6 +1733,12 @@
   "playlists": {
     "title": "播放清單",
     "playlist": "播放清單",
+    "customPlaylist": "",
+    "customPlaylists": "",
+    "createCustomPlaylist": "",
+    "serverPlaylists": "",
+    "createServerPlaylist": "",
+    "customBadge": "",
     "noPlaylists": "找不到播放清單",
     "create": "建立播放清單",
     "playlistName": "播放清單名稱",
@@ -1756,7 +1762,10 @@
     "errorLoading": "載入播放清單失敗",
     "errorAdding": "新增至播放清單失敗",
     "errorReordering": "重新排序播放清單項目失敗",
-    "errorRemoving": "從播放清單移除失敗"
+    "errorRemoving": "從播放清單移除失敗",
+    "rename": "重新命名播放清單",
+    "renamed": "播放清單已重新命名",
+    "errorRenaming": "重新命名播放清單失敗"
   },
   "music": {
     "goToAlbum": "前往專輯",

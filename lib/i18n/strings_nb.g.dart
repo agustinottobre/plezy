@@ -1754,6 +1754,9 @@ class _Translations$playlists$nb extends Translations$playlists$en {
 	@override String get errorAdding => 'Kunne ikke legge til i spilleliste';
 	@override String get errorReordering => 'Kunne ikke omorganisere spillelisteelement';
 	@override String get errorRemoving => 'Kunne ikke fjerne fra spilleliste';
+	@override String get rename => 'Gi nytt navn til spilleliste';
+	@override String get renamed => 'Spilleliste har fått nytt navn';
+	@override String get errorRenaming => 'Kunne ikke gi nytt navn til spilleliste';
 }
 
 // Path: music
@@ -4994,6 +4997,9 @@ extension on TranslationsNb {
 			'playlists.errorAdding' => 'Kunne ikke legge til i spilleliste',
 			'playlists.errorReordering' => 'Kunne ikke omorganisere spillelisteelement',
 			'playlists.errorRemoving' => 'Kunne ikke fjerne fra spilleliste',
+			'playlists.rename' => 'Gi nytt navn til spilleliste',
+			'playlists.renamed' => 'Spilleliste har fått nytt navn',
+			'playlists.errorRenaming' => 'Kunne ikke gi nytt navn til spilleliste',
 			'music.goToAlbum' => 'Gå til album',
 			'music.goToArtist' => 'Gå til artist',
 			'music.instantMix' => 'Direktemiks',
@@ -5449,11 +5455,11 @@ extension on TranslationsNb {
 			'performanceOverlay.decoderAndroidHw' => 'Android-maskinvare',
 			'performanceOverlay.decoderNvidiaHw' => 'NVIDIA-maskinvare',
 			'performanceOverlay.decoderQualcommHw' => 'Qualcomm-maskinvare',
+			_ => null,
+		} ?? switch (path) {
 			'performanceOverlay.decoderMediatekHw' => 'MediaTek-maskinvare',
 			'performanceOverlay.decoderExynosHw' => 'Exynos-maskinvare',
 			'performanceOverlay.decoderSoftware' => 'Programvare',
-			_ => null,
-		} ?? switch (path) {
 			'performanceOverlay.decoderHardware' => 'Maskinvare',
 			'performanceOverlay.tunnelingActive' => 'Aktiv',
 			'performanceOverlay.dvRpuFailed' => ({required Object converted, required Object failures}) => '${converted} (${failures} mislyktes)',

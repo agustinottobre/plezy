@@ -4236,6 +4236,24 @@ class Translations$playlists$en {
 	/// en: 'Playlist'
 	String get playlist => 'Playlist';
 
+	/// en: 'Custom Playlist'
+	String get customPlaylist => 'Custom Playlist';
+
+	/// en: 'Custom Playlists'
+	String get customPlaylists => 'Custom Playlists';
+
+	/// en: 'Create Custom Playlist'
+	String get createCustomPlaylist => 'Create Custom Playlist';
+
+	/// en: 'Server Playlists'
+	String get serverPlaylists => 'Server Playlists';
+
+	/// en: 'Create Server Playlist'
+	String get createServerPlaylist => 'Create Server Playlist';
+
+	/// en: 'Custom'
+	String get customBadge => 'Custom';
+
 	/// en: 'No playlists found'
 	String get noPlaylists => 'No playlists found';
 
@@ -4307,6 +4325,15 @@ class Translations$playlists$en {
 
 	/// en: 'Failed to remove from playlist'
 	String get errorRemoving => 'Failed to remove from playlist';
+
+	/// en: 'Rename Playlist'
+	String get rename => 'Rename Playlist';
+
+	/// en: 'Playlist renamed'
+	String get renamed => 'Playlist renamed';
+
+	/// en: 'Failed to rename playlist'
+	String get errorRenaming => 'Failed to rename playlist';
 }
 
 // Path: music
@@ -9699,6 +9726,12 @@ extension on Translations {
 			'collections.searchCollections' => 'Search collections...',
 			'playlists.title' => 'Playlists',
 			'playlists.playlist' => 'Playlist',
+			'playlists.customPlaylist' => 'Custom Playlist',
+			'playlists.customPlaylists' => 'Custom Playlists',
+			'playlists.createCustomPlaylist' => 'Create Custom Playlist',
+			'playlists.serverPlaylists' => 'Server Playlists',
+			'playlists.createServerPlaylist' => 'Create Server Playlist',
+			'playlists.customBadge' => 'Custom',
 			'playlists.noPlaylists' => 'No playlists found',
 			'playlists.create' => 'Create Playlist',
 			'playlists.playlistName' => 'Playlist Name',
@@ -9723,6 +9756,9 @@ extension on Translations {
 			'playlists.errorAdding' => 'Failed to add to playlist',
 			'playlists.errorReordering' => 'Failed to reorder playlist item',
 			'playlists.errorRemoving' => 'Failed to remove from playlist',
+			'playlists.rename' => 'Rename Playlist',
+			'playlists.renamed' => 'Playlist renamed',
+			'playlists.errorRenaming' => 'Failed to rename playlist',
 			'music.goToAlbum' => 'Go to album',
 			'music.goToArtist' => 'Go to artist',
 			'music.instantMix' => 'Instant Mix',
@@ -10164,6 +10200,8 @@ extension on Translations {
 			'performanceOverlay.dvRpus' => 'DV RPUs',
 			'performanceOverlay.dvRpuAverage' => 'DV RPU Avg',
 			'performanceOverlay.dvSampleAverage' => 'DV Sample Avg',
+			_ => null,
+		} ?? switch (path) {
 			'performanceOverlay.maxLuma' => 'Max Luma',
 			'performanceOverlay.minLuma' => 'Min Luma',
 			'performanceOverlay.maxCll' => 'MaxCLL',
@@ -10173,8 +10211,6 @@ extension on Translations {
 			'performanceOverlay.speed' => 'Speed',
 			'performanceOverlay.player' => 'Player',
 			'performanceOverlay.playMethod' => 'Play Method',
-			_ => null,
-		} ?? switch (path) {
 			'performanceOverlay.memory' => 'Memory',
 			'performanceOverlay.uiFps' => 'UI FPS',
 			'performanceOverlay.fps' => 'FPS',

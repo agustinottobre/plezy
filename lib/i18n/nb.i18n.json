@@ -1743,6 +1743,12 @@
   "playlists": {
     "title": "Spillelister",
     "playlist": "Spilleliste",
+    "customPlaylist": "",
+    "customPlaylists": "",
+    "createCustomPlaylist": "",
+    "serverPlaylists": "",
+    "createServerPlaylist": "",
+    "customBadge": "",
     "noPlaylists": "Ingen spillelister funnet",
     "create": "Opprett spilleliste",
     "playlistName": "Spillelistenavn",
@@ -1766,7 +1772,10 @@
     "errorLoading": "Kunne ikke laste spillelister",
     "errorAdding": "Kunne ikke legge til i spilleliste",
     "errorReordering": "Kunne ikke omorganisere spillelisteelement",
-    "errorRemoving": "Kunne ikke fjerne fra spilleliste"
+    "errorRemoving": "Kunne ikke fjerne fra spilleliste",
+    "rename": "Gi nytt navn til spilleliste",
+    "renamed": "Spilleliste har fått nytt navn",
+    "errorRenaming": "Kunne ikke gi nytt navn til spilleliste"
   },
   "music": {
     "goToAlbum": "Gå til album",

@@ -1746,6 +1746,9 @@ class _Translations$playlists$ja extends Translations$playlists$en {
 	@override String get errorAdding => 'プレイリストへの追加に失敗しました';
 	@override String get errorReordering => 'プレイリストアイテムの並べ替えに失敗しました';
 	@override String get errorRemoving => 'プレイリストからの削除に失敗しました';
+	@override String get rename => 'プレイリスト名を変更';
+	@override String get renamed => 'プレイリスト名を変更しました';
+	@override String get errorRenaming => 'プレイリスト名の変更に失敗しました';
 }
 
 // Path: music
@@ -4982,6 +4985,9 @@ extension on TranslationsJa {
 			'playlists.errorAdding' => 'プレイリストへの追加に失敗しました',
 			'playlists.errorReordering' => 'プレイリストアイテムの並べ替えに失敗しました',
 			'playlists.errorRemoving' => 'プレイリストからの削除に失敗しました',
+			'playlists.rename' => 'プレイリスト名を変更',
+			'playlists.renamed' => 'プレイリスト名を変更しました',
+			'playlists.errorRenaming' => 'プレイリスト名の変更に失敗しました',
 			'music.goToAlbum' => 'アルバムへ移動',
 			'music.goToArtist' => 'アーティストへ移動',
 			'music.instantMix' => 'インスタントミックス',
@@ -5437,11 +5443,11 @@ extension on TranslationsJa {
 			'performanceOverlay.decoderAndroidHw' => 'Android HW',
 			'performanceOverlay.decoderNvidiaHw' => 'NVIDIA HW',
 			'performanceOverlay.decoderQualcommHw' => 'Qualcomm HW',
+			_ => null,
+		} ?? switch (path) {
 			'performanceOverlay.decoderMediatekHw' => 'MediaTek HW',
 			'performanceOverlay.decoderExynosHw' => 'Exynos HW',
 			'performanceOverlay.decoderSoftware' => 'ソフトウェア',
-			_ => null,
-		} ?? switch (path) {
 			'performanceOverlay.decoderHardware' => 'ハードウェア',
 			'performanceOverlay.tunnelingActive' => '有効',
 			'performanceOverlay.dvRpuFailed' => ({required Object converted, required Object failures}) => '${converted}（${failures}件失敗）',

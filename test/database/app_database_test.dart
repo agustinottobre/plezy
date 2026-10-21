@@ -7,10 +7,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/io_client.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:plezy/database/app_database.dart';
+import 'package:plezy/database/custom_playlist_operations.dart';
 import 'package:plezy/database/download_collection_operations.dart';
 import 'package:plezy/database/download_operations.dart';
 import 'package:plezy/database/tvos_database_recovery_store.dart';
 import 'package:plezy/media/ids.dart';
+import 'package:plezy/media/media_backend.dart';
+import 'package:plezy/media/media_kind.dart';
 import 'package:plezy/models/download_models.dart';
 import 'package:plezy/services/base_shared_preferences_service.dart';
 import 'package:plezy/services/credential_vault.dart';
@@ -22,6 +25,7 @@ import 'package:plezy/utils/media_server_http_client.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import '../test_helpers/download_fixtures.dart';
+import '../test_helpers/media_items.dart';
 import '../test_helpers/prefs.dart';
 
 final class _EnsureOpenTrackingInterceptor extends QueryInterceptor {
@@ -59,6 +63,7 @@ class _AppDatabaseTestSuite {
     _registerDownloadedMediaTests();
     _registerOfflineWatchProgressTests();
     _registerSyncRulesTests();
+    _registerCustomPlaylistTests();
   }
 
   void _registerSchemaTests() {
@@ -73,6 +78,8 @@ class _AppDatabaseTestSuite {
         expect(await db.select(db.connections).get(), isEmpty);
         expect(await db.select(db.profiles).get(), isEmpty);
         expect(await db.select(db.profileConnections).get(), isEmpty);
+        expect(await db.select(db.customPlaylists).get(), isEmpty);
+        expect(await db.select(db.customPlaylistItems).get(), isEmpty);
       });
 
       test('ProfileConnections has no profile_id FK (virtual plex_home profiles)', () async {
@@ -2536,6 +2543,158 @@ class _AppDatabaseTestSuite {
 
         await db.removeDownloadOwner(profileId: 'profile-a', globalKey: 'srv:profile-shared');
         expect(await db.getSyncRuleDownloadLinks(otherProfile.id), hasLength(1));
+      });
+    });
+  }
+
+  void _registerCustomPlaylistTests() {
+    group('custom playlists', () {
+      test('create and retrieve custom playlist with initial cross-server items', () async {
+        final plexMovie = testMediaItem(
+          id: 'plex-1',
+          serverId: 'server-plex',
+          backend: MediaBackend.plex,
+          kind: MediaKind.movie,
+          title: 'Plex Movie',
+          durationMs: 120000,
+        );
+        final jellyfinMovie = testMediaItem(
+          id: 'jf-1',
+          serverId: 'server-jf',
+          backend: MediaBackend.jellyfin,
+          kind: MediaKind.movie,
+          title: 'Jellyfin Movie',
+          durationMs: 180000,
+        );
+
+        final playlistRow = await db.createCustomPlaylist(
+          profileId: 'profile-1',
+          title: 'Cross-Server Mix',
+          playlistType: 'video',
+          initialItems: [plexMovie, jellyfinMovie],
+        );
+
+        expect(playlistRow.title, 'Cross-Server Mix');
+        expect(playlistRow.profileId, 'profile-1');
+        expect(playlistRow.playlistType, 'video');
+
+        final playlists = await db.getCustomPlaylists(profileId: 'profile-1');
+        expect(playlists, hasLength(1));
+        final pl = playlists.first;
+        expect(pl.isCustom, isTrue);
+        expect(pl.title, 'Cross-Server Mix');
+        expect(pl.leafCount, 2);
+        expect(pl.durationMs, 300000); // 300,000 ms
+
+        final items = await db.getCustomPlaylistItems(pl.id);
+        expect(items, hasLength(2));
+        expect(items[0].id, 'plex-1');
+        expect(items[0].serverId, 'server-plex');
+        expect(items[0].backend, MediaBackend.plex);
+        expect(items[0].playlistItemId, isNotNull);
+
+        expect(items[1].id, 'jf-1');
+        expect(items[1].serverId, 'server-jf');
+        expect(items[1].backend, MediaBackend.jellyfin);
+        expect(items[1].playlistItemId, isNotNull);
+        expect(items[0].playlistItemId, isNot(equals(items[1].playlistItemId)));
+      });
+
+      test('profile isolation: playlists are scoped to profileId', () async {
+        await db.createCustomPlaylist(profileId: 'profile-a', title: 'A Playlist');
+        await db.createCustomPlaylist(profileId: 'profile-b', title: 'B Playlist');
+
+        final aList = await db.getCustomPlaylists(profileId: 'profile-a');
+        expect(aList, hasLength(1));
+        expect(aList.first.title, 'A Playlist');
+
+        final bList = await db.getCustomPlaylists(profileId: 'profile-b');
+        expect(bList, hasLength(1));
+        expect(bList.first.title, 'B Playlist');
+      });
+
+      test('filters by playlistType (video vs audio)', () async {
+        await db.createCustomPlaylist(profileId: 'p1', title: 'Videos', playlistType: 'video');
+        await db.createCustomPlaylist(profileId: 'p1', title: 'Tracks', playlistType: 'audio');
+
+        final videoList = await db.getCustomPlaylists(profileId: 'p1', playlistType: 'video');
+        expect(videoList, hasLength(1));
+        expect(videoList.first.title, 'Videos');
+
+        final audioList = await db.getCustomPlaylists(profileId: 'p1', playlistType: 'audio');
+        expect(audioList, hasLength(1));
+        expect(audioList.first.title, 'Tracks');
+      });
+
+      test('duplicate items receive unique playlistItemId', () async {
+        final movie = testMediaItem(id: 'm1', title: 'Repeat Movie');
+        final pl = await db.createCustomPlaylist(profileId: 'p1', title: 'Repeat');
+
+        await db.addItemsToCustomPlaylist(playlistId: pl.id, items: [movie, movie]);
+        final items = await db.getCustomPlaylistItems(pl.id);
+        expect(items, hasLength(2));
+        expect(items[0].id, 'm1');
+        expect(items[1].id, 'm1');
+        expect(items[0].playlistItemId, isNotNull);
+        expect(items[1].playlistItemId, isNotNull);
+        expect(items[0].playlistItemId, isNot(equals(items[1].playlistItemId)));
+      });
+
+      test('reorderCustomPlaylistItems shifts items atomically', () async {
+        final m1 = testMediaItem(id: '1', title: 'Item 1');
+        final m2 = testMediaItem(id: '2', title: 'Item 2');
+        final m3 = testMediaItem(id: '3', title: 'Item 3');
+
+        final pl = await db.createCustomPlaylist(profileId: 'p1', title: 'Reorder Test', initialItems: [m1, m2, m3]);
+
+        // Move Item 1 (index 0) to index 2: order should become [Item 2, Item 3, Item 1]
+        await db.reorderCustomPlaylistItems(playlistId: pl.id, oldIndex: 0, newIndex: 2);
+        var items = await db.getCustomPlaylistItems(pl.id);
+        expect(items.map((i) => i.id).toList(), ['2', '3', '1']);
+
+        // Move Item 1 (index 2) back to index 0: order should become [Item 1, Item 2, Item 3]
+        await db.reorderCustomPlaylistItems(playlistId: pl.id, oldIndex: 2, newIndex: 0);
+        items = await db.getCustomPlaylistItems(pl.id);
+        expect(items.map((i) => i.id).toList(), ['1', '2', '3']);
+      });
+
+      test('removeCustomPlaylistItem compacts sortOrder', () async {
+        final m1 = testMediaItem(id: '1', title: 'Item 1');
+        final m2 = testMediaItem(id: '2', title: 'Item 2');
+        final m3 = testMediaItem(id: '3', title: 'Item 3');
+
+        final pl = await db.createCustomPlaylist(profileId: 'p1', title: 'Remove Test', initialItems: [m1, m2, m3]);
+
+        final initialItems = await db.getCustomPlaylistItems(pl.id);
+        final secondItemId = initialItems[1].playlistItemId as int;
+
+        await db.removeCustomPlaylistItem(playlistId: pl.id, customPlaylistItemId: secondItemId);
+
+        final remaining = await db.getCustomPlaylistItems(pl.id);
+        expect(remaining.map((i) => i.id).toList(), ['1', '3']);
+
+        // Verify remaining rows have contiguous sortOrder (0, 1)
+        final rows = await (db.select(db.customPlaylistItems)..where((t) => t.playlistId.equals(pl.id))).get();
+        expect(rows.map((r) => r.sortOrder).toList(), [0, 1]);
+      });
+
+      test('deleteCustomPlaylist cascades to items', () async {
+        final m1 = testMediaItem(id: '1', title: 'Item 1');
+        final pl = await db.createCustomPlaylist(profileId: 'p1', title: 'Delete Cascade', initialItems: [m1]);
+
+        expect(await db.getCustomPlaylistItems(pl.id), hasLength(1));
+        await db.deleteCustomPlaylist(pl.id);
+
+        expect(await db.getCustomPlaylists(profileId: 'p1'), isEmpty);
+        expect(await db.getCustomPlaylistItems(pl.id), isEmpty);
+      });
+
+      test('updateCustomPlaylistTitle updates title', () async {
+        final pl = await db.createCustomPlaylist(profileId: 'p1', title: 'Old Title');
+        await db.updateCustomPlaylistTitle(playlistId: pl.id, title: 'New Title');
+
+        final updated = await db.getCustomPlaylist(pl.id);
+        expect(updated?.title, 'New Title');
       });
     });
   }
