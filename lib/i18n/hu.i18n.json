@@ -1743,6 +1743,12 @@
   "playlists": {
     "title": "Lejátszási listák",
     "playlist": "Lejátszási lista",
+    "customPlaylist": "",
+    "customPlaylists": "",
+    "createCustomPlaylist": "",
+    "serverPlaylists": "",
+    "createServerPlaylist": "",
+    "customBadge": "",
     "noPlaylists": "Nem találhatók lejátszási listák",
     "create": "Lejátszási lista létrehozása",
     "playlistName": "Lejátszási lista neve",
@@ -1766,7 +1772,10 @@
     "errorLoading": "Nem sikerült a lejátszási listák betöltése",
     "errorAdding": "Nem sikerült a lejátszási listához adni",
     "errorReordering": "Nem sikerült átrendezni a lejátszási lista elemét",
-    "errorRemoving": "Nem sikerült az eltávolítás a lejátszási listáról"
+    "errorRemoving": "Nem sikerült az eltávolítás a lejátszási listáról",
+    "rename": "Lejátszási lista átnevezése",
+    "renamed": "Lejátszási lista átnevezve",
+    "errorRenaming": "Nem sikerült átnevezni a lejátszási listát"
   },
   "music": {
     "goToAlbum": "Ugrás az albumhoz",

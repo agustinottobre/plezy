@@ -1754,6 +1754,9 @@ class _Translations$playlists$kk extends Translations$playlists$en {
 	@override String get errorAdding => 'Тізімге қосу мүмкін болмады';
 	@override String get errorReordering => 'Қайта реттеу мүмкін болмады';
 	@override String get errorRemoving => 'Тізімнен өшіру мүмкін болмады';
+	@override String get rename => 'Ойнату тізімінің атын өзгерту';
+	@override String get renamed => 'Ойнату тізімінің аты өзгертілді';
+	@override String get errorRenaming => 'Ойнату тізімінің атын өзгерту сәтсіз аяқталды';
 }
 
 // Path: music
@@ -4994,6 +4997,9 @@ extension on TranslationsKk {
 			'playlists.errorAdding' => 'Тізімге қосу мүмкін болмады',
 			'playlists.errorReordering' => 'Қайта реттеу мүмкін болмады',
 			'playlists.errorRemoving' => 'Тізімнен өшіру мүмкін болмады',
+			'playlists.rename' => 'Ойнату тізімінің атын өзгерту',
+			'playlists.renamed' => 'Ойнату тізімінің аты өзгертілді',
+			'playlists.errorRenaming' => 'Ойнату тізімінің атын өзгерту сәтсіз аяқталды',
 			'music.goToAlbum' => 'Альбомға өту',
 			'music.goToArtist' => 'Орындаушыға өту',
 			'music.instantMix' => 'Сәттік микс',
@@ -5449,11 +5455,11 @@ extension on TranslationsKk {
 			'performanceOverlay.decoderAndroidHw' => 'Android HW',
 			'performanceOverlay.decoderNvidiaHw' => 'NVIDIA HW',
 			'performanceOverlay.decoderQualcommHw' => 'Qualcomm HW',
+			_ => null,
+		} ?? switch (path) {
 			'performanceOverlay.decoderMediatekHw' => 'MediaTek HW',
 			'performanceOverlay.decoderExynosHw' => 'Exynos HW',
 			'performanceOverlay.decoderSoftware' => 'Бағдарламалық',
-			_ => null,
-		} ?? switch (path) {
 			'performanceOverlay.decoderHardware' => 'Аппараттық',
 			'performanceOverlay.tunnelingActive' => 'Белсенді',
 			'performanceOverlay.dvRpuFailed' => ({required Object converted, required Object failures}) => '${converted} (${failures} сәтсіз аяқталды)',

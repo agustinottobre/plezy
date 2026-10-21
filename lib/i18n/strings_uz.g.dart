@@ -1754,6 +1754,9 @@ class _Translations$playlists$uz extends Translations$playlists$en {
 	@override String get errorAdding => 'Roʻyxatga qoʻshib boʻlmadi';
 	@override String get errorReordering => 'Qayta tartiblab boʻlmadi';
 	@override String get errorRemoving => 'Roʻyxatdan oʻchirib boʻlmadi';
+	@override String get rename => 'Ijro roʻyxati nomini oʻzgartirish';
+	@override String get renamed => 'Ijro roʻyxati nomi oʻzgartirildi';
+	@override String get errorRenaming => 'Ijro roʻyxati nomini oʻzgartirib boʻlmadi';
 }
 
 // Path: music
@@ -4994,6 +4997,9 @@ extension on TranslationsUz {
 			'playlists.errorAdding' => 'Roʻyxatga qoʻshib boʻlmadi',
 			'playlists.errorReordering' => 'Qayta tartiblab boʻlmadi',
 			'playlists.errorRemoving' => 'Roʻyxatdan oʻchirib boʻlmadi',
+			'playlists.rename' => 'Ijro roʻyxati nomini oʻzgartirish',
+			'playlists.renamed' => 'Ijro roʻyxati nomi oʻzgartirildi',
+			'playlists.errorRenaming' => 'Ijro roʻyxati nomini oʻzgartirib boʻlmadi',
 			'music.goToAlbum' => 'Albomga oʻtish',
 			'music.goToArtist' => 'Ijrochiga oʻtish',
 			'music.instantMix' => 'Tezkor miks',
@@ -5449,11 +5455,11 @@ extension on TranslationsUz {
 			'performanceOverlay.decoderAndroidHw' => 'Android HW',
 			'performanceOverlay.decoderNvidiaHw' => 'NVIDIA HW',
 			'performanceOverlay.decoderQualcommHw' => 'Qualcomm HW',
+			_ => null,
+		} ?? switch (path) {
 			'performanceOverlay.decoderMediatekHw' => 'MediaTek HW',
 			'performanceOverlay.decoderExynosHw' => 'Exynos HW',
 			'performanceOverlay.decoderSoftware' => 'Dasturiy',
-			_ => null,
-		} ?? switch (path) {
 			'performanceOverlay.decoderHardware' => 'Apparat',
 			'performanceOverlay.tunnelingActive' => 'Faol',
 			'performanceOverlay.dvRpuFailed' => ({required Object converted, required Object failures}) => '${converted} (${failures} ta muvaffaqiyatsiz)',

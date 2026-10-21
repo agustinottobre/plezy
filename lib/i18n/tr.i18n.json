@@ -1743,6 +1743,12 @@
   "playlists": {
     "title": "Oynatma Listeleri",
     "playlist": "Oynatma Listesi",
+    "customPlaylist": "",
+    "customPlaylists": "",
+    "createCustomPlaylist": "",
+    "serverPlaylists": "",
+    "createServerPlaylist": "",
+    "customBadge": "",
     "noPlaylists": "Oynatma listesi bulunamadı",
     "create": "Oynatma Listesi Oluştur",
     "playlistName": "Oynatma Listesi Adı",
@@ -1766,7 +1772,10 @@
     "errorLoading": "Oynatma listeleri yüklenemedi",
     "errorAdding": "Oynatma listesine eklenemedi",
     "errorReordering": "Oynatma listesi ögesi yeniden sıralanamadı",
-    "errorRemoving": "Oynatma listesinden kaldırılamadı"
+    "errorRemoving": "Oynatma listesinden kaldırılamadı",
+    "rename": "Çalma Listesini Yeniden Adlandır",
+    "renamed": "Çalma listesi yeniden adlandırıldı",
+    "errorRenaming": "Çalma listesi yeniden adlandırılamadı"
   },
   "music": {
     "goToAlbum": "Albüme git",

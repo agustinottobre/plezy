@@ -1743,6 +1743,12 @@
   "playlists": {
     "title": "Spellistor",
     "playlist": "Spellista",
+    "customPlaylist": "",
+    "customPlaylists": "",
+    "createCustomPlaylist": "",
+    "serverPlaylists": "",
+    "createServerPlaylist": "",
+    "customBadge": "",
     "noPlaylists": "Inga spellistor hittades",
     "create": "Skapa spellista",
     "playlistName": "Spellistans namn",
@@ -1766,7 +1772,10 @@
     "errorLoading": "Det gick inte att läsa in spellistor",
     "errorAdding": "Det gick inte att lägga till objektet i spellistan",
     "errorReordering": "Det gick inte att flytta objektet i spellistan",
-    "errorRemoving": "Det gick inte att ta bort objektet från spellistan"
+    "errorRemoving": "Det gick inte att ta bort objektet från spellistan",
+    "rename": "Byt namn på spellista",
+    "renamed": "Spellista har bytt namn",
+    "errorRenaming": "Kunde inte byta namn på spellista"
   },
   "music": {
     "goToAlbum": "Gå till album",

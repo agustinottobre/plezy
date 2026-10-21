@@ -1743,6 +1743,12 @@
   "playlists": {
     "title": "Ойнату тізімдері",
     "playlist": "Ойнату тізімі",
+    "customPlaylist": "",
+    "customPlaylists": "",
+    "createCustomPlaylist": "",
+    "serverPlaylists": "",
+    "createServerPlaylist": "",
+    "customBadge": "",
     "noPlaylists": "Ойнату тізімдері табылмады",
     "create": "Ойнату тізімін жасау",
     "playlistName": "Ойнату тізімінің атауы",
@@ -1766,7 +1772,10 @@
     "errorLoading": "Тізімдерді жүктеу мүмкін болмады",
     "errorAdding": "Тізімге қосу мүмкін болмады",
     "errorReordering": "Қайта реттеу мүмкін болмады",
-    "errorRemoving": "Тізімнен өшіру мүмкін болмады"
+    "errorRemoving": "Тізімнен өшіру мүмкін болмады",
+    "rename": "Ойнату тізімінің атын өзгерту",
+    "renamed": "Ойнату тізімінің аты өзгертілді",
+    "errorRenaming": "Ойнату тізімінің атын өзгерту сәтсіз аяқталды"
   },
   "music": {
     "goToAlbum": "Альбомға өту",

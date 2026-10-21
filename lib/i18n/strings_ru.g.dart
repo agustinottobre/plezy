@@ -1770,6 +1770,9 @@ class _Translations$playlists$ru extends Translations$playlists$en {
 	@override String get errorAdding => 'Не удалось добавить в плейлист';
 	@override String get errorReordering => 'Не удалось переупорядочить элемент плейлиста';
 	@override String get errorRemoving => 'Не удалось удалить из плейлиста';
+	@override String get rename => 'Переименовать плейлист';
+	@override String get renamed => 'Плейлист переименован';
+	@override String get errorRenaming => 'Не удалось переименовать плейлист';
 }
 
 // Path: music
@@ -5018,6 +5021,9 @@ extension on TranslationsRu {
 			'playlists.errorAdding' => 'Не удалось добавить в плейлист',
 			'playlists.errorReordering' => 'Не удалось переупорядочить элемент плейлиста',
 			'playlists.errorRemoving' => 'Не удалось удалить из плейлиста',
+			'playlists.rename' => 'Переименовать плейлист',
+			'playlists.renamed' => 'Плейлист переименован',
+			'playlists.errorRenaming' => 'Не удалось переименовать плейлист',
 			'music.goToAlbum' => 'Перейти к альбому',
 			'music.goToArtist' => 'Перейти к исполнителю',
 			'music.instantMix' => 'Быстрый микс',
@@ -5473,11 +5479,11 @@ extension on TranslationsRu {
 			'performanceOverlay.decoderAndroidHw' => 'Android, аппаратный',
 			'performanceOverlay.decoderNvidiaHw' => 'NVIDIA, аппаратный',
 			'performanceOverlay.decoderQualcommHw' => 'Qualcomm, аппаратный',
+			_ => null,
+		} ?? switch (path) {
 			'performanceOverlay.decoderMediatekHw' => 'MediaTek, аппаратный',
 			'performanceOverlay.decoderExynosHw' => 'Exynos, аппаратный',
 			'performanceOverlay.decoderSoftware' => 'Программный',
-			_ => null,
-		} ?? switch (path) {
 			'performanceOverlay.decoderHardware' => 'Аппаратный',
 			'performanceOverlay.tunnelingActive' => 'Активно',
 			'performanceOverlay.dvRpuFailed' => ({required Object converted, required Object failures}) => '${converted} (ошибок: ${failures})',

@@ -1743,6 +1743,12 @@
   "playlists": {
     "title": "Listas de reproducción",
     "playlist": "Lista de reproducción",
+    "customPlaylist": "",
+    "customPlaylists": "",
+    "createCustomPlaylist": "",
+    "serverPlaylists": "",
+    "createServerPlaylist": "",
+    "customBadge": "",
     "noPlaylists": "No se encontraron listas de reproducción",
     "create": "Crear lista de reproducción",
     "playlistName": "Nombre de la lista de reproducción",
@@ -1766,7 +1772,10 @@
     "errorLoading": "Error al cargar las listas de reproducción",
     "errorAdding": "Error al añadir a la lista de reproducción",
     "errorReordering": "Error al reordenar el elemento de la lista de reproducción",
-    "errorRemoving": "Error al eliminar de la lista de reproducción"
+    "errorRemoving": "Error al eliminar de la lista de reproducción",
+    "rename": "Renombrar lista de reproducción",
+    "renamed": "Lista de reproducción renombrada",
+    "errorRenaming": "Error al renombrar la lista de reproducción"
   },
   "music": {
     "goToAlbum": "Ir al álbum",

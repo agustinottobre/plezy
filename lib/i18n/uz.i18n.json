@@ -1743,6 +1743,12 @@
   "playlists": {
     "title": "Ijro roʻyxatlari",
     "playlist": "Ijro roʻyxati",
+    "customPlaylist": "",
+    "customPlaylists": "",
+    "createCustomPlaylist": "",
+    "serverPlaylists": "",
+    "createServerPlaylist": "",
+    "customBadge": "",
     "noPlaylists": "Ijro roʻyxatlari topilmadi",
     "create": "Ijro roʻyxatini yaratish",
     "playlistName": "Ijro roʻyxati nomi",
@@ -1766,7 +1772,10 @@
     "errorLoading": "Roʻyxatlarni yuklab boʻlmadi",
     "errorAdding": "Roʻyxatga qoʻshib boʻlmadi",
     "errorReordering": "Qayta tartiblab boʻlmadi",
-    "errorRemoving": "Roʻyxatdan oʻchirib boʻlmadi"
+    "errorRemoving": "Roʻyxatdan oʻchirib boʻlmadi",
+    "rename": "Ijro roʻyxati nomini oʻzgartirish",
+    "renamed": "Ijro roʻyxati nomi oʻzgartirildi",
+    "errorRenaming": "Ijro roʻyxati nomini oʻzgartirib boʻlmadi"
   },
   "music": {
     "goToAlbum": "Albomga oʻtish",

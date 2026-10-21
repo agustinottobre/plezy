@@ -35,6 +35,9 @@ class MediaPlaylist {
   final String? serverId;
   final String? serverName;
 
+  /// Whether this playlist is stored locally on client (cross-server custom playlist).
+  final bool isCustom;
+
   const MediaPlaylist({
     required this.id,
     required this.backend,
@@ -53,6 +56,7 @@ class MediaPlaylist {
     this.thumbPath,
     this.serverId,
     this.serverName,
+    this.isCustom = false,
   });
 
   /// Image used to represent the playlist in browse views. A user-assigned
@@ -62,5 +66,47 @@ class MediaPlaylist {
   /// Display-friendly title (alias of [title] for parity with [MediaItem]).
   String get displayTitle => title;
 
-  String get globalKey => serverId != null ? buildGlobalKey(ServerId(serverId!), id) : id;
+  String get globalKey => isCustom ? 'custom:$id' : (serverId != null ? buildGlobalKey(ServerId(serverId!), id) : id);
+
+  MediaPlaylist copyWith({
+    String? id,
+    MediaBackend? backend,
+    String? title,
+    String? summary,
+    String? guid,
+    bool? smart,
+    String? playlistType,
+    int? durationMs,
+    int? leafCount,
+    int? viewCount,
+    int? addedAt,
+    int? updatedAt,
+    int? lastViewedAt,
+    String? compositeImagePath,
+    String? thumbPath,
+    String? serverId,
+    String? serverName,
+    bool? isCustom,
+  }) {
+    return MediaPlaylist(
+      id: id ?? this.id,
+      backend: backend ?? this.backend,
+      title: title ?? this.title,
+      summary: summary ?? this.summary,
+      guid: guid ?? this.guid,
+      smart: smart ?? this.smart,
+      playlistType: playlistType ?? this.playlistType,
+      durationMs: durationMs ?? this.durationMs,
+      leafCount: leafCount ?? this.leafCount,
+      viewCount: viewCount ?? this.viewCount,
+      addedAt: addedAt ?? this.addedAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      lastViewedAt: lastViewedAt ?? this.lastViewedAt,
+      compositeImagePath: compositeImagePath ?? this.compositeImagePath,
+      thumbPath: thumbPath ?? this.thumbPath,
+      serverId: serverId ?? this.serverId,
+      serverName: serverName ?? this.serverName,
+      isCustom: isCustom ?? this.isCustom,
+    );
+  }
 }

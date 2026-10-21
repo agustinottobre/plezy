@@ -165,6 +165,15 @@ class ContentStateBuilder<T> extends StatelessWidget {
   /// Callback when user taps retry button
   final VoidCallback onRetry;
 
+  /// Optional action callback for empty state
+  final VoidCallback? onEmptyAction;
+
+  /// Optional label for the empty state action button
+  final String? emptyActionLabel;
+
+  /// Optional icon for the empty state action button
+  final IconData? emptyActionIcon;
+
   /// Builder for the content when items are available
   final Widget Function(List<T> items) builder;
 
@@ -176,6 +185,9 @@ class ContentStateBuilder<T> extends StatelessWidget {
     required this.emptyIcon,
     required this.emptyMessage,
     required this.onRetry,
+    this.onEmptyAction,
+    this.emptyActionLabel,
+    this.emptyActionIcon,
     required this.builder,
   });
 
@@ -195,7 +207,13 @@ class ContentStateBuilder<T> extends StatelessWidget {
     }
 
     if (items.isEmpty) {
-      return EmptyStateWidget(message: emptyMessage, icon: emptyIcon);
+      return EmptyStateWidget(
+        message: emptyMessage,
+        icon: emptyIcon,
+        onAction: onEmptyAction,
+        actionLabel: emptyActionLabel,
+        actionIcon: emptyActionIcon,
+      );
     }
 
     return builder(items);

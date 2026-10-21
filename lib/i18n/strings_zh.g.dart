@@ -1746,6 +1746,9 @@ class Translations$playlists$zh extends Translations$playlists$en {
 	@override String get errorAdding => '添加到播放列表失败';
 	@override String get errorReordering => '重新排序播放列表项目失败';
 	@override String get errorRemoving => '从播放列表中移除失败';
+	@override String get rename => '重命名播放列表';
+	@override String get renamed => '播放列表已重命名';
+	@override String get errorRenaming => '重命名播放列表失败';
 }
 
 // Path: music
@@ -4982,6 +4985,9 @@ extension on TranslationsZh {
 			'playlists.errorAdding' => '添加到播放列表失败',
 			'playlists.errorReordering' => '重新排序播放列表项目失败',
 			'playlists.errorRemoving' => '从播放列表中移除失败',
+			'playlists.rename' => '重命名播放列表',
+			'playlists.renamed' => '播放列表已重命名',
+			'playlists.errorRenaming' => '重命名播放列表失败',
 			'music.goToAlbum' => '前往专辑',
 			'music.goToArtist' => '前往艺术家',
 			'music.instantMix' => '即时混合播放',
@@ -5437,11 +5443,11 @@ extension on TranslationsZh {
 			'performanceOverlay.decoderAndroidHw' => 'Android 硬件',
 			'performanceOverlay.decoderNvidiaHw' => 'NVIDIA 硬件',
 			'performanceOverlay.decoderQualcommHw' => 'Qualcomm 硬件',
+			_ => null,
+		} ?? switch (path) {
 			'performanceOverlay.decoderMediatekHw' => 'MediaTek 硬件',
 			'performanceOverlay.decoderExynosHw' => 'Exynos 硬件',
 			'performanceOverlay.decoderSoftware' => '软件',
-			_ => null,
-		} ?? switch (path) {
 			'performanceOverlay.decoderHardware' => '硬件',
 			'performanceOverlay.tunnelingActive' => '已启用',
 			'performanceOverlay.dvRpuFailed' => ({required Object converted, required Object failures}) => '${converted}（${failures} 个失败）',
