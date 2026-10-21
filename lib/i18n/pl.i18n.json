@@ -1759,6 +1759,12 @@
   "playlists": {
     "title": "Playlisty",
     "playlist": "Playlista",
+    "customPlaylist": "",
+    "customPlaylists": "",
+    "createCustomPlaylist": "",
+    "serverPlaylists": "",
+    "createServerPlaylist": "",
+    "customBadge": "",
     "noPlaylists": "Nie znaleziono playlist",
     "create": "Utwórz playlistę",
     "playlistName": "Nazwa playlisty",
@@ -1782,7 +1788,10 @@
     "errorLoading": "Nie udało się załadować playlist",
     "errorAdding": "Nie udało się dodać do playlisty",
     "errorReordering": "Nie udało się zmienić kolejności elementu playlisty",
-    "errorRemoving": "Nie udało się usunąć z playlisty"
+    "errorRemoving": "Nie udało się usunąć z playlisty",
+    "rename": "Zmień nazwę playlisty",
+    "renamed": "Nazwa playlisty zmieniona",
+    "errorRenaming": "Nie udało się zmienić nazwy playlisty"
   },
   "music": {
     "goToAlbum": "Przejdź do albumu",

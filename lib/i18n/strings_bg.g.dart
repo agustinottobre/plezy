@@ -1753,6 +1753,9 @@ class _Translations$playlists$bg extends Translations$playlists$en {
 	@override String get errorAdding => 'Неуспешно добавяне към плейлист';
 	@override String get errorReordering => 'Неуспешно пренареждане на елемент в плейлиста';
 	@override String get errorRemoving => 'Неуспешно премахване от плейлист';
+	@override String get rename => 'Преименувай плейлист';
+	@override String get renamed => 'Плейлистът е преименуван';
+	@override String get errorRenaming => 'Неуспешно преименуване на плейлиста';
 }
 
 // Path: music
@@ -4988,6 +4991,9 @@ extension on TranslationsBg {
 			'playlists.errorAdding' => 'Неуспешно добавяне към плейлист',
 			'playlists.errorReordering' => 'Неуспешно пренареждане на елемент в плейлиста',
 			'playlists.errorRemoving' => 'Неуспешно премахване от плейлист',
+			'playlists.rename' => 'Преименувай плейлист',
+			'playlists.renamed' => 'Плейлистът е преименуван',
+			'playlists.errorRenaming' => 'Неуспешно преименуване на плейлиста',
 			'music.goToAlbum' => 'Към албума',
 			'music.goToArtist' => 'Към изпълнителя',
 			'music.instantMix' => 'Мигновен микс',
@@ -5446,11 +5452,11 @@ extension on TranslationsBg {
 			'performanceOverlay.decoderMediatekHw' => 'MediaTek HW',
 			'performanceOverlay.decoderExynosHw' => 'Exynos HW',
 			'performanceOverlay.decoderSoftware' => 'Софтуерен',
+			_ => null,
+		} ?? switch (path) {
 			'performanceOverlay.decoderHardware' => 'Хардуерен',
 			'performanceOverlay.tunnelingActive' => 'Активно',
 			'performanceOverlay.dvRpuFailed' => ({required Object converted, required Object failures}) => '${converted} (неуспешни: ${failures})',
-			_ => null,
-		} ?? switch (path) {
 			'externalPlayer.title' => 'Външен плеър',
 			'externalPlayer.useExternalPlayer' => 'Използвай външен плеър',
 			'externalPlayer.useExternalPlayerDescription' => 'Отваряй видеата в друго приложение',

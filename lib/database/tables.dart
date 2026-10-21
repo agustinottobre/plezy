@@ -370,3 +370,62 @@ class MusicSessions extends Table {
   @override
   Set<Column> get primaryKey => {profileId};
 }
+
+/// Client-side custom playlists. Holds metadata for cross-server user-created playlists.
+@DataClassName('CustomPlaylistRow')
+@TableIndex(name: 'idx_custom_playlists_profile', columns: {#profileId})
+class CustomPlaylists extends Table {
+  /// UUID v4 primary key.
+  TextColumn get id => text()();
+
+  /// Profile that owns this playlist (empty string if global/no profile).
+  TextColumn get profileId => text().withDefault(const Constant(''))();
+
+  /// User-visible title.
+  TextColumn get title => text()();
+
+  /// Playlist kind: 'video' or 'audio' (matches MediaPlaylist.playlistType).
+  TextColumn get playlistType => text().withDefault(const Constant('video'))();
+
+  /// Optional description or user note.
+  TextColumn get summary => text().nullable()();
+
+  /// Thumbnail image path (custom or derived from first item's poster).
+  TextColumn get thumbPath => text().nullable()();
+
+  /// Timestamp in milliseconds since epoch.
+  IntColumn get createdAt => integer()();
+  IntColumn get updatedAt => integer()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+/// Ordered members of client-side custom playlists.
+///
+/// Contains self-contained serialized [MediaItem] JSON, allowing cross-server items
+/// from Plex, Jellyfin, and Emby to be mixed and preserved faithfully.
+@DataClassName('CustomPlaylistItemRow')
+@TableIndex(name: 'idx_custom_playlist_items_playlist', columns: {#playlistId})
+@TableIndex(name: 'idx_custom_playlist_items_sort', columns: {#playlistId, #sortOrder})
+class CustomPlaylistItems extends Table {
+  /// Auto-incrementing integer ID.
+  /// Stamped into [MediaItem.playlistItemId] on load so row keys stay unique
+  /// across duplicate items in the playlist.
+  IntColumn get id => integer().autoIncrement()();
+
+  /// Foreign key to [CustomPlaylists], cascades on delete.
+  TextColumn get playlistId => text().references(CustomPlaylists, #id, onDelete: KeyAction.cascade)();
+
+  /// Zero-based position in playlist.
+  IntColumn get sortOrder => integer()();
+
+  /// Complete serialized MediaItem JSON.
+  TextColumn get mediaJson => text()();
+
+  /// Global key of the media item ('serverId:ratingKey') for rapid lookups.
+  TextColumn get mediaGlobalKey => text()();
+
+  /// Timestamp in milliseconds since epoch.
+  IntColumn get addedAt => integer()();
+}

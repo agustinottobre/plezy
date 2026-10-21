@@ -68,6 +68,7 @@ import '../focus/covered_route_focus_boundary.dart';
 import '../focus/dpad_navigator.dart';
 import '../focus/key_event_utils.dart';
 import 'discover_screen.dart';
+import 'playlist/playlists_screen.dart';
 import 'explore_screen.dart';
 import 'libraries/library_quick_picker_sheet.dart';
 import 'libraries/libraries_screen.dart';
@@ -1201,6 +1202,7 @@ class _MainScreenState extends State<MainScreen>
 
     return switch (tab) {
       NavigationTabId.discover => DiscoverScreen(key: _screenKeys[tab]),
+      NavigationTabId.playlists => PlaylistsScreen(key: _screenKeys[tab]),
       NavigationTabId.explore => ExploreScreen(key: _screenKeys[tab]),
       NavigationTabId.libraries => LibrariesScreen(
         key: _screenKeys[tab],
@@ -1940,7 +1942,12 @@ class _MainScreenState extends State<MainScreen>
     }
   }
 
-  static const _contentTabs = [NavigationTabId.discover, NavigationTabId.libraries, NavigationTabId.search];
+  static const _contentTabs = [
+    NavigationTabId.discover,
+    NavigationTabId.playlists,
+    NavigationTabId.libraries,
+    NavigationTabId.search,
+  ];
 
   Widget _buildBottomNavigationBar(BuildContext context, {required bool hideLabels}) {
     final tabs = _getBottomNavigationTabs(context);

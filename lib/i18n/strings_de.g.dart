@@ -1753,6 +1753,9 @@ class _Translations$playlists$de extends Translations$playlists$en {
 	@override String get errorAdding => 'Konnte nicht zur Wiedergabeliste hinzugefügt werden';
 	@override String get errorReordering => 'Element der Wiedergabeliste konnte nicht neu geordnet werden';
 	@override String get errorRemoving => 'Konnte nicht aus der Wiedergabeliste entfernt werden';
+	@override String get rename => 'Wiedergabeliste umbenennen';
+	@override String get renamed => 'Wiedergabeliste umbenannt';
+	@override String get errorRenaming => 'Fehler beim Umbenennen der Wiedergabeliste';
 }
 
 // Path: music
@@ -4988,6 +4991,9 @@ extension on TranslationsDe {
 			'playlists.errorAdding' => 'Konnte nicht zur Wiedergabeliste hinzugefügt werden',
 			'playlists.errorReordering' => 'Element der Wiedergabeliste konnte nicht neu geordnet werden',
 			'playlists.errorRemoving' => 'Konnte nicht aus der Wiedergabeliste entfernt werden',
+			'playlists.rename' => 'Wiedergabeliste umbenennen',
+			'playlists.renamed' => 'Wiedergabeliste umbenannt',
+			'playlists.errorRenaming' => 'Fehler beim Umbenennen der Wiedergabeliste',
 			'music.goToAlbum' => 'Zum Album',
 			'music.goToArtist' => 'Zum Interpreten',
 			'music.instantMix' => 'Instant-Mix',
@@ -5446,11 +5452,11 @@ extension on TranslationsDe {
 			'performanceOverlay.decoderMediatekHw' => 'MediaTek HW',
 			'performanceOverlay.decoderExynosHw' => 'Exynos HW',
 			'performanceOverlay.decoderSoftware' => 'Software',
+			_ => null,
+		} ?? switch (path) {
 			'performanceOverlay.decoderHardware' => 'Hardware',
 			'performanceOverlay.tunnelingActive' => 'Aktiv',
 			'performanceOverlay.dvRpuFailed' => ({required Object converted, required Object failures}) => '${converted} (${failures} fehlgeschlagen)',
-			_ => null,
-		} ?? switch (path) {
 			'externalPlayer.title' => 'Externer Player',
 			'externalPlayer.useExternalPlayer' => 'Externen Player verwenden',
 			'externalPlayer.useExternalPlayerDescription' => 'Videos in einer anderen App öffnen',

@@ -1753,6 +1753,9 @@ class _Translations$playlists$nl extends Translations$playlists$en {
 	@override String get errorAdding => 'Toevoegen aan afspeellijst mislukt';
 	@override String get errorReordering => 'Afspeellijstitem herschikken mislukt';
 	@override String get errorRemoving => 'Verwijderen uit afspeellijst mislukt';
+	@override String get rename => 'Afspeellijst hernoemen';
+	@override String get renamed => 'Afspeellijst hernoemd';
+	@override String get errorRenaming => 'Afspeellijst hernoemen mislukt';
 }
 
 // Path: music
@@ -4988,6 +4991,9 @@ extension on TranslationsNl {
 			'playlists.errorAdding' => 'Toevoegen aan afspeellijst mislukt',
 			'playlists.errorReordering' => 'Afspeellijstitem herschikken mislukt',
 			'playlists.errorRemoving' => 'Verwijderen uit afspeellijst mislukt',
+			'playlists.rename' => 'Afspeellijst hernoemen',
+			'playlists.renamed' => 'Afspeellijst hernoemd',
+			'playlists.errorRenaming' => 'Afspeellijst hernoemen mislukt',
 			'music.goToAlbum' => 'Ga naar album',
 			'music.goToArtist' => 'Ga naar artiest',
 			'music.instantMix' => 'Instantmix',
@@ -5446,11 +5452,11 @@ extension on TranslationsNl {
 			'performanceOverlay.decoderMediatekHw' => 'MediaTek HW',
 			'performanceOverlay.decoderExynosHw' => 'Exynos HW',
 			'performanceOverlay.decoderSoftware' => 'Software',
+			_ => null,
+		} ?? switch (path) {
 			'performanceOverlay.decoderHardware' => 'Hardware',
 			'performanceOverlay.tunnelingActive' => 'Actief',
 			'performanceOverlay.dvRpuFailed' => ({required Object converted, required Object failures}) => '${converted} (${failures} mislukt)',
-			_ => null,
-		} ?? switch (path) {
 			'externalPlayer.title' => 'Externe speler',
 			'externalPlayer.useExternalPlayer' => 'Externe speler gebruiken',
 			'externalPlayer.useExternalPlayerDescription' => 'Open video\'s in een andere app',

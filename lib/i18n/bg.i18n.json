@@ -1739,6 +1739,12 @@
   "playlists": {
     "title": "Плейлисти",
     "playlist": "Плейлист",
+    "customPlaylist": "",
+    "customPlaylists": "",
+    "createCustomPlaylist": "",
+    "serverPlaylists": "",
+    "createServerPlaylist": "",
+    "customBadge": "",
     "noPlaylists": "Не са намерени плейлисти",
     "create": "Създай плейлист",
     "playlistName": "Име на плейлист",
@@ -1762,7 +1768,10 @@
     "errorLoading": "Неуспешно зареждане на плейлисти",
     "errorAdding": "Неуспешно добавяне към плейлист",
     "errorReordering": "Неуспешно пренареждане на елемент в плейлиста",
-    "errorRemoving": "Неуспешно премахване от плейлист"
+    "errorRemoving": "Неуспешно премахване от плейлист",
+    "rename": "Преименувай плейлист",
+    "renamed": "Плейлистът е преименуван",
+    "errorRenaming": "Неуспешно преименуване на плейлиста"
   },
   "music": {
     "goToAlbum": "Към албума",

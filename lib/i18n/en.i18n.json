@@ -1739,6 +1739,12 @@
   "playlists": {
     "title": "Playlists",
     "playlist": "Playlist",
+    "customPlaylist": "Custom Playlist",
+    "customPlaylists": "Custom Playlists",
+    "createCustomPlaylist": "Create Custom Playlist",
+    "serverPlaylists": "Server Playlists",
+    "createServerPlaylist": "Create Server Playlist",
+    "customBadge": "Custom",
     "noPlaylists": "No playlists found",
     "create": "Create Playlist",
     "playlistName": "Playlist Name",
@@ -1762,7 +1768,10 @@
     "errorLoading": "Failed to load playlists",
     "errorAdding": "Failed to add to playlist",
     "errorReordering": "Failed to reorder playlist item",
-    "errorRemoving": "Failed to remove from playlist"
+    "errorRemoving": "Failed to remove from playlist",
+    "rename": "Rename Playlist",
+    "renamed": "Playlist renamed",
+    "errorRenaming": "Failed to rename playlist"
   },
   "music": {
     "goToAlbum": "Go to album",

@@ -1729,6 +1729,12 @@
   "playlists": {
     "title": "플레이리스트",
     "playlist": "재생 목록",
+    "customPlaylist": "",
+    "customPlaylists": "",
+    "createCustomPlaylist": "",
+    "serverPlaylists": "",
+    "createServerPlaylist": "",
+    "customBadge": "",
     "noPlaylists": "재생 목록을 찾을 수 없습니다",
     "create": "재생 목록 생성",
     "playlistName": "재생 목록 이름",
@@ -1752,7 +1758,10 @@
     "errorLoading": "재생 목록 로드 실패",
     "errorAdding": "재생 목록에 추가 실패",
     "errorReordering": "재생 목록 항목 재정렬 실패",
-    "errorRemoving": "재생 목록에서 제거 실패"
+    "errorRemoving": "재생 목록에서 제거 실패",
+    "rename": "재생목록 이름 변경",
+    "renamed": "재생목록 이름 변경됨",
+    "errorRenaming": "재생목록 이름 변경 실패"
   },
   "music": {
     "goToAlbum": "앨범으로 이동",

@@ -1769,6 +1769,9 @@ class _Translations$playlists$pl extends Translations$playlists$en {
 	@override String get errorAdding => 'Nie udało się dodać do playlisty';
 	@override String get errorReordering => 'Nie udało się zmienić kolejności elementu playlisty';
 	@override String get errorRemoving => 'Nie udało się usunąć z playlisty';
+	@override String get rename => 'Zmień nazwę playlisty';
+	@override String get renamed => 'Nazwa playlisty zmieniona';
+	@override String get errorRenaming => 'Nie udało się zmienić nazwy playlisty';
 }
 
 // Path: music
@@ -5012,6 +5015,9 @@ extension on TranslationsPl {
 			'playlists.errorAdding' => 'Nie udało się dodać do playlisty',
 			'playlists.errorReordering' => 'Nie udało się zmienić kolejności elementu playlisty',
 			'playlists.errorRemoving' => 'Nie udało się usunąć z playlisty',
+			'playlists.rename' => 'Zmień nazwę playlisty',
+			'playlists.renamed' => 'Nazwa playlisty zmieniona',
+			'playlists.errorRenaming' => 'Nie udało się zmienić nazwy playlisty',
 			'music.goToAlbum' => 'Przejdź do albumu',
 			'music.goToArtist' => 'Przejdź do wykonawcy',
 			'music.instantMix' => 'Miks błyskawiczny',
@@ -5470,11 +5476,11 @@ extension on TranslationsPl {
 			'performanceOverlay.decoderMediatekHw' => 'MediaTek (sprzętowy)',
 			'performanceOverlay.decoderExynosHw' => 'Exynos (sprzętowy)',
 			'performanceOverlay.decoderSoftware' => 'Programowy',
+			_ => null,
+		} ?? switch (path) {
 			'performanceOverlay.decoderHardware' => 'Sprzętowy',
 			'performanceOverlay.tunnelingActive' => 'Aktywne',
 			'performanceOverlay.dvRpuFailed' => ({required Object converted, required Object failures}) => '${converted} (niepowodzenia: ${failures})',
-			_ => null,
-		} ?? switch (path) {
 			'externalPlayer.title' => 'Zewnętrzny odtwarzacz',
 			'externalPlayer.useExternalPlayer' => 'Użyj zewnętrznego odtwarzacza',
 			'externalPlayer.useExternalPlayerDescription' => 'Otwieraj wideo w innej aplikacji',

@@ -12,6 +12,7 @@ import 'package:http/testing.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:plezy/connection/connection.dart';
 import 'package:plezy/database/app_database.dart';
+import 'package:plezy/database/custom_playlist_operations.dart';
 import 'package:plezy/focus/focusable_wrapper.dart';
 import 'package:plezy/i18n/strings.g.dart';
 import 'package:plezy/navigation/profile_navigation_scope.dart';
@@ -1053,6 +1054,86 @@ void main() {
       expect(music.callCount, 3, reason: 'the stale playlist fetch must not start a fourth queue');
       expect(music.playedTracks, [newerTrack]);
       expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('custom audio playlist play and shuffle actions use music playback without remote call', (tester) async {
+      LocaleSettings.setLocaleSync(AppLocale.en);
+      TvDetectionService.debugSetAppleTVOverride(true);
+      addTearDown(() => TvDetectionService.debugSetAppleTVOverride(null));
+
+      final stack = await ProfileStack.create(withStorage: false);
+      final db = stack.db;
+      final track1 = testMediaItem(
+        id: 'track-c1',
+        backend: MediaBackend.jellyfin,
+        kind: MediaKind.track,
+        title: 'Custom Track One',
+        serverId: 'srv-1',
+      );
+      final track2 = testMediaItem(
+        id: 'track-c2',
+        backend: MediaBackend.plex,
+        kind: MediaKind.track,
+        title: 'Custom Track Two',
+        serverId: 'srv-2',
+      );
+
+      final pl = await db.createCustomPlaylist(
+        profileId: 'p1',
+        title: 'Mixed Custom Audio',
+        playlistType: 'audio',
+        initialItems: [track1, track2],
+      );
+      final playlist = (await db.getCustomPlaylist(pl.id))!;
+
+      final music = _RecordingMusicPlaybackService();
+      final manager = MultiServerManager();
+      final multiServerProvider = testMultiServerProvider(manager);
+      addTearDown(() async {
+        await stack.dispose();
+        music.dispose();
+        multiServerProvider.dispose();
+        manager.dispose();
+      });
+
+      final menuKey = GlobalKey<MediaContextMenuState>();
+
+      await tester.pumpWidget(
+        TranslationProvider(
+          child: MultiProvider(
+            providers: [
+              Provider<AppDatabase>.value(value: db),
+              ChangeNotifierProvider<MultiServerProvider>.value(value: multiServerProvider),
+              ChangeNotifierProvider<ActiveProfileProvider>.value(value: stack.active),
+              ChangeNotifierProvider<MusicPlaybackService>.value(value: music),
+            ],
+            child: MaterialApp(
+              theme: monoTheme(MonoPalette.dark),
+              home: Scaffold(
+                body: Center(
+                  child: MediaContextMenu(
+                    key: menuKey,
+                    item: playlist,
+                    child: const SizedBox(width: 120, height: 80, child: Text('custom audio target')),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      menuKey.currentState!.showContextMenu(tester.element(find.text('custom audio target')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(t.mediaMenu.shufflePlay));
+      await tester.pumpAndSettle();
+
+      expect(music.callCount, 1);
+      expect(music.playedTracks?.map((t) => t.id).toList(), ['track-c1', 'track-c2']);
+      expect(music.playedContext?.title, playlist.title);
+      expect(music.playedContext?.kind, MusicPlayContextKind.playlist);
+      expect(music.shuffle, isTrue);
+      expect(find.byType(SnackBar), findsNothing);
     });
 
     testWidgets('Jellyfin video playlist context Play exposes cancellable loading', (tester) async {

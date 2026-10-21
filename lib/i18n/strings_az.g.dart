@@ -1753,6 +1753,9 @@ class _Translations$playlists$az extends Translations$playlists$en {
 	@override String get errorAdding => 'Oynatma siyahısına əlavə edilə bilmədi';
 	@override String get errorReordering => 'Element yenidən sıralana bilmədi';
 	@override String get errorRemoving => 'Oynatma siyahısından silinə bilmədi';
+	@override String get rename => 'Pleylistin adını dəyişdir';
+	@override String get renamed => 'Pleylistin adı dəyişdirildi';
+	@override String get errorRenaming => 'Pleylistin adını dəyişdirmək alınmadı';
 }
 
 // Path: music
@@ -4988,6 +4991,9 @@ extension on TranslationsAz {
 			'playlists.errorAdding' => 'Oynatma siyahısına əlavə edilə bilmədi',
 			'playlists.errorReordering' => 'Element yenidən sıralana bilmədi',
 			'playlists.errorRemoving' => 'Oynatma siyahısından silinə bilmədi',
+			'playlists.rename' => 'Pleylistin adını dəyişdir',
+			'playlists.renamed' => 'Pleylistin adı dəyişdirildi',
+			'playlists.errorRenaming' => 'Pleylistin adını dəyişdirmək alınmadı',
 			'music.goToAlbum' => 'Alboma keç',
 			'music.goToArtist' => 'İfaçıya keç',
 			'music.instantMix' => 'Anında qarışıq',
@@ -5446,11 +5452,11 @@ extension on TranslationsAz {
 			'performanceOverlay.decoderMediatekHw' => 'MediaTek HW',
 			'performanceOverlay.decoderExynosHw' => 'Exynos HW',
 			'performanceOverlay.decoderSoftware' => 'Proqram təminatı',
+			_ => null,
+		} ?? switch (path) {
 			'performanceOverlay.decoderHardware' => 'Aparat təminatı',
 			'performanceOverlay.tunnelingActive' => 'Aktiv',
 			'performanceOverlay.dvRpuFailed' => ({required Object converted, required Object failures}) => '${converted} (${failures} uğursuz)',
-			_ => null,
-		} ?? switch (path) {
 			'externalPlayer.title' => 'Xarici oynadıcı',
 			'externalPlayer.useExternalPlayer' => 'Xarici oynadıcı istifadə et',
 			'externalPlayer.useExternalPlayerDescription' => 'Videoları başqa tətbiqdə açın',

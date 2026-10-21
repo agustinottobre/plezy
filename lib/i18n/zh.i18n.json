@@ -1729,6 +1729,12 @@
   "playlists": {
     "title": "播放列表",
     "playlist": "播放列表",
+    "customPlaylist": "",
+    "customPlaylists": "",
+    "createCustomPlaylist": "",
+    "serverPlaylists": "",
+    "createServerPlaylist": "",
+    "customBadge": "",
     "noPlaylists": "未找到播放列表",
     "create": "创建播放列表",
     "playlistName": "播放列表名称",
@@ -1752,7 +1758,10 @@
     "errorLoading": "加载播放列表失败",
     "errorAdding": "添加到播放列表失败",
     "errorReordering": "重新排序播放列表项目失败",
-    "errorRemoving": "从播放列表中移除失败"
+    "errorRemoving": "从播放列表中移除失败",
+    "rename": "重命名播放列表",
+    "renamed": "播放列表已重命名",
+    "errorRenaming": "重命名播放列表失败"
   },
   "music": {
     "goToAlbum": "前往专辑",

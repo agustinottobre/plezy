@@ -1739,6 +1739,12 @@
   "playlists": {
     "title": "Wiedergabelisten",
     "playlist": "Wiedergabeliste",
+    "customPlaylist": "",
+    "customPlaylists": "",
+    "createCustomPlaylist": "",
+    "serverPlaylists": "",
+    "createServerPlaylist": "",
+    "customBadge": "",
     "noPlaylists": "Keine Wiedergabelisten gefunden",
     "create": "Wiedergabeliste erstellen",
     "playlistName": "Name der Wiedergabeliste",
@@ -1762,7 +1768,10 @@
     "errorLoading": "Wiedergabelisten konnten nicht geladen werden",
     "errorAdding": "Konnte nicht zur Wiedergabeliste hinzugefügt werden",
     "errorReordering": "Element der Wiedergabeliste konnte nicht neu geordnet werden",
-    "errorRemoving": "Konnte nicht aus der Wiedergabeliste entfernt werden"
+    "errorRemoving": "Konnte nicht aus der Wiedergabeliste entfernt werden",
+    "rename": "Wiedergabeliste umbenennen",
+    "renamed": "Wiedergabeliste umbenannt",
+    "errorRenaming": "Fehler beim Umbenennen der Wiedergabeliste"
   },
   "music": {
     "goToAlbum": "Zum Album",

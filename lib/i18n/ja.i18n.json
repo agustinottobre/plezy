@@ -1729,6 +1729,12 @@
   "playlists": {
     "title": "プレイリスト",
     "playlist": "プレイリスト",
+    "customPlaylist": "",
+    "customPlaylists": "",
+    "createCustomPlaylist": "",
+    "serverPlaylists": "",
+    "createServerPlaylist": "",
+    "customBadge": "",
     "noPlaylists": "プレイリストが見つかりません",
     "create": "プレイリストを作成",
     "playlistName": "プレイリスト名",
@@ -1752,7 +1758,10 @@
     "errorLoading": "プレイリストの読み込みに失敗しました",
     "errorAdding": "プレイリストへの追加に失敗しました",
     "errorReordering": "プレイリストアイテムの並べ替えに失敗しました",
-    "errorRemoving": "プレイリストからの削除に失敗しました"
+    "errorRemoving": "プレイリストからの削除に失敗しました",
+    "rename": "プレイリスト名を変更",
+    "renamed": "プレイリスト名を変更しました",
+    "errorRenaming": "プレイリスト名の変更に失敗しました"
   },
   "music": {
     "goToAlbum": "アルバムへ移動",

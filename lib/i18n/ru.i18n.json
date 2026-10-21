@@ -1759,6 +1759,12 @@
   "playlists": {
     "title": "Плейлисты",
     "playlist": "Плейлист",
+    "customPlaylist": "",
+    "customPlaylists": "",
+    "createCustomPlaylist": "",
+    "serverPlaylists": "",
+    "createServerPlaylist": "",
+    "customBadge": "",
     "noPlaylists": "Плейлисты не найдены",
     "create": "Создать плейлист",
     "playlistName": "Название плейлиста",
@@ -1782,7 +1788,10 @@
     "errorLoading": "Не удалось загрузить плейлисты",
     "errorAdding": "Не удалось добавить в плейлист",
     "errorReordering": "Не удалось переупорядочить элемент плейлиста",
-    "errorRemoving": "Не удалось удалить из плейлиста"
+    "errorRemoving": "Не удалось удалить из плейлиста",
+    "rename": "Переименовать плейлист",
+    "renamed": "Плейлист переименован",
+    "errorRenaming": "Не удалось переименовать плейлист"
   },
   "music": {
     "goToAlbum": "Перейти к альбому",

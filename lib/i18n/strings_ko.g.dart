@@ -1745,6 +1745,9 @@ class _Translations$playlists$ko extends Translations$playlists$en {
 	@override String get errorAdding => '재생 목록에 추가 실패';
 	@override String get errorReordering => '재생 목록 항목 재정렬 실패';
 	@override String get errorRemoving => '재생 목록에서 제거 실패';
+	@override String get rename => '재생목록 이름 변경';
+	@override String get renamed => '재생목록 이름 변경됨';
+	@override String get errorRenaming => '재생목록 이름 변경 실패';
 }
 
 // Path: music
@@ -4976,6 +4979,9 @@ extension on TranslationsKo {
 			'playlists.errorAdding' => '재생 목록에 추가 실패',
 			'playlists.errorReordering' => '재생 목록 항목 재정렬 실패',
 			'playlists.errorRemoving' => '재생 목록에서 제거 실패',
+			'playlists.rename' => '재생목록 이름 변경',
+			'playlists.renamed' => '재생목록 이름 변경됨',
+			'playlists.errorRenaming' => '재생목록 이름 변경 실패',
 			'music.goToAlbum' => '앨범으로 이동',
 			'music.goToArtist' => '아티스트로 이동',
 			'music.instantMix' => '인스턴트 믹스',
@@ -5434,11 +5440,11 @@ extension on TranslationsKo {
 			'performanceOverlay.decoderMediatekHw' => 'MediaTek HW',
 			'performanceOverlay.decoderExynosHw' => 'Exynos HW',
 			'performanceOverlay.decoderSoftware' => '소프트웨어',
+			_ => null,
+		} ?? switch (path) {
 			'performanceOverlay.decoderHardware' => '하드웨어',
 			'performanceOverlay.tunnelingActive' => '활성',
 			'performanceOverlay.dvRpuFailed' => ({required Object converted, required Object failures}) => '${converted} (${failures}개 실패)',
-			_ => null,
-		} ?? switch (path) {
 			'externalPlayer.title' => '외부 플레이어',
 			'externalPlayer.useExternalPlayer' => '외부 플레이어 사용',
 			'externalPlayer.useExternalPlayerDescription' => '동영상을 다른 앱에서 열기',

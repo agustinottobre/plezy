@@ -1739,6 +1739,12 @@
   "playlists": {
     "title": "Playlister",
     "playlist": "Playliste",
+    "customPlaylist": "",
+    "customPlaylists": "",
+    "createCustomPlaylist": "",
+    "serverPlaylists": "",
+    "createServerPlaylist": "",
+    "customBadge": "",
     "noPlaylists": "Ingen playlister fundet",
     "create": "Opret playliste",
     "playlistName": "Playlistenavn",
@@ -1762,7 +1768,10 @@
     "errorLoading": "Kunne ikke indlæse playlister",
     "errorAdding": "Kunne ikke tilføje til playliste",
     "errorReordering": "Kunne ikke ændre rækkefølge på playlisteelement",
-    "errorRemoving": "Kunne ikke fjerne fra playliste"
+    "errorRemoving": "Kunne ikke fjerne fra playliste",
+    "rename": "Omdøb afspilningsliste",
+    "renamed": "Afspilningsliste omdøbt",
+    "errorRenaming": "Kunne ikke omdøbe afspilningsliste"
   },
   "music": {
     "goToAlbum": "Gå til album",

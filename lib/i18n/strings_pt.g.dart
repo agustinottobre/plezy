@@ -1753,6 +1753,9 @@ class _Translations$playlists$pt extends Translations$playlists$en {
 	@override String get errorAdding => 'Falha ao adicionar à playlist';
 	@override String get errorReordering => 'Falha ao reordenar item da playlist';
 	@override String get errorRemoving => 'Falha ao remover da playlist';
+	@override String get rename => 'Renomear lista de reprodução';
+	@override String get renamed => 'Lista de reprodução renomeada';
+	@override String get errorRenaming => 'Falha ao renomear lista de reprodução';
 }
 
 // Path: music
@@ -4988,6 +4991,9 @@ extension on TranslationsPt {
 			'playlists.errorAdding' => 'Falha ao adicionar à playlist',
 			'playlists.errorReordering' => 'Falha ao reordenar item da playlist',
 			'playlists.errorRemoving' => 'Falha ao remover da playlist',
+			'playlists.rename' => 'Renomear lista de reprodução',
+			'playlists.renamed' => 'Lista de reprodução renomeada',
+			'playlists.errorRenaming' => 'Falha ao renomear lista de reprodução',
 			'music.goToAlbum' => 'Ir para o álbum',
 			'music.goToArtist' => 'Ir para o artista',
 			'music.instantMix' => 'Mix instantâneo',
@@ -5446,11 +5452,11 @@ extension on TranslationsPt {
 			'performanceOverlay.decoderMediatekHw' => 'MediaTek HW',
 			'performanceOverlay.decoderExynosHw' => 'Exynos HW',
 			'performanceOverlay.decoderSoftware' => 'Software',
+			_ => null,
+		} ?? switch (path) {
 			'performanceOverlay.decoderHardware' => 'Hardware',
 			'performanceOverlay.tunnelingActive' => 'Ativo',
 			'performanceOverlay.dvRpuFailed' => ({required Object converted, required Object failures}) => '${converted} (${failures} com falha)',
-			_ => null,
-		} ?? switch (path) {
 			'externalPlayer.title' => 'Reprodutor externo',
 			'externalPlayer.useExternalPlayer' => 'Usar reprodutor externo',
 			'externalPlayer.useExternalPlayerDescription' => 'Abrir vídeos em outro app',

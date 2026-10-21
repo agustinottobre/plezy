@@ -1,5 +1,9 @@
 import 'dart:async';
+import 'rename_custom_playlist_dialog.dart';
+import '../database/app_database.dart';
+import '../database/custom_playlist_operations.dart';
 import '../media/ids.dart';
+import '../utils/playlist_action_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
@@ -597,11 +601,16 @@ class MediaContextMenuState extends State<MediaContextMenu> {
     // collection qualify — collections can contain movies, episodes,
     // shows, albums, and artists; audio playlists queue their tracks.
     final playlist = menu.playlist;
+    final isCustomPlaylist = playlist != null && playlist.isCustom;
     final isDownloadablePlaylist =
-        playlist != null && (playlist.playlistType == 'video' || playlist.playlistType == 'audio');
+        playlist != null &&
+        !playlist.isCustom &&
+        (playlist.playlistType == 'video' || playlist.playlistType == 'audio');
     return [
       _MenuAction(value: 'play', icon: Symbols.play_arrow_rounded, label: t.common.play),
       _MenuAction(value: 'shuffle', icon: Symbols.shuffle_rounded, label: t.mediaMenu.shufflePlay),
+      if (isCustomPlaylist)
+        _MenuAction(value: 'rename', icon: Symbols.edit_rounded, label: t.playlists.rename),
       if ((isDownloadablePlaylist || menu.isCollection) && !PlatformDetector.isAppleTV())
         ..._syncDownloadMenuActions(
           hasSyncRule: Provider.of<DownloadProvider>(context, listen: false).hasSyncRule(_itemSyncRuleKey(context)),
@@ -711,6 +720,8 @@ class MediaContextMenuState extends State<MediaContextMenu> {
         _MenuAction(value: 'music_play_next', icon: Symbols.playlist_play_rounded, label: t.music.playNext),
         _MenuAction(value: 'music_add_queue', icon: Symbols.queue_music_rounded, label: t.music.addToQueue),
       ],
+      if (mediaKind == MediaKind.track || mediaKind == MediaKind.album)
+        _MenuAction(value: 'add_to_playlist', icon: Symbols.playlist_add_rounded, label: t.common.addTo),
       // Instant Mix — capability-gated, and only while the server is
       // reachable (capabilities stay truthy for offline servers).
       if (menu.itemServerOnline && (menu.mediaClient?.capabilities.instantMix ?? false))
@@ -852,6 +863,9 @@ class MediaContextMenuState extends State<MediaContextMenu> {
       case 'shuffle':
         await _handleShuffle(context, menu.isCollection, menu.isPlaylist);
         break;
+      case 'rename':
+        await _handleRenameCustomPlaylist(context);
+        break;
       case 'download_playlist' || 'download_collection':
         await _handleDownloadList(context, isPlaylist: selected == 'download_playlist');
         break;
@@ -970,6 +984,9 @@ class MediaContextMenuState extends State<MediaContextMenu> {
         break;
       case 'add_to':
         await _showAddToSubmenu(context, offerCollections: menu.canManageCollections);
+        break;
+      case 'add_to_playlist':
+        await _showAddToPlaylistDialog(context);
         break;
       case 'delete_media':
         await _handleDeleteMediaItem(context, mediaItem.kind);
@@ -1455,43 +1472,10 @@ class MediaContextMenuState extends State<MediaContextMenu> {
   }
 
   Future<void> _showAddToPlaylistDialog(BuildContext context) async {
-    final client = _getMediaClientForItem();
-
-    try {
-      final item = _mediaItem!;
-
-      final result = await showScopedDialog<String>(
-        context: context,
-        builder: (context) => PlaylistSelectionDialog(client: client),
-      );
-
-      if (result == null || !context.mounted) return;
-
-      await _addItemToContainer<MediaPlaylist>(
-        context,
-        kind: 'playlist',
-        item: item,
-        client: client,
-        result: result,
-        createPrompt: (title: t.playlists.create, label: t.playlists.playlistName, hint: t.playlists.enterPlaylistName),
-        create: (name) => client.createPlaylist(title: name, items: [item]),
-        createdLog: (playlist) => 'Successfully created playlist: ${playlist.title}',
-        eagerSyncId: (_) => null,
-        add: () => client.addToPlaylist(playlistId: result, items: [item]),
-        messages: (
-          created: t.playlists.created,
-          createError: t.playlists.errorCreating,
-          added: t.playlists.itemAdded,
-          addError: t.playlists.errorAdding,
-        ),
-        notifyChanged: () => LibraryRefreshNotifier().notifyPlaylistsChanged(),
-      );
-    } catch (e, stackTrace) {
-      appLogger.e('Error in add to playlist flow', error: e, stackTrace: stackTrace);
-      if (context.mounted) {
-        showErrorSnackBar(context, '${t.playlists.errorLoading}: ${localizedErrorReason(e)}');
-      }
-    }
+    final client = _tryGetMediaClientForItem();
+    final item = _mediaItem;
+    if (item == null) return;
+    await showAddToPlaylistFlow(context, item, client: client);
   }
 
   Future<void> _showAddToCollectionDialog(BuildContext context) async {
@@ -1711,7 +1695,7 @@ class MediaContextMenuState extends State<MediaContextMenu> {
   /// in-memory queue locally.
   Future<void> _launchCollectionOrPlaylist(BuildContext context, {required bool shuffle}) async {
     final playlist = _playlist;
-    if (playlist != null && playlist.playlistType == 'audio') {
+    if (playlist != null && !playlist.isCustom && playlist.playlistType == 'audio') {
       await playAudioPlaylist(
         context,
         client: _getMediaClientForItem(),
@@ -1728,11 +1712,56 @@ class MediaContextMenuState extends State<MediaContextMenu> {
 
     // Launcher accepts both MediaItem (for collections) and MediaPlaylist.
     final launcher = MediaListPlaybackLauncher.forItem(context, widget.item);
-    await launcher.launchFromCollectionOrPlaylist(item: widget.item, shuffle: shuffle);
+    final result = await launcher.launchFromCollectionOrPlaylist(item: widget.item, shuffle: shuffle);
+    if (!context.mounted) return;
+    if (result is PlayQueueEmpty) {
+      showErrorSnackBar(context, t.messages.failedToCreatePlayQueueNoItems);
+    } else if (result is PlayQueueError) {
+      showErrorSnackBar(context, t.messages.errorLoading(error: localizedErrorReason(result.error)));
+    }
+  }
+
+  Future<void> _handleRenameCustomPlaylist(BuildContext context) async {
+    final playlist = _playlist;
+    if (playlist == null || !playlist.isCustom) return;
+
+    final newName = await showRenameCustomPlaylistDialog(
+      context,
+      currentTitle: playlist.title,
+    );
+    if (newName == null || newName.trim().isEmpty || newName.trim() == playlist.title || !context.mounted) return;
+
+    try {
+      final db = context.read<AppDatabase>();
+      await db.updateCustomPlaylistTitle(playlistId: playlist.id, title: newName.trim());
+      if (!context.mounted) return;
+      showSuccessSnackBar(context, t.playlists.renamed);
+      LibraryRefreshNotifier().notifyPlaylistsChanged();
+      _notifyListRefresh();
+    } catch (e, stackTrace) {
+      appLogger.e('Failed to rename custom playlist: $e', error: e, stackTrace: stackTrace);
+      if (!context.mounted) return;
+      showErrorSnackBar(context, t.playlists.errorRenaming);
+    }
   }
 
   /// Handle delete action for collections and playlists
   Future<void> _handleDelete(BuildContext context, bool _, bool isPlaylist) async {
+    if (isPlaylist && _playlist!.isCustom) {
+      final confirmed = await showDeleteConfirmation(
+        context,
+        title: t.playlists.deleteConfirm,
+        message: t.playlists.deleteMessage(name: _playlist!.title),
+      );
+      if (!confirmed || !context.mounted) return;
+      await context.read<AppDatabase>().deleteCustomPlaylist(_playlist!.id);
+      if (context.mounted) {
+        showSuccessSnackBar(context, t.playlists.deleted);
+        _notifyListRefresh();
+      }
+      return;
+    }
+
     final client = _getMediaClientForItem();
 
     if (isPlaylist) {

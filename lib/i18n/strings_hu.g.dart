@@ -1753,6 +1753,9 @@ class _Translations$playlists$hu extends Translations$playlists$en {
 	@override String get errorAdding => 'Nem sikerült a lejátszási listához adni';
 	@override String get errorReordering => 'Nem sikerült átrendezni a lejátszási lista elemét';
 	@override String get errorRemoving => 'Nem sikerült az eltávolítás a lejátszási listáról';
+	@override String get rename => 'Lejátszási lista átnevezése';
+	@override String get renamed => 'Lejátszási lista átnevezve';
+	@override String get errorRenaming => 'Nem sikerült átnevezni a lejátszási listát';
 }
 
 // Path: music
@@ -4988,6 +4991,9 @@ extension on TranslationsHu {
 			'playlists.errorAdding' => 'Nem sikerült a lejátszási listához adni',
 			'playlists.errorReordering' => 'Nem sikerült átrendezni a lejátszási lista elemét',
 			'playlists.errorRemoving' => 'Nem sikerült az eltávolítás a lejátszási listáról',
+			'playlists.rename' => 'Lejátszási lista átnevezése',
+			'playlists.renamed' => 'Lejátszási lista átnevezve',
+			'playlists.errorRenaming' => 'Nem sikerült átnevezni a lejátszási listát',
 			'music.goToAlbum' => 'Ugrás az albumhoz',
 			'music.goToArtist' => 'Ugrás az előadóhoz',
 			'music.instantMix' => 'Azonnali keverés',
@@ -5446,11 +5452,11 @@ extension on TranslationsHu {
 			'performanceOverlay.decoderMediatekHw' => 'MediaTek HW',
 			'performanceOverlay.decoderExynosHw' => 'Exynos HW',
 			'performanceOverlay.decoderSoftware' => 'Szoftveres',
+			_ => null,
+		} ?? switch (path) {
 			'performanceOverlay.decoderHardware' => 'Hardveres',
 			'performanceOverlay.tunnelingActive' => 'Aktív',
 			'performanceOverlay.dvRpuFailed' => ({required Object converted, required Object failures}) => '${converted} (${failures} sikertelen)',
-			_ => null,
-		} ?? switch (path) {
 			'externalPlayer.title' => 'Külső lejátszó',
 			'externalPlayer.useExternalPlayer' => 'Külső lejátszó használata',
 			'externalPlayer.useExternalPlayerDescription' => 'Videók megnyitása egy másik alkalmazásban',
