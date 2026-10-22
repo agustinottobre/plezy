@@ -327,6 +327,10 @@ class _Translations$settings$bg extends Translations$settings$en {
 	@override String get showServerNameOnHubsDescription => 'Винаги показвай имената на сървърите в заглавията на хъбовете.';
 	@override String get groupLibrariesByServer => 'Групирай библиотеките по сървър';
 	@override String get groupLibrariesByServerDescription => 'Групирай библиотеките в страничната лента под всеки медиен сървър.';
+	@override String get collapseServerLibrariesByDefault => 'Свиване на библиотеките по подразбиране';
+	@override String get collapseServerLibrariesByDefaultDescription => 'Започване със свити списъци с библиотеки под всеки сървър в страничната лента.';
+	@override String get showHiddenLibrariesInSidebar => 'Показване на скритите библиотеки в страничната лента';
+	@override String get showHiddenLibrariesInSidebarDescription => 'Показване на сгъваемия раздел \'Скрити\' под библиотеките в страничната лента.';
 	@override String get alwaysKeepSidebarOpen => 'Винаги дръж страничната лента отворена';
 	@override String get alwaysKeepSidebarOpenDescription => 'Страничната лента остава разгъната и зоната със съдържание се наглася да пасне';
 	@override String get showUnwatchedCount => 'Показвай броя негледани';
@@ -3613,6 +3617,10 @@ extension on TranslationsBg {
 			'settings.showServerNameOnHubsDescription' => 'Винаги показвай имената на сървърите в заглавията на хъбовете.',
 			'settings.groupLibrariesByServer' => 'Групирай библиотеките по сървър',
 			'settings.groupLibrariesByServerDescription' => 'Групирай библиотеките в страничната лента под всеки медиен сървър.',
+			'settings.collapseServerLibrariesByDefault' => 'Свиване на библиотеките по подразбиране',
+			'settings.collapseServerLibrariesByDefaultDescription' => 'Започване със свити списъци с библиотеки под всеки сървър в страничната лента.',
+			'settings.showHiddenLibrariesInSidebar' => 'Показване на скритите библиотеки в страничната лента',
+			'settings.showHiddenLibrariesInSidebarDescription' => 'Показване на сгъваемия раздел \'Скрити\' под библиотеките в страничната лента.',
 			'settings.alwaysKeepSidebarOpen' => 'Винаги дръж страничната лента отворена',
 			'settings.alwaysKeepSidebarOpenDescription' => 'Страничната лента остава разгъната и зоната със съдържание се наглася да пасне',
 			'settings.showUnwatchedCount' => 'Показвай броя негледани',
@@ -3909,12 +3917,12 @@ extension on TranslationsBg {
 			'themeEditor.colors' => 'Цветове',
 			'themeEditor.preview' => 'Визуализация',
 			'themeEditor.slots.bg' => 'Фон',
+			_ => null,
+		} ?? switch (path) {
 			'themeEditor.slots.surface' => 'Повърхност',
 			'themeEditor.slots.outline' => 'Контур',
 			'themeEditor.slots.text' => 'Текст',
 			'themeEditor.slots.textMuted' => 'Вторичен текст',
-			_ => null,
-		} ?? switch (path) {
 			'themeEditor.slots.accent' => 'Акцент',
 			'themeEditor.opacity' => 'Непрозрачност',
 			'themeEditor.hexHint' => '#RRGGBB или #AARRGGBB',
@@ -4423,12 +4431,12 @@ extension on TranslationsBg {
 			'profiles.profileNameHint' => 'напр. Гости, Деца, Семейна стая',
 			'profiles.pinProtectionOptional' => 'PIN защита (по желание)',
 			'profiles.pinExplain' => 'Изисква се 4-цифрен PIN за смяна на профили.',
+			_ => null,
+		} ?? switch (path) {
 			'profiles.continueButton' => 'Продължи',
 			'profiles.pinsDontMatch' => 'PIN кодовете не съвпадат',
 			'profiles.tokenIdentityMismatch' => 'Токенът на профила в Plex съответства на неочакван сървър',
 			'connections.sectionTitle' => 'Връзки',
-			_ => null,
-		} ?? switch (path) {
 			'connections.addConnection' => 'Добави връзка',
 			'connections.addConnectionSubtitleNoProfile' => 'Влезте с Plex или свържете Jellyfin или Emby сървър',
 			'connections.addConnectionSubtitleScoped' => ({required Object displayName}) => 'Добави към ${displayName}: Plex, Jellyfin, Emby или връзка от друг профил',
@@ -4937,12 +4945,12 @@ extension on TranslationsBg {
 			'liveTv.recordSettings.startEarly' => 'Започване по-рано (секунди)',
 			'liveTv.recordSettings.endLate' => 'Приключване по-късно (секунди)',
 			'liveTv.recordSettings.newOnly' => 'Само нови епизоди',
+			_ => null,
+		} ?? switch (path) {
 			'liveTv.recordSettings.anyChannel' => 'Записване от всеки канал',
 			'liveTv.recordSettings.anyTime' => 'Записване по всяко време',
 			'liveTv.recordSettings.skipInLibrary' => 'Пропускане на епизоди, които вече са в библиотеката',
 			'liveTv.recordSettings.keepUpTo' => 'Епизоди за запазване',
-			_ => null,
-		} ?? switch (path) {
 			'liveTv.recordSettings.keepUpToHint' => '0 запазва всички епизоди',
 			'liveTv.startingInMinutes' => ({required Object minutes}) => 'Започва след ${minutes} мин',
 			'liveTv.dayAtTime' => ({required Object day, required Object time}) => '${day} в ${time}',
@@ -5451,12 +5459,12 @@ extension on TranslationsBg {
 			'performanceOverlay.player' => 'Плеър',
 			'performanceOverlay.memory' => 'Памет',
 			'performanceOverlay.uiFps' => 'FPS на интерфейса',
+			_ => null,
+		} ?? switch (path) {
 			'performanceOverlay.fps' => 'FPS',
 			'performanceOverlay.decoderAndroidHw' => 'Android HW',
 			'performanceOverlay.decoderNvidiaHw' => 'NVIDIA HW',
 			'performanceOverlay.decoderQualcommHw' => 'Qualcomm HW',
-			_ => null,
-		} ?? switch (path) {
 			'performanceOverlay.decoderMediatekHw' => 'MediaTek HW',
 			'performanceOverlay.decoderExynosHw' => 'Exynos HW',
 			'performanceOverlay.decoderSoftware' => 'Софтуерен',
