@@ -650,6 +650,18 @@ class Translations$settings$en {
 	/// en: 'Group sidebar libraries under each media server.'
 	String get groupLibrariesByServerDescription => 'Group sidebar libraries under each media server.';
 
+	/// en: 'Collapse Server Libraries by Default'
+	String get collapseServerLibrariesByDefault => 'Collapse Server Libraries by Default';
+
+	/// en: 'Start with library lists collapsed under each server in the sidebar.'
+	String get collapseServerLibrariesByDefaultDescription => 'Start with library lists collapsed under each server in the sidebar.';
+
+	/// en: 'Show Hidden Libraries in Sidebar'
+	String get showHiddenLibrariesInSidebar => 'Show Hidden Libraries in Sidebar';
+
+	/// en: 'Display the collapsible 'Hidden' section under libraries in the sidebar.'
+	String get showHiddenLibrariesInSidebarDescription => 'Display the collapsible \'Hidden\' section under libraries in the sidebar.';
+
 	/// en: 'Always Keep Sidebar Open'
 	String get alwaysKeepSidebarOpen => 'Always Keep Sidebar Open';
 
@@ -8346,6 +8358,10 @@ extension on Translations {
 			'settings.showServerNameOnHubsDescription' => 'Always show server names in hub titles.',
 			'settings.groupLibrariesByServer' => 'Group Libraries by Server',
 			'settings.groupLibrariesByServerDescription' => 'Group sidebar libraries under each media server.',
+			'settings.collapseServerLibrariesByDefault' => 'Collapse Server Libraries by Default',
+			'settings.collapseServerLibrariesByDefaultDescription' => 'Start with library lists collapsed under each server in the sidebar.',
+			'settings.showHiddenLibrariesInSidebar' => 'Show Hidden Libraries in Sidebar',
+			'settings.showHiddenLibrariesInSidebarDescription' => 'Display the collapsible \'Hidden\' section under libraries in the sidebar.',
 			'settings.alwaysKeepSidebarOpen' => 'Always Keep Sidebar Open',
 			'settings.alwaysKeepSidebarOpenDescription' => 'Sidebar stays expanded and content area adjusts to fit',
 			'settings.showUnwatchedCount' => 'Show Unwatched Count',
@@ -8642,12 +8658,12 @@ extension on Translations {
 			'themeEditor.preview' => 'Preview',
 			'themeEditor.slots.bg' => 'Background',
 			'themeEditor.slots.surface' => 'Surface',
+			_ => null,
+		} ?? switch (path) {
 			'themeEditor.slots.outline' => 'Outline',
 			'themeEditor.slots.text' => 'Text',
 			'themeEditor.slots.textMuted' => 'Secondary text',
 			'themeEditor.slots.accent' => 'Accent',
-			_ => null,
-		} ?? switch (path) {
 			'themeEditor.opacity' => 'Opacity',
 			'themeEditor.hexHint' => '#RRGGBB or #AARRGGBB',
 			'themeEditor.fromOtherThemes' => 'From other themes',
@@ -9156,12 +9172,12 @@ extension on Translations {
 			'profiles.newProfile' => 'New profile',
 			'profiles.profileNameHint' => 'e.g. Guests, Kids, Family Room',
 			'profiles.pinProtectionOptional' => 'PIN protection (optional)',
+			_ => null,
+		} ?? switch (path) {
 			'profiles.pinExplain' => '4-digit PIN required to switch profiles.',
 			'profiles.continueButton' => 'Continue',
 			'profiles.pinsDontMatch' => 'PINs don\'t match',
 			'profiles.tokenIdentityMismatch' => 'The Plex profile token resolved to an unexpected server',
-			_ => null,
-		} ?? switch (path) {
 			'connections.sectionTitle' => 'Connections',
 			'connections.addConnection' => 'Add connection',
 			'connections.addConnectionSubtitleNoProfile' => 'Sign in with Plex or connect a Jellyfin or Emby server',
@@ -9670,12 +9686,12 @@ extension on Translations {
 			'liveTv.guideReloadFailed' => 'Couldn\'t refresh the guide',
 			'liveTv.rulesProcessRequested' => 'Rule re-evaluation requested',
 			'liveTv.rulesProcessFailed' => 'Couldn\'t re-evaluate recording rules',
+			_ => null,
+		} ?? switch (path) {
 			'liveTv.recordShow' => 'Record show',
 			'liveTv.recordSettings.startEarly' => 'Start early (seconds)',
 			'liveTv.recordSettings.endLate' => 'End late (seconds)',
 			'liveTv.recordSettings.newOnly' => 'Only new episodes',
-			_ => null,
-		} ?? switch (path) {
 			'liveTv.recordSettings.anyChannel' => 'Record on any channel',
 			'liveTv.recordSettings.anyTime' => 'Record at any time',
 			'liveTv.recordSettings.skipInLibrary' => 'Skip episodes already in the library',
@@ -10184,12 +10200,12 @@ extension on Translations {
 			'performanceOverlay.dvRpus' => 'DV RPUs',
 			'performanceOverlay.dvRpuAverage' => 'DV RPU Avg',
 			'performanceOverlay.dvSampleAverage' => 'DV Sample Avg',
+			_ => null,
+		} ?? switch (path) {
 			'performanceOverlay.maxLuma' => 'Max Luma',
 			'performanceOverlay.minLuma' => 'Min Luma',
 			'performanceOverlay.maxCll' => 'MaxCLL',
 			'performanceOverlay.maxFall' => 'MaxFALL',
-			_ => null,
-		} ?? switch (path) {
 			'performanceOverlay.cacheUsed' => 'Cache Used',
 			'performanceOverlay.cacheLimit' => 'Cache Limit',
 			'performanceOverlay.speed' => 'Speed',

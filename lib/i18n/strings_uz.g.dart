@@ -327,6 +327,10 @@ class _Translations$settings$uz extends Translations$settings$en {
 	@override String get showServerNameOnHubsDescription => 'Boʻlim sarlavhalarida har doim server nomini koʻrsatish.';
 	@override String get groupLibrariesByServer => 'Kutubxonalarni server boʻyicha guruhlash';
 	@override String get groupLibrariesByServerDescription => 'Yon menyudagi kutubxonalarni serverlar boʻyicha guruhlash.';
+	@override String get collapseServerLibrariesByDefault => 'Server kutubxonalarini odatda yigʻish';
+	@override String get collapseServerLibrariesByDefaultDescription => 'Yon panelda har bir server ostidagi kutubxona roʻyxatlarini yigʻilgan holda boshlash.';
+	@override String get showHiddenLibrariesInSidebar => 'Yon panelda yashirin kutubxonalarni koʻrsatish';
+	@override String get showHiddenLibrariesInSidebarDescription => 'Yon paneldagi kutubxonalar ostida yigʻiladigan \'Yashirin\' boʻlimini koʻrsatish.';
 	@override String get alwaysKeepSidebarOpen => 'Yon menyuni har doim ochiq saqlash';
 	@override String get alwaysKeepSidebarOpenDescription => 'Yon menyu ochiq holatda qoladi, kontent maydoni unga moslashadi';
 	@override String get showUnwatchedCount => 'Koʻrilmaganlar sonini koʻrsatish';
@@ -3610,6 +3614,10 @@ extension on TranslationsUz {
 			'settings.showServerNameOnHubsDescription' => 'Boʻlim sarlavhalarida har doim server nomini koʻrsatish.',
 			'settings.groupLibrariesByServer' => 'Kutubxonalarni server boʻyicha guruhlash',
 			'settings.groupLibrariesByServerDescription' => 'Yon menyudagi kutubxonalarni serverlar boʻyicha guruhlash.',
+			'settings.collapseServerLibrariesByDefault' => 'Server kutubxonalarini odatda yigʻish',
+			'settings.collapseServerLibrariesByDefaultDescription' => 'Yon panelda har bir server ostidagi kutubxona roʻyxatlarini yigʻilgan holda boshlash.',
+			'settings.showHiddenLibrariesInSidebar' => 'Yon panelda yashirin kutubxonalarni koʻrsatish',
+			'settings.showHiddenLibrariesInSidebarDescription' => 'Yon paneldagi kutubxonalar ostida yigʻiladigan \'Yashirin\' boʻlimini koʻrsatish.',
 			'settings.alwaysKeepSidebarOpen' => 'Yon menyuni har doim ochiq saqlash',
 			'settings.alwaysKeepSidebarOpenDescription' => 'Yon menyu ochiq holatda qoladi, kontent maydoni unga moslashadi',
 			'settings.showUnwatchedCount' => 'Koʻrilmaganlar sonini koʻrsatish',
@@ -3906,12 +3914,12 @@ extension on TranslationsUz {
 			'themeEditor.preview' => 'Oldindan koʻrish',
 			'themeEditor.slots.bg' => 'Fon',
 			'themeEditor.slots.surface' => 'Sirt',
+			_ => null,
+		} ?? switch (path) {
 			'themeEditor.slots.outline' => 'Kontur',
 			'themeEditor.slots.text' => 'Matn',
 			'themeEditor.slots.textMuted' => 'Ikkilamchi matn',
 			'themeEditor.slots.accent' => 'Urgʻu rangi',
-			_ => null,
-		} ?? switch (path) {
 			'themeEditor.opacity' => 'Noshaffoflik',
 			'themeEditor.hexHint' => '#RRGGBB yoki #AARRGGBB',
 			'themeEditor.fromOtherThemes' => 'Boshqa mavzulardan',
@@ -4420,12 +4428,12 @@ extension on TranslationsUz {
 			'profiles.pinProtectionOptional' => 'PIN himoyasi (ixtiyoriy)',
 			'profiles.pinExplain' => 'Profillar orasida oʻtish uchun 4 xonali PIN kod talab qilinadi.',
 			'profiles.continueButton' => 'Davom ettirish',
+			_ => null,
+		} ?? switch (path) {
 			'profiles.pinsDontMatch' => 'PIN kodlar mos kelmadi',
 			'profiles.tokenIdentityMismatch' => 'Plex profil tokeni kutilmagan serverga tegishli boʻlib chiqdi',
 			'connections.sectionTitle' => 'Ulanishlar',
 			'connections.addConnection' => 'Ulanish qoʻshish',
-			_ => null,
-		} ?? switch (path) {
 			'connections.addConnectionSubtitleNoProfile' => 'Plex orqali kiring yoki Jellyfin yoki Emby serveriga ulaning',
 			'connections.addConnectionSubtitleScoped' => ({required Object displayName}) => '${displayName} profiliga qoʻshish: Plex, Jellyfin, Emby yoki boshqa ulanish',
 			'connections.sessionExpiredOne' => ({required Object name}) => '${name} uchun seans vaqti tugadi',
@@ -4934,12 +4942,12 @@ extension on TranslationsUz {
 			'liveTv.recordSettings.anyChannel' => 'Istalgan kanaldan yozib olish',
 			'liveTv.recordSettings.anyTime' => 'Istalgan vaqtda yozib olish',
 			'liveTv.recordSettings.skipInLibrary' => 'Kutubxonada mavjud epizodlarni oʻtkazib yuborish',
+			_ => null,
+		} ?? switch (path) {
 			'liveTv.recordSettings.keepUpTo' => 'Saqlanadigan epizodlar',
 			'liveTv.recordSettings.keepUpToHint' => '0 barcha epizodlarni saqlaydi',
 			'liveTv.startingInMinutes' => ({required Object minutes}) => '${minutes} daqiqadan keyin boshlanadi',
 			'liveTv.dayAtTime' => ({required Object day, required Object time}) => '${day}, soat ${time} da',
-			_ => null,
-		} ?? switch (path) {
 			'liveTv.invalidPlaybackData' => ({required Object product}) => '${product} Jonli TV ijrosi uchun notoʻgʻri maʼlumot qaytardi',
 			'liveTv.failedToStartChannel' => 'Jonli kanalni boshlab boʻlmadi',
 			'liveTv.failedToBuildStreamUrl' => 'Oqim URL-ini tuzib boʻlmadi',
@@ -5448,12 +5456,12 @@ extension on TranslationsUz {
 			'performanceOverlay.fps' => 'FPS',
 			'performanceOverlay.decoderAndroidHw' => 'Android HW',
 			'performanceOverlay.decoderNvidiaHw' => 'NVIDIA HW',
+			_ => null,
+		} ?? switch (path) {
 			'performanceOverlay.decoderQualcommHw' => 'Qualcomm HW',
 			'performanceOverlay.decoderMediatekHw' => 'MediaTek HW',
 			'performanceOverlay.decoderExynosHw' => 'Exynos HW',
 			'performanceOverlay.decoderSoftware' => 'Dasturiy',
-			_ => null,
-		} ?? switch (path) {
 			'performanceOverlay.decoderHardware' => 'Apparat',
 			'performanceOverlay.tunnelingActive' => 'Faol',
 			'performanceOverlay.dvRpuFailed' => ({required Object converted, required Object failures}) => '${converted} (${failures} ta muvaffaqiyatsiz)',

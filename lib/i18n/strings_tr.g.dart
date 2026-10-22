@@ -327,6 +327,10 @@ class _Translations$settings$tr extends Translations$settings$en {
 	@override String get showServerNameOnHubsDescription => 'Bölüm başlıklarında her zaman sunucu adlarını göster.';
 	@override String get groupLibrariesByServer => 'Kitaplıkları Sunucuya Göre Grupla';
 	@override String get groupLibrariesByServerDescription => 'Yan menü kitaplıklarını her medya sunucusunun altında grupla.';
+	@override String get collapseServerLibrariesByDefault => 'Sunucu Kitaplıklarını Varsayılan Olarak Daralt';
+	@override String get collapseServerLibrariesByDefaultDescription => 'Kenar çubuğundaki her sunucu altındaki kitaplık listelerini daraltılmış olarak başlat.';
+	@override String get showHiddenLibrariesInSidebar => 'Gizli Kitaplıkları Kenar Çubuğunda Göster';
+	@override String get showHiddenLibrariesInSidebarDescription => 'Kenar çubuğundaki kitaplıkların altında daraltılabilir \'Gizli\' bölümünü göster.';
 	@override String get alwaysKeepSidebarOpen => 'Yan Menüyü Her Zaman Açık Tut';
 	@override String get alwaysKeepSidebarOpenDescription => 'Yan menü genişletilmiş kalır ve içerik alanı buna göre ayarlanır';
 	@override String get showUnwatchedCount => 'İzlenmemiş Sayısını Göster';
@@ -3610,6 +3614,10 @@ extension on TranslationsTr {
 			'settings.showServerNameOnHubsDescription' => 'Bölüm başlıklarında her zaman sunucu adlarını göster.',
 			'settings.groupLibrariesByServer' => 'Kitaplıkları Sunucuya Göre Grupla',
 			'settings.groupLibrariesByServerDescription' => 'Yan menü kitaplıklarını her medya sunucusunun altında grupla.',
+			'settings.collapseServerLibrariesByDefault' => 'Sunucu Kitaplıklarını Varsayılan Olarak Daralt',
+			'settings.collapseServerLibrariesByDefaultDescription' => 'Kenar çubuğundaki her sunucu altındaki kitaplık listelerini daraltılmış olarak başlat.',
+			'settings.showHiddenLibrariesInSidebar' => 'Gizli Kitaplıkları Kenar Çubuğunda Göster',
+			'settings.showHiddenLibrariesInSidebarDescription' => 'Kenar çubuğundaki kitaplıkların altında daraltılabilir \'Gizli\' bölümünü göster.',
 			'settings.alwaysKeepSidebarOpen' => 'Yan Menüyü Her Zaman Açık Tut',
 			'settings.alwaysKeepSidebarOpenDescription' => 'Yan menü genişletilmiş kalır ve içerik alanı buna göre ayarlanır',
 			'settings.showUnwatchedCount' => 'İzlenmemiş Sayısını Göster',
@@ -3906,12 +3914,12 @@ extension on TranslationsTr {
 			'themeEditor.preview' => 'Önizleme',
 			'themeEditor.slots.bg' => 'Arka plan',
 			'themeEditor.slots.surface' => 'Yüzey',
+			_ => null,
+		} ?? switch (path) {
 			'themeEditor.slots.outline' => 'Kenarlık',
 			'themeEditor.slots.text' => 'Metin',
 			'themeEditor.slots.textMuted' => 'İkincil metin',
 			'themeEditor.slots.accent' => 'Vurgu',
-			_ => null,
-		} ?? switch (path) {
 			'themeEditor.opacity' => 'Opaklık',
 			'themeEditor.hexHint' => '#RRGGBB veya #AARRGGBB',
 			'themeEditor.fromOtherThemes' => 'Diğer temalardan',
@@ -4420,12 +4428,12 @@ extension on TranslationsTr {
 			'profiles.pinProtectionOptional' => 'PIN koruması (isteğe bağlı)',
 			'profiles.pinExplain' => 'Profiller arasında geçiş yapmak için 4 haneli PIN gereklidir.',
 			'profiles.continueButton' => 'Devam Et',
+			_ => null,
+		} ?? switch (path) {
 			'profiles.pinsDontMatch' => 'PIN\'ler eşleşmiyor',
 			'profiles.tokenIdentityMismatch' => 'Plex profil belirtecinin beklenmeyen bir sunucuya ait olduğu belirlendi',
 			'connections.sectionTitle' => 'Bağlantılar',
 			'connections.addConnection' => 'Bağlantı ekle',
-			_ => null,
-		} ?? switch (path) {
 			'connections.addConnectionSubtitleNoProfile' => 'Plex ile giriş yapın veya bir Jellyfin ya da Emby sunucusu bağlayın',
 			'connections.addConnectionSubtitleScoped' => ({required Object displayName}) => '${displayName} profiline ekle: Plex, Jellyfin, Emby veya başka bir profil bağlantısı',
 			'connections.sessionExpiredOne' => ({required Object name}) => '${name} için oturum süresi doldu',
@@ -4934,12 +4942,12 @@ extension on TranslationsTr {
 			'liveTv.recordSettings.anyChannel' => 'Herhangi bir kanalda kaydet',
 			'liveTv.recordSettings.anyTime' => 'Herhangi bir saatte kaydet',
 			'liveTv.recordSettings.skipInLibrary' => 'Kitaplıkta zaten bulunan bölümleri atla',
+			_ => null,
+		} ?? switch (path) {
 			'liveTv.recordSettings.keepUpTo' => 'Saklanacak bölüm sayısı',
 			'liveTv.recordSettings.keepUpToHint' => '0 tüm bölümleri saklar',
 			'liveTv.startingInMinutes' => ({required Object minutes}) => '${minutes} dk içinde başlıyor',
 			'liveTv.dayAtTime' => ({required Object day, required Object time}) => '${day} saat ${time}',
-			_ => null,
-		} ?? switch (path) {
 			'liveTv.invalidPlaybackData' => ({required Object product}) => '${product} geçersiz Canlı TV oynatma verileri döndürdü',
 			'liveTv.failedToStartChannel' => 'Canlı kanal başlatılamadı',
 			'liveTv.failedToBuildStreamUrl' => 'Akış URL\'si oluşturulamadı',
@@ -5448,12 +5456,12 @@ extension on TranslationsTr {
 			'performanceOverlay.fps' => 'FPS',
 			'performanceOverlay.decoderAndroidHw' => 'Android Donanım',
 			'performanceOverlay.decoderNvidiaHw' => 'NVIDIA Donanım',
+			_ => null,
+		} ?? switch (path) {
 			'performanceOverlay.decoderQualcommHw' => 'Qualcomm Donanım',
 			'performanceOverlay.decoderMediatekHw' => 'MediaTek Donanım',
 			'performanceOverlay.decoderExynosHw' => 'Exynos Donanım',
 			'performanceOverlay.decoderSoftware' => 'Yazılım',
-			_ => null,
-		} ?? switch (path) {
 			'performanceOverlay.decoderHardware' => 'Donanım',
 			'performanceOverlay.tunnelingActive' => 'Etkin',
 			'performanceOverlay.dvRpuFailed' => ({required Object converted, required Object failures}) => '${converted} (${failures} başarısız)',

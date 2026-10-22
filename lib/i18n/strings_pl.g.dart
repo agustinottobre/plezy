@@ -327,6 +327,10 @@ class _Translations$settings$pl extends Translations$settings$en {
 	@override String get showServerNameOnHubsDescription => 'Zawsze pokazuj nazwy serwerów w tytułach sekcji.';
 	@override String get groupLibrariesByServer => 'Grupuj biblioteki według serwera';
 	@override String get groupLibrariesByServerDescription => 'Grupuj biblioteki paska bocznego pod każdym serwerem multimediów.';
+	@override String get collapseServerLibrariesByDefault => 'Domyślnie zwijaj biblioteki serwerów';
+	@override String get collapseServerLibrariesByDefaultDescription => 'Rozpoczynaj ze zwiniętymi listami bibliotek pod każdym serwerem na pasku bocznym.';
+	@override String get showHiddenLibrariesInSidebar => 'Pokaż ukryte biblioteki na pasku bocznym';
+	@override String get showHiddenLibrariesInSidebarDescription => 'Wyświetlaj zwijaną sekcję \'Ukryte\' pod bibliotekami na pasku bocznym.';
 	@override String get alwaysKeepSidebarOpen => 'Zawsze utrzymuj panel boczny otwarty';
 	@override String get alwaysKeepSidebarOpenDescription => 'Panel boczny jest rozwinięty, a obszar treści dostosowuje się';
 	@override String get showUnwatchedCount => 'Pokaż liczbę nieobejrzanych';
@@ -3634,6 +3638,10 @@ extension on TranslationsPl {
 			'settings.showServerNameOnHubsDescription' => 'Zawsze pokazuj nazwy serwerów w tytułach sekcji.',
 			'settings.groupLibrariesByServer' => 'Grupuj biblioteki według serwera',
 			'settings.groupLibrariesByServerDescription' => 'Grupuj biblioteki paska bocznego pod każdym serwerem multimediów.',
+			'settings.collapseServerLibrariesByDefault' => 'Domyślnie zwijaj biblioteki serwerów',
+			'settings.collapseServerLibrariesByDefaultDescription' => 'Rozpoczynaj ze zwiniętymi listami bibliotek pod każdym serwerem na pasku bocznym.',
+			'settings.showHiddenLibrariesInSidebar' => 'Pokaż ukryte biblioteki na pasku bocznym',
+			'settings.showHiddenLibrariesInSidebarDescription' => 'Wyświetlaj zwijaną sekcję \'Ukryte\' pod bibliotekami na pasku bocznym.',
 			'settings.alwaysKeepSidebarOpen' => 'Zawsze utrzymuj panel boczny otwarty',
 			'settings.alwaysKeepSidebarOpenDescription' => 'Panel boczny jest rozwinięty, a obszar treści dostosowuje się',
 			'settings.showUnwatchedCount' => 'Pokaż liczbę nieobejrzanych',
@@ -3930,12 +3938,12 @@ extension on TranslationsPl {
 			'themeEditor.preview' => 'Podgląd',
 			'themeEditor.slots.bg' => 'Tło',
 			'themeEditor.slots.surface' => 'Powierzchnia',
+			_ => null,
+		} ?? switch (path) {
 			'themeEditor.slots.outline' => 'Kontur',
 			'themeEditor.slots.text' => 'Tekst',
 			'themeEditor.slots.textMuted' => 'Tekst drugorzędny',
 			'themeEditor.slots.accent' => 'Akcent',
-			_ => null,
-		} ?? switch (path) {
 			'themeEditor.opacity' => 'Krycie',
 			'themeEditor.hexHint' => '#RRGGBB lub #AARRGGBB',
 			'themeEditor.fromOtherThemes' => 'Z innych motywów',
@@ -4444,12 +4452,12 @@ extension on TranslationsPl {
 			'profiles.pinProtectionOptional' => 'Ochrona PIN-em (opcjonalnie)',
 			'profiles.pinExplain' => 'Do przełączania profili wymagany jest 4-cyfrowy PIN.',
 			'profiles.continueButton' => 'Kontynuuj',
+			_ => null,
+		} ?? switch (path) {
 			'profiles.pinsDontMatch' => 'PIN-y nie pasują',
 			'profiles.tokenIdentityMismatch' => 'Token profilu Plex został powiązany z nieoczekiwanym serwerem',
 			'connections.sectionTitle' => 'Połączenia',
 			'connections.addConnection' => 'Dodaj połączenie',
-			_ => null,
-		} ?? switch (path) {
 			'connections.addConnectionSubtitleNoProfile' => 'Zaloguj się przez Plex lub połącz serwer Jellyfin albo Emby',
 			'connections.addConnectionSubtitleScoped' => ({required Object displayName}) => 'Dodaj do ${displayName}: Plex, Jellyfin, Emby lub połączenie innego profilu',
 			'connections.sessionExpiredOne' => ({required Object name}) => 'Sesja wygasła dla ${name}',
@@ -4958,12 +4966,12 @@ extension on TranslationsPl {
 			'liveTv.recordSettings.anyChannel' => 'Nagrywaj na dowolnym kanale',
 			'liveTv.recordSettings.anyTime' => 'Nagrywaj o dowolnej porze',
 			'liveTv.recordSettings.skipInLibrary' => 'Pomijaj odcinki już obecne w bibliotece',
+			_ => null,
+		} ?? switch (path) {
 			'liveTv.recordSettings.keepUpTo' => 'Odcinki do zachowania',
 			'liveTv.recordSettings.keepUpToHint' => '0 zachowuje wszystkie odcinki',
 			'liveTv.startingInMinutes' => ({required Object minutes}) => 'Rozpocznie się za ${minutes} min',
 			'liveTv.dayAtTime' => ({required Object day, required Object time}) => '${day} o ${time}',
-			_ => null,
-		} ?? switch (path) {
 			'liveTv.invalidPlaybackData' => ({required Object product}) => '${product} zwrócił nieprawidłowe dane odtwarzania TV na żywo',
 			'liveTv.failedToStartChannel' => 'Nie udało się uruchomić kanału na żywo',
 			'liveTv.failedToBuildStreamUrl' => 'Nie udało się utworzyć adresu URL strumienia',
@@ -5472,12 +5480,12 @@ extension on TranslationsPl {
 			'performanceOverlay.fps' => 'FPS',
 			'performanceOverlay.decoderAndroidHw' => 'Android (sprzętowy)',
 			'performanceOverlay.decoderNvidiaHw' => 'NVIDIA (sprzętowy)',
+			_ => null,
+		} ?? switch (path) {
 			'performanceOverlay.decoderQualcommHw' => 'Qualcomm (sprzętowy)',
 			'performanceOverlay.decoderMediatekHw' => 'MediaTek (sprzętowy)',
 			'performanceOverlay.decoderExynosHw' => 'Exynos (sprzętowy)',
 			'performanceOverlay.decoderSoftware' => 'Programowy',
-			_ => null,
-		} ?? switch (path) {
 			'performanceOverlay.decoderHardware' => 'Sprzętowy',
 			'performanceOverlay.tunnelingActive' => 'Aktywne',
 			'performanceOverlay.dvRpuFailed' => ({required Object converted, required Object failures}) => '${converted} (niepowodzenia: ${failures})',

@@ -327,6 +327,10 @@ class _Translations$settings$ru extends Translations$settings$en {
 	@override String get showServerNameOnHubsDescription => 'Всегда показывать имена серверов в заголовках разделов.';
 	@override String get groupLibrariesByServer => 'Группировать библиотеки по серверам';
 	@override String get groupLibrariesByServerDescription => 'Группировать библиотеки боковой панели по медиасерверам.';
+	@override String get collapseServerLibrariesByDefault => 'Сворачивать библиотеки серверов по умолчанию';
+	@override String get collapseServerLibrariesByDefaultDescription => 'Отображать списки библиотек под каждым сервером на боковой панели свёрнутыми.';
+	@override String get showHiddenLibrariesInSidebar => 'Показывать скрытые библиотеки на боковой панели';
+	@override String get showHiddenLibrariesInSidebarDescription => 'Отображать сворачиваемый раздел \'Скрытые\' под библиотеками на боковой панели.';
 	@override String get alwaysKeepSidebarOpen => 'Всегда держать боковую панель открытой';
 	@override String get alwaysKeepSidebarOpenDescription => 'Боковая панель остаётся развёрнутой, область контента подстраивается';
 	@override String get showUnwatchedCount => 'Показывать количество непросмотренных';
@@ -3634,6 +3638,10 @@ extension on TranslationsRu {
 			'settings.showServerNameOnHubsDescription' => 'Всегда показывать имена серверов в заголовках разделов.',
 			'settings.groupLibrariesByServer' => 'Группировать библиотеки по серверам',
 			'settings.groupLibrariesByServerDescription' => 'Группировать библиотеки боковой панели по медиасерверам.',
+			'settings.collapseServerLibrariesByDefault' => 'Сворачивать библиотеки серверов по умолчанию',
+			'settings.collapseServerLibrariesByDefaultDescription' => 'Отображать списки библиотек под каждым сервером на боковой панели свёрнутыми.',
+			'settings.showHiddenLibrariesInSidebar' => 'Показывать скрытые библиотеки на боковой панели',
+			'settings.showHiddenLibrariesInSidebarDescription' => 'Отображать сворачиваемый раздел \'Скрытые\' под библиотеками на боковой панели.',
 			'settings.alwaysKeepSidebarOpen' => 'Всегда держать боковую панель открытой',
 			'settings.alwaysKeepSidebarOpenDescription' => 'Боковая панель остаётся развёрнутой, область контента подстраивается',
 			'settings.showUnwatchedCount' => 'Показывать количество непросмотренных',
@@ -3930,12 +3938,12 @@ extension on TranslationsRu {
 			'themeEditor.preview' => 'Предпросмотр',
 			'themeEditor.slots.bg' => 'Фон',
 			'themeEditor.slots.surface' => 'Поверхность',
+			_ => null,
+		} ?? switch (path) {
 			'themeEditor.slots.outline' => 'Обводка',
 			'themeEditor.slots.text' => 'Текст',
 			'themeEditor.slots.textMuted' => 'Второстепенный текст',
 			'themeEditor.slots.accent' => 'Акцент',
-			_ => null,
-		} ?? switch (path) {
 			'themeEditor.opacity' => 'Непрозрачность',
 			'themeEditor.hexHint' => '#RRGGBB или #AARRGGBB',
 			'themeEditor.fromOtherThemes' => 'Из других тем',
@@ -4444,12 +4452,12 @@ extension on TranslationsRu {
 			'profiles.pinProtectionOptional' => 'Защита PIN-кодом (необязательно)',
 			'profiles.pinExplain' => 'Для переключения профилей нужен 4-значный PIN.',
 			'profiles.continueButton' => 'Продолжить',
+			_ => null,
+		} ?? switch (path) {
 			'profiles.pinsDontMatch' => 'PIN-коды не совпадают',
 			'profiles.tokenIdentityMismatch' => 'Токен профиля Plex указал на неожиданный сервер',
 			'connections.sectionTitle' => 'Подключения',
 			'connections.addConnection' => 'Добавить подключение',
-			_ => null,
-		} ?? switch (path) {
 			'connections.addConnectionSubtitleNoProfile' => 'Войдите через Plex или подключите сервер Jellyfin или Emby',
 			'connections.addConnectionSubtitleScoped' => ({required Object displayName}) => 'Добавить к ${displayName}: Plex, Jellyfin, Emby или подключение другого профиля',
 			'connections.sessionExpiredOne' => ({required Object name}) => 'Сессия истекла для ${name}',
@@ -4958,12 +4966,12 @@ extension on TranslationsRu {
 			'liveTv.recordSettings.anyChannel' => 'Записывать на любом канале',
 			'liveTv.recordSettings.anyTime' => 'Записывать в любое время',
 			'liveTv.recordSettings.skipInLibrary' => 'Пропускать эпизоды, уже имеющиеся в библиотеке',
+			_ => null,
+		} ?? switch (path) {
 			'liveTv.recordSettings.keepUpTo' => 'Сколько эпизодов хранить',
 			'liveTv.recordSettings.keepUpToHint' => '0 — хранить все эпизоды',
 			'liveTv.startingInMinutes' => ({required Object minutes}) => 'Начало через ${minutes} мин',
 			'liveTv.dayAtTime' => ({required Object day, required Object time}) => '${day} в ${time}',
-			_ => null,
-		} ?? switch (path) {
 			'liveTv.invalidPlaybackData' => ({required Object product}) => '${product} вернул некорректные данные для воспроизведения ТВ в прямом эфире',
 			'liveTv.failedToStartChannel' => 'Не удалось запустить канал в прямом эфире',
 			'liveTv.failedToBuildStreamUrl' => 'Не удалось сформировать URL потока',
@@ -5472,12 +5480,12 @@ extension on TranslationsRu {
 			'performanceOverlay.fps' => 'FPS',
 			'performanceOverlay.decoderAndroidHw' => 'Android, аппаратный',
 			'performanceOverlay.decoderNvidiaHw' => 'NVIDIA, аппаратный',
+			_ => null,
+		} ?? switch (path) {
 			'performanceOverlay.decoderQualcommHw' => 'Qualcomm, аппаратный',
 			'performanceOverlay.decoderMediatekHw' => 'MediaTek, аппаратный',
 			'performanceOverlay.decoderExynosHw' => 'Exynos, аппаратный',
 			'performanceOverlay.decoderSoftware' => 'Программный',
-			_ => null,
-		} ?? switch (path) {
 			'performanceOverlay.decoderHardware' => 'Аппаратный',
 			'performanceOverlay.tunnelingActive' => 'Активно',
 			'performanceOverlay.dvRpuFailed' => ({required Object converted, required Object failures}) => '${converted} (ошибок: ${failures})',

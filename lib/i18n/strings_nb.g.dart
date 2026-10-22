@@ -327,6 +327,10 @@ class _Translations$settings$nb extends Translations$settings$en {
 	@override String get showServerNameOnHubsDescription => 'Vis alltid servernavn i hubtitler.';
 	@override String get groupLibrariesByServer => 'Grupper biblioteker etter server';
 	@override String get groupLibrariesByServerDescription => 'Grupper sidepanelbiblioteker under hver medieserver.';
+	@override String get collapseServerLibrariesByDefault => 'Skjul serverbiblioteker som standard';
+	@override String get collapseServerLibrariesByDefaultDescription => 'Start med bibliotekslistene skjult under hver server i sidepanelet.';
+	@override String get showHiddenLibrariesInSidebar => 'Vis skjulte biblioteker i sidepanelet';
+	@override String get showHiddenLibrariesInSidebarDescription => 'Vis den sammenleggbare delen \'Skjulte\' under biblioteker i sidepanelet.';
 	@override String get alwaysKeepSidebarOpen => 'Hold sidefeltet alltid åpent';
 	@override String get alwaysKeepSidebarOpenDescription => 'Sidefeltet forblir utvidet og innholdsområdet tilpasser seg';
 	@override String get showUnwatchedCount => 'Vis antall usette';
@@ -3610,6 +3614,10 @@ extension on TranslationsNb {
 			'settings.showServerNameOnHubsDescription' => 'Vis alltid servernavn i hubtitler.',
 			'settings.groupLibrariesByServer' => 'Grupper biblioteker etter server',
 			'settings.groupLibrariesByServerDescription' => 'Grupper sidepanelbiblioteker under hver medieserver.',
+			'settings.collapseServerLibrariesByDefault' => 'Skjul serverbiblioteker som standard',
+			'settings.collapseServerLibrariesByDefaultDescription' => 'Start med bibliotekslistene skjult under hver server i sidepanelet.',
+			'settings.showHiddenLibrariesInSidebar' => 'Vis skjulte biblioteker i sidepanelet',
+			'settings.showHiddenLibrariesInSidebarDescription' => 'Vis den sammenleggbare delen \'Skjulte\' under biblioteker i sidepanelet.',
 			'settings.alwaysKeepSidebarOpen' => 'Hold sidefeltet alltid åpent',
 			'settings.alwaysKeepSidebarOpenDescription' => 'Sidefeltet forblir utvidet og innholdsområdet tilpasser seg',
 			'settings.showUnwatchedCount' => 'Vis antall usette',
@@ -3906,12 +3914,12 @@ extension on TranslationsNb {
 			'themeEditor.preview' => 'Forhåndsvisning',
 			'themeEditor.slots.bg' => 'Bakgrunn',
 			'themeEditor.slots.surface' => 'Overflate',
+			_ => null,
+		} ?? switch (path) {
 			'themeEditor.slots.outline' => 'Kontur',
 			'themeEditor.slots.text' => 'Tekst',
 			'themeEditor.slots.textMuted' => 'Sekundærtekst',
 			'themeEditor.slots.accent' => 'Aksent',
-			_ => null,
-		} ?? switch (path) {
 			'themeEditor.opacity' => 'Opasitet',
 			'themeEditor.hexHint' => '#RRGGBB eller #AARRGGBB',
 			'themeEditor.fromOtherThemes' => 'Fra andre temaer',
@@ -4420,12 +4428,12 @@ extension on TranslationsNb {
 			'profiles.pinProtectionOptional' => 'PIN-beskyttelse (valgfri)',
 			'profiles.pinExplain' => '4-sifret PIN kreves for å bytte profiler.',
 			'profiles.continueButton' => 'Fortsett',
+			_ => null,
+		} ?? switch (path) {
 			'profiles.pinsDontMatch' => 'PIN-ene samsvarer ikke',
 			'profiles.tokenIdentityMismatch' => 'Plex-profiltokenet ble knyttet til en uventet server',
 			'connections.sectionTitle' => 'Tilkoblinger',
 			'connections.addConnection' => 'Legg til tilkobling',
-			_ => null,
-		} ?? switch (path) {
 			'connections.addConnectionSubtitleNoProfile' => 'Logg inn med Plex eller koble til en Jellyfin- eller Emby-server',
 			'connections.addConnectionSubtitleScoped' => ({required Object displayName}) => 'Legg til for ${displayName}: Plex, Jellyfin, Emby eller en annen profiltilkobling',
 			'connections.sessionExpiredOne' => ({required Object name}) => 'Økten er utløpt for ${name}',
@@ -4934,12 +4942,12 @@ extension on TranslationsNb {
 			'liveTv.recordSettings.anyChannel' => 'Ta opp på alle kanaler',
 			'liveTv.recordSettings.anyTime' => 'Ta opp når som helst',
 			'liveTv.recordSettings.skipInLibrary' => 'Hopp over episoder som allerede finnes i biblioteket',
+			_ => null,
+		} ?? switch (path) {
 			'liveTv.recordSettings.keepUpTo' => 'Episoder som skal beholdes',
 			'liveTv.recordSettings.keepUpToHint' => '0 beholder alle episoder',
 			'liveTv.startingInMinutes' => ({required Object minutes}) => 'Starter om ${minutes} min',
 			'liveTv.dayAtTime' => ({required Object day, required Object time}) => '${day} kl. ${time}',
-			_ => null,
-		} ?? switch (path) {
 			'liveTv.invalidPlaybackData' => ({required Object product}) => '${product} returnerte ugyldige avspillingsdata for direkte-TV',
 			'liveTv.failedToStartChannel' => 'Kunne ikke starte direktekanalen',
 			'liveTv.failedToBuildStreamUrl' => 'Kunne ikke opprette strømme-URL-en',
@@ -5448,12 +5456,12 @@ extension on TranslationsNb {
 			'performanceOverlay.fps' => 'FPS',
 			'performanceOverlay.decoderAndroidHw' => 'Android-maskinvare',
 			'performanceOverlay.decoderNvidiaHw' => 'NVIDIA-maskinvare',
+			_ => null,
+		} ?? switch (path) {
 			'performanceOverlay.decoderQualcommHw' => 'Qualcomm-maskinvare',
 			'performanceOverlay.decoderMediatekHw' => 'MediaTek-maskinvare',
 			'performanceOverlay.decoderExynosHw' => 'Exynos-maskinvare',
 			'performanceOverlay.decoderSoftware' => 'Programvare',
-			_ => null,
-		} ?? switch (path) {
 			'performanceOverlay.decoderHardware' => 'Maskinvare',
 			'performanceOverlay.tunnelingActive' => 'Aktiv',
 			'performanceOverlay.dvRpuFailed' => ({required Object converted, required Object failures}) => '${converted} (${failures} mislyktes)',

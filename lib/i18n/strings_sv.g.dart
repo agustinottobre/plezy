@@ -327,6 +327,10 @@ class _Translations$settings$sv extends Translations$settings$en {
 	@override String get showServerNameOnHubsDescription => 'Visa alltid servernamnet i innehållssektionernas rubriker.';
 	@override String get groupLibrariesByServer => 'Gruppera bibliotek efter server';
 	@override String get groupLibrariesByServerDescription => 'Gruppera biblioteken i sidofältet under respektive medieserver.';
+	@override String get collapseServerLibrariesByDefault => 'Fäll ihop serverbibliotek som standard';
+	@override String get collapseServerLibrariesByDefaultDescription => 'Börja med bibliotekslistorna hopfällda under varje server i sidofältet.';
+	@override String get showHiddenLibrariesInSidebar => 'Visa dolda bibliotek i sidofältet';
+	@override String get showHiddenLibrariesInSidebarDescription => 'Visa den hopfällbara sektionen \'Dolda\' under bibliotek i sidofältet.';
 	@override String get alwaysKeepSidebarOpen => 'Håll alltid sidofältet öppet';
 	@override String get alwaysKeepSidebarOpenDescription => 'Sidofältet förblir utfällt och innehållsytan anpassas efter det';
 	@override String get showUnwatchedCount => 'Visa antal osedda';
@@ -3610,6 +3614,10 @@ extension on TranslationsSv {
 			'settings.showServerNameOnHubsDescription' => 'Visa alltid servernamnet i innehållssektionernas rubriker.',
 			'settings.groupLibrariesByServer' => 'Gruppera bibliotek efter server',
 			'settings.groupLibrariesByServerDescription' => 'Gruppera biblioteken i sidofältet under respektive medieserver.',
+			'settings.collapseServerLibrariesByDefault' => 'Fäll ihop serverbibliotek som standard',
+			'settings.collapseServerLibrariesByDefaultDescription' => 'Börja med bibliotekslistorna hopfällda under varje server i sidofältet.',
+			'settings.showHiddenLibrariesInSidebar' => 'Visa dolda bibliotek i sidofältet',
+			'settings.showHiddenLibrariesInSidebarDescription' => 'Visa den hopfällbara sektionen \'Dolda\' under bibliotek i sidofältet.',
 			'settings.alwaysKeepSidebarOpen' => 'Håll alltid sidofältet öppet',
 			'settings.alwaysKeepSidebarOpenDescription' => 'Sidofältet förblir utfällt och innehållsytan anpassas efter det',
 			'settings.showUnwatchedCount' => 'Visa antal osedda',
@@ -3906,12 +3914,12 @@ extension on TranslationsSv {
 			'themeEditor.preview' => 'Förhandsgranskning',
 			'themeEditor.slots.bg' => 'Bakgrund',
 			'themeEditor.slots.surface' => 'Yta',
+			_ => null,
+		} ?? switch (path) {
 			'themeEditor.slots.outline' => 'Kontur',
 			'themeEditor.slots.text' => 'Text',
 			'themeEditor.slots.textMuted' => 'Sekundär text',
 			'themeEditor.slots.accent' => 'Accentfärg',
-			_ => null,
-		} ?? switch (path) {
 			'themeEditor.opacity' => 'Opacitet',
 			'themeEditor.hexHint' => '#RRGGBB eller #AARRGGBB',
 			'themeEditor.fromOtherThemes' => 'Från andra teman',
@@ -4420,12 +4428,12 @@ extension on TranslationsSv {
 			'profiles.pinProtectionOptional' => 'PIN-skydd (valfritt)',
 			'profiles.pinExplain' => 'En fyrsiffrig PIN-kod krävs för att byta profil.',
 			'profiles.continueButton' => 'Fortsätt',
+			_ => null,
+		} ?? switch (path) {
 			'profiles.pinsDontMatch' => 'PIN-koderna stämmer inte överens',
 			'profiles.tokenIdentityMismatch' => 'Plex-profiltoken kopplades till en oväntad server',
 			'connections.sectionTitle' => 'Anslutningar',
 			'connections.addConnection' => 'Lägg till anslutning',
-			_ => null,
-		} ?? switch (path) {
 			'connections.addConnectionSubtitleNoProfile' => 'Logga in med Plex eller anslut en Jellyfin- eller Emby-server',
 			'connections.addConnectionSubtitleScoped' => ({required Object displayName}) => 'Lägg till för ${displayName}: Plex, Jellyfin, Emby eller en annan profilanslutning',
 			'connections.sessionExpiredOne' => ({required Object name}) => 'Sessionen har gått ut för ${name}',
@@ -4934,12 +4942,12 @@ extension on TranslationsSv {
 			'liveTv.recordSettings.anyChannel' => 'Spela in på alla kanaler',
 			'liveTv.recordSettings.anyTime' => 'Spela in när som helst',
 			'liveTv.recordSettings.skipInLibrary' => 'Hoppa över avsnitt som redan finns i biblioteket',
+			_ => null,
+		} ?? switch (path) {
 			'liveTv.recordSettings.keepUpTo' => 'Avsnitt att behålla',
 			'liveTv.recordSettings.keepUpToHint' => '0 behåller alla avsnitt',
 			'liveTv.startingInMinutes' => ({required Object minutes}) => 'Börjar om ${minutes} min',
 			'liveTv.dayAtTime' => ({required Object day, required Object time}) => '${day} kl. ${time}',
-			_ => null,
-		} ?? switch (path) {
 			'liveTv.invalidPlaybackData' => ({required Object product}) => '${product} returnerade ogiltiga uppspelningsdata för Live-TV',
 			'liveTv.failedToStartChannel' => 'Kunde inte starta livekanalen',
 			'liveTv.failedToBuildStreamUrl' => 'Kunde inte skapa strömmens URL',
@@ -5448,12 +5456,12 @@ extension on TranslationsSv {
 			'performanceOverlay.fps' => 'FPS',
 			'performanceOverlay.decoderAndroidHw' => 'Android HW',
 			'performanceOverlay.decoderNvidiaHw' => 'NVIDIA HW',
+			_ => null,
+		} ?? switch (path) {
 			'performanceOverlay.decoderQualcommHw' => 'Qualcomm HW',
 			'performanceOverlay.decoderMediatekHw' => 'MediaTek HW',
 			'performanceOverlay.decoderExynosHw' => 'Exynos HW',
 			'performanceOverlay.decoderSoftware' => 'Programvara',
-			_ => null,
-		} ?? switch (path) {
 			'performanceOverlay.decoderHardware' => 'Maskinvara',
 			'performanceOverlay.tunnelingActive' => 'Aktiv',
 			'performanceOverlay.dvRpuFailed' => ({required Object converted, required Object failures}) => '${converted} (${failures} misslyckades)',

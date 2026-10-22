@@ -327,6 +327,10 @@ class _Translations$settings$hu extends Translations$settings$en {
 	@override String get showServerNameOnHubsDescription => 'Mindig jelenjen meg a szerver neve a blokkok címében.';
 	@override String get groupLibrariesByServer => 'Könyvtárak csoportosítása szerver szerint';
 	@override String get groupLibrariesByServerDescription => 'Az oldalsáv könyvtárainak csoportosítása a médiaszerverek alatt.';
+	@override String get collapseServerLibrariesByDefault => 'Szerverkönyvtárak összecsukása alapértelmezés szerint';
+	@override String get collapseServerLibrariesByDefaultDescription => 'A könyvtárlisták összecsukott állapotban indítása az oldalsávban az egyes szerverek alatt.';
+	@override String get showHiddenLibrariesInSidebar => 'Rejtett könyvtárak megjelenítése az oldalsávban';
+	@override String get showHiddenLibrariesInSidebarDescription => 'A könyvtárak alatti összecsukható \'Rejtett\' szakasz megjelenítése az oldalsávban.';
 	@override String get alwaysKeepSidebarOpen => 'Oldalsáv mindig nyitva';
 	@override String get alwaysKeepSidebarOpenDescription => 'Az oldalsáv kibontva marad, a tartalom területe igazodik hozzá';
 	@override String get showUnwatchedCount => 'Nem látott elemek számának megjelenítése';
@@ -3610,6 +3614,10 @@ extension on TranslationsHu {
 			'settings.showServerNameOnHubsDescription' => 'Mindig jelenjen meg a szerver neve a blokkok címében.',
 			'settings.groupLibrariesByServer' => 'Könyvtárak csoportosítása szerver szerint',
 			'settings.groupLibrariesByServerDescription' => 'Az oldalsáv könyvtárainak csoportosítása a médiaszerverek alatt.',
+			'settings.collapseServerLibrariesByDefault' => 'Szerverkönyvtárak összecsukása alapértelmezés szerint',
+			'settings.collapseServerLibrariesByDefaultDescription' => 'A könyvtárlisták összecsukott állapotban indítása az oldalsávban az egyes szerverek alatt.',
+			'settings.showHiddenLibrariesInSidebar' => 'Rejtett könyvtárak megjelenítése az oldalsávban',
+			'settings.showHiddenLibrariesInSidebarDescription' => 'A könyvtárak alatti összecsukható \'Rejtett\' szakasz megjelenítése az oldalsávban.',
 			'settings.alwaysKeepSidebarOpen' => 'Oldalsáv mindig nyitva',
 			'settings.alwaysKeepSidebarOpenDescription' => 'Az oldalsáv kibontva marad, a tartalom területe igazodik hozzá',
 			'settings.showUnwatchedCount' => 'Nem látott elemek számának megjelenítése',
@@ -3906,12 +3914,12 @@ extension on TranslationsHu {
 			'themeEditor.preview' => 'Előnézet',
 			'themeEditor.slots.bg' => 'Háttér',
 			'themeEditor.slots.surface' => 'Felület',
+			_ => null,
+		} ?? switch (path) {
 			'themeEditor.slots.outline' => 'Körvonal',
 			'themeEditor.slots.text' => 'Szöveg',
 			'themeEditor.slots.textMuted' => 'Másodlagos szöveg',
 			'themeEditor.slots.accent' => 'Kiemelőszín',
-			_ => null,
-		} ?? switch (path) {
 			'themeEditor.opacity' => 'Átlátszatlanság',
 			'themeEditor.hexHint' => '#RRGGBB vagy #AARRGGBB',
 			'themeEditor.fromOtherThemes' => 'Más témákból',
@@ -4420,12 +4428,12 @@ extension on TranslationsHu {
 			'profiles.pinProtectionOptional' => 'PIN-védelem (opcionális)',
 			'profiles.pinExplain' => '4 jegyű PIN-kód szükséges a profilváltáshoz.',
 			'profiles.continueButton' => 'Folytatás',
+			_ => null,
+		} ?? switch (path) {
 			'profiles.pinsDontMatch' => 'A PIN-kódok nem egyeznek',
 			'profiles.tokenIdentityMismatch' => 'A Plex-profil tokenje nem a várt szerverhez tartozik',
 			'connections.sectionTitle' => 'Kapcsolatok',
 			'connections.addConnection' => 'Kapcsolat hozzáadása',
-			_ => null,
-		} ?? switch (path) {
 			'connections.addConnectionSubtitleNoProfile' => 'Jelentkezz be Plexszel, vagy csatlakoztass egy Jellyfin- vagy Emby-szervert',
 			'connections.addConnectionSubtitleScoped' => ({required Object displayName}) => 'Hozzáadás a következőhöz (${displayName}): Plex, Jellyfin, Emby vagy más profilkapcsolat',
 			'connections.sessionExpiredOne' => ({required Object name}) => 'A(z) ${name} munkamenete lejárt',
@@ -4934,12 +4942,12 @@ extension on TranslationsHu {
 			'liveTv.recordSettings.anyChannel' => 'Felvétel bármelyik csatornáról',
 			'liveTv.recordSettings.anyTime' => 'Felvétel bármikor',
 			'liveTv.recordSettings.skipInLibrary' => 'A könyvtárban már meglévő epizódok kihagyása',
+			_ => null,
+		} ?? switch (path) {
 			'liveTv.recordSettings.keepUpTo' => 'Megtartandó epizódok',
 			'liveTv.recordSettings.keepUpToHint' => 'A 0 minden epizódot megtart',
 			'liveTv.startingInMinutes' => ({required Object minutes}) => '${minutes} perc múlva kezdődik',
 			'liveTv.dayAtTime' => ({required Object day, required Object time}) => '${day}, ${time}',
-			_ => null,
-		} ?? switch (path) {
 			'liveTv.invalidPlaybackData' => ({required Object product}) => 'A(z) ${product} érvénytelen Élő TV-lejátszási adatokat adott vissza',
 			'liveTv.failedToStartChannel' => 'Nem sikerült elindítani az élő csatornát',
 			'liveTv.failedToBuildStreamUrl' => 'Nem sikerült összeállítani a stream URL-címét',
@@ -5448,12 +5456,12 @@ extension on TranslationsHu {
 			'performanceOverlay.fps' => 'FPS',
 			'performanceOverlay.decoderAndroidHw' => 'Android HW',
 			'performanceOverlay.decoderNvidiaHw' => 'NVIDIA HW',
+			_ => null,
+		} ?? switch (path) {
 			'performanceOverlay.decoderQualcommHw' => 'Qualcomm HW',
 			'performanceOverlay.decoderMediatekHw' => 'MediaTek HW',
 			'performanceOverlay.decoderExynosHw' => 'Exynos HW',
 			'performanceOverlay.decoderSoftware' => 'Szoftveres',
-			_ => null,
-		} ?? switch (path) {
 			'performanceOverlay.decoderHardware' => 'Hardveres',
 			'performanceOverlay.tunnelingActive' => 'Aktív',
 			'performanceOverlay.dvRpuFailed' => ({required Object converted, required Object failures}) => '${converted} (${failures} sikertelen)',
