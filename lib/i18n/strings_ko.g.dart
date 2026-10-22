@@ -327,6 +327,10 @@ class _Translations$settings$ko extends Translations$settings$en {
 	@override String get showServerNameOnHubsDescription => '허브 제목에 항상 서버 이름을 표시합니다.';
 	@override String get groupLibrariesByServer => '서버별로 라이브러리 그룹화';
 	@override String get groupLibrariesByServerDescription => '사이드바 라이브러리를 미디어 서버별로 그룹화합니다.';
+	@override String get collapseServerLibrariesByDefault => '기본적으로 서버 라이브러리 접기';
+	@override String get collapseServerLibrariesByDefaultDescription => '사이드바에서 각 서버 아래의 라이브러리 목록을 접은 상태로 시작합니다.';
+	@override String get showHiddenLibrariesInSidebar => '사이드바에 숨겨진 라이브러리 표시';
+	@override String get showHiddenLibrariesInSidebarDescription => '사이드바의 라이브러리 아래에 접을 수 있는 \'숨김\' 섹션을 표시합니다.';
 	@override String get alwaysKeepSidebarOpen => '사이드바 항상 열어두기';
 	@override String get alwaysKeepSidebarOpenDescription => '사이드바가 확장된 상태로 유지되고 콘텐츠 영역이 맞춰집니다';
 	@override String get showUnwatchedCount => '미시청 수 표시';
@@ -3601,6 +3605,10 @@ extension on TranslationsKo {
 			'settings.showServerNameOnHubsDescription' => '허브 제목에 항상 서버 이름을 표시합니다.',
 			'settings.groupLibrariesByServer' => '서버별로 라이브러리 그룹화',
 			'settings.groupLibrariesByServerDescription' => '사이드바 라이브러리를 미디어 서버별로 그룹화합니다.',
+			'settings.collapseServerLibrariesByDefault' => '기본적으로 서버 라이브러리 접기',
+			'settings.collapseServerLibrariesByDefaultDescription' => '사이드바에서 각 서버 아래의 라이브러리 목록을 접은 상태로 시작합니다.',
+			'settings.showHiddenLibrariesInSidebar' => '사이드바에 숨겨진 라이브러리 표시',
+			'settings.showHiddenLibrariesInSidebarDescription' => '사이드바의 라이브러리 아래에 접을 수 있는 \'숨김\' 섹션을 표시합니다.',
 			'settings.alwaysKeepSidebarOpen' => '사이드바 항상 열어두기',
 			'settings.alwaysKeepSidebarOpenDescription' => '사이드바가 확장된 상태로 유지되고 콘텐츠 영역이 맞춰집니다',
 			'settings.showUnwatchedCount' => '미시청 수 표시',
@@ -3897,12 +3905,12 @@ extension on TranslationsKo {
 			'themeEditor.colors' => '색상',
 			'themeEditor.preview' => '미리보기',
 			'themeEditor.slots.bg' => '배경',
+			_ => null,
+		} ?? switch (path) {
 			'themeEditor.slots.surface' => '표면',
 			'themeEditor.slots.outline' => '윤곽선',
 			'themeEditor.slots.text' => '텍스트',
 			'themeEditor.slots.textMuted' => '보조 텍스트',
-			_ => null,
-		} ?? switch (path) {
 			'themeEditor.slots.accent' => '강조색',
 			'themeEditor.opacity' => '불투명도',
 			'themeEditor.hexHint' => '#RRGGBB 또는 #AARRGGBB',
@@ -4411,12 +4419,12 @@ extension on TranslationsKo {
 			'profiles.profileNameHint' => '예: 손님, 어린이, 가족실',
 			'profiles.pinProtectionOptional' => 'PIN 보호 (선택 사항)',
 			'profiles.pinExplain' => '프로필 전환에는 4자리 PIN이 필요합니다.',
+			_ => null,
+		} ?? switch (path) {
 			'profiles.continueButton' => '계속',
 			'profiles.pinsDontMatch' => 'PIN이 일치하지 않습니다',
 			'profiles.tokenIdentityMismatch' => 'Plex 프로필 토큰이 예상과 다른 서버로 확인되었습니다',
 			'connections.sectionTitle' => '연결',
-			_ => null,
-		} ?? switch (path) {
 			'connections.addConnection' => '연결 추가',
 			'connections.addConnectionSubtitleNoProfile' => 'Plex로 로그인하거나 Jellyfin 또는 Emby 서버에 연결',
 			'connections.addConnectionSubtitleScoped' => ({required Object displayName}) => '${displayName}에 추가: Plex, Jellyfin, Emby 또는 다른 프로필 연결',
@@ -4925,12 +4933,12 @@ extension on TranslationsKo {
 			'liveTv.recordSettings.startEarly' => '일찍 시작 (초)',
 			'liveTv.recordSettings.endLate' => '늦게 종료 (초)',
 			'liveTv.recordSettings.newOnly' => '새 에피소드만',
+			_ => null,
+		} ?? switch (path) {
 			'liveTv.recordSettings.anyChannel' => '모든 채널에서 녹화',
 			'liveTv.recordSettings.anyTime' => '모든 시간대에 녹화',
 			'liveTv.recordSettings.skipInLibrary' => '라이브러리에 이미 있는 에피소드 건너뛰기',
 			'liveTv.recordSettings.keepUpTo' => '보관할 에피소드 수',
-			_ => null,
-		} ?? switch (path) {
 			'liveTv.recordSettings.keepUpToHint' => '0이면 모든 에피소드 보관',
 			'liveTv.startingInMinutes' => ({required Object minutes}) => '${minutes}분 후 시작',
 			'liveTv.dayAtTime' => ({required Object day, required Object time}) => '${day} ${time}',
@@ -5439,12 +5447,12 @@ extension on TranslationsKo {
 			'performanceOverlay.player' => '플레이어',
 			'performanceOverlay.memory' => '메모리',
 			'performanceOverlay.uiFps' => 'UI FPS',
+			_ => null,
+		} ?? switch (path) {
 			'performanceOverlay.fps' => 'FPS',
 			'performanceOverlay.decoderAndroidHw' => 'Android HW',
 			'performanceOverlay.decoderNvidiaHw' => 'NVIDIA HW',
 			'performanceOverlay.decoderQualcommHw' => 'Qualcomm HW',
-			_ => null,
-		} ?? switch (path) {
 			'performanceOverlay.decoderMediatekHw' => 'MediaTek HW',
 			'performanceOverlay.decoderExynosHw' => 'Exynos HW',
 			'performanceOverlay.decoderSoftware' => '소프트웨어',

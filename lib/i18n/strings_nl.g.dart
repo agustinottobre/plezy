@@ -327,6 +327,10 @@ class _Translations$settings$nl extends Translations$settings$en {
 	@override String get showServerNameOnHubsDescription => 'Toon servernamen altijd in hubtitels.';
 	@override String get groupLibrariesByServer => 'Bibliotheken groeperen per server';
 	@override String get groupLibrariesByServerDescription => 'Groepeer zijbalkbibliotheken onder elke mediaserver.';
+	@override String get collapseServerLibrariesByDefault => 'Serverbibliotheken standaard inklappen';
+	@override String get collapseServerLibrariesByDefaultDescription => 'Begin met bibliotheeklijsten ingeklapt onder elke server in de zijbalk.';
+	@override String get showHiddenLibrariesInSidebar => 'Verborgen bibliotheken weergeven in zijbalk';
+	@override String get showHiddenLibrariesInSidebarDescription => 'Toon de inklapbare sectie \'Verborgen\' onder bibliotheken in de zijbalk.';
 	@override String get alwaysKeepSidebarOpen => 'Zijbalk altijd open houden';
 	@override String get alwaysKeepSidebarOpenDescription => 'Zijbalk blijft uitgevouwen en inhoudsgebied past zich aan';
 	@override String get showUnwatchedCount => 'Aantal ongekeken tonen';
@@ -3613,6 +3617,10 @@ extension on TranslationsNl {
 			'settings.showServerNameOnHubsDescription' => 'Toon servernamen altijd in hubtitels.',
 			'settings.groupLibrariesByServer' => 'Bibliotheken groeperen per server',
 			'settings.groupLibrariesByServerDescription' => 'Groepeer zijbalkbibliotheken onder elke mediaserver.',
+			'settings.collapseServerLibrariesByDefault' => 'Serverbibliotheken standaard inklappen',
+			'settings.collapseServerLibrariesByDefaultDescription' => 'Begin met bibliotheeklijsten ingeklapt onder elke server in de zijbalk.',
+			'settings.showHiddenLibrariesInSidebar' => 'Verborgen bibliotheken weergeven in zijbalk',
+			'settings.showHiddenLibrariesInSidebarDescription' => 'Toon de inklapbare sectie \'Verborgen\' onder bibliotheken in de zijbalk.',
 			'settings.alwaysKeepSidebarOpen' => 'Zijbalk altijd open houden',
 			'settings.alwaysKeepSidebarOpenDescription' => 'Zijbalk blijft uitgevouwen en inhoudsgebied past zich aan',
 			'settings.showUnwatchedCount' => 'Aantal ongekeken tonen',
@@ -3909,12 +3917,12 @@ extension on TranslationsNl {
 			'themeEditor.colors' => 'Kleuren',
 			'themeEditor.preview' => 'Voorbeeld',
 			'themeEditor.slots.bg' => 'Achtergrond',
+			_ => null,
+		} ?? switch (path) {
 			'themeEditor.slots.surface' => 'Oppervlak',
 			'themeEditor.slots.outline' => 'Rand',
 			'themeEditor.slots.text' => 'Tekst',
 			'themeEditor.slots.textMuted' => 'Secundaire tekst',
-			_ => null,
-		} ?? switch (path) {
 			'themeEditor.slots.accent' => 'Accent',
 			'themeEditor.opacity' => 'Dekking',
 			'themeEditor.hexHint' => '#RRGGBB of #AARRGGBB',
@@ -4423,12 +4431,12 @@ extension on TranslationsNl {
 			'profiles.profileNameHint' => 'bijv. Gasten, Kinderen, Woonkamer',
 			'profiles.pinProtectionOptional' => 'Pincodebeveiliging (optioneel)',
 			'profiles.pinExplain' => 'Een viercijferige pincode is vereist om van profiel te wisselen.',
+			_ => null,
+		} ?? switch (path) {
 			'profiles.continueButton' => 'Doorgaan',
 			'profiles.pinsDontMatch' => 'De pincodes komen niet overeen',
 			'profiles.tokenIdentityMismatch' => 'Het token van het Plex-profiel bleek bij een onverwachte server te horen',
 			'connections.sectionTitle' => 'Verbindingen',
-			_ => null,
-		} ?? switch (path) {
 			'connections.addConnection' => 'Verbinding toevoegen',
 			'connections.addConnectionSubtitleNoProfile' => 'Meld je aan met Plex of verbind een Jellyfin- of Emby-server',
 			'connections.addConnectionSubtitleScoped' => ({required Object displayName}) => 'Toevoegen aan ${displayName}: Plex, Jellyfin, Emby of een andere profielverbinding',
@@ -4937,12 +4945,12 @@ extension on TranslationsNl {
 			'liveTv.recordSettings.startEarly' => 'Eerder beginnen (seconden)',
 			'liveTv.recordSettings.endLate' => 'Later stoppen (seconden)',
 			'liveTv.recordSettings.newOnly' => 'Alleen nieuwe afleveringen',
+			_ => null,
+		} ?? switch (path) {
 			'liveTv.recordSettings.anyChannel' => 'Op elke zender opnemen',
 			'liveTv.recordSettings.anyTime' => 'Op elk tijdstip opnemen',
 			'liveTv.recordSettings.skipInLibrary' => 'Afleveringen overslaan die al in de bibliotheek staan',
 			'liveTv.recordSettings.keepUpTo' => 'Te bewaren afleveringen',
-			_ => null,
-		} ?? switch (path) {
 			'liveTv.recordSettings.keepUpToHint' => '0 bewaart alle afleveringen',
 			'liveTv.startingInMinutes' => ({required Object minutes}) => 'Begint over ${minutes} min',
 			'liveTv.dayAtTime' => ({required Object day, required Object time}) => '${day} om ${time}',
@@ -5451,12 +5459,12 @@ extension on TranslationsNl {
 			'performanceOverlay.player' => 'Speler',
 			'performanceOverlay.memory' => 'Geheugen',
 			'performanceOverlay.uiFps' => 'UI FPS',
+			_ => null,
+		} ?? switch (path) {
 			'performanceOverlay.fps' => 'FPS',
 			'performanceOverlay.decoderAndroidHw' => 'Android HW',
 			'performanceOverlay.decoderNvidiaHw' => 'NVIDIA HW',
 			'performanceOverlay.decoderQualcommHw' => 'Qualcomm HW',
-			_ => null,
-		} ?? switch (path) {
 			'performanceOverlay.decoderMediatekHw' => 'MediaTek HW',
 			'performanceOverlay.decoderExynosHw' => 'Exynos HW',
 			'performanceOverlay.decoderSoftware' => 'Software',

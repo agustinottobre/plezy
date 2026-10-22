@@ -149,13 +149,30 @@ class AppearanceSettingsScreen extends StatelessWidget {
                 title: t.settings.alwaysKeepSidebarOpen,
                 subtitle: t.settings.alwaysKeepSidebarOpenDescription,
               ),
-            if (PlatformDetector.shouldUseSideNavigation(context))
+            if (PlatformDetector.shouldUseSideNavigation(context)) ...[
               SettingSwitchTile(
                 pref: SettingsService.groupLibrariesByServer,
                 icon: Symbols.dns_rounded,
                 title: t.settings.groupLibrariesByServer,
                 subtitle: t.settings.groupLibrariesByServerDescription,
               ),
+              SettingValueBuilder<bool>(
+                pref: SettingsService.groupLibrariesByServer,
+                builder: (context, grouped, _) => SettingSwitchTile(
+                  pref: SettingsService.collapseServerLibrariesByDefault,
+                  icon: Symbols.unfold_less_rounded,
+                  title: t.settings.collapseServerLibrariesByDefault,
+                  subtitle: t.settings.collapseServerLibrariesByDefaultDescription,
+                  enabled: grouped,
+                ),
+              ),
+              SettingSwitchTile(
+                pref: SettingsService.showHiddenLibrariesInSidebar,
+                icon: Symbols.visibility_off_rounded,
+                title: t.settings.showHiddenLibrariesInSidebar,
+                subtitle: t.settings.showHiddenLibrariesInSidebarDescription,
+              ),
+            ],
             if (!PlatformDetector.shouldUseSideNavigation(context))
               SettingSwitchTile(
                 pref: SettingsService.showNavBarLabels,

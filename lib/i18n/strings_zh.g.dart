@@ -327,6 +327,10 @@ class Translations$settings$zh extends Translations$settings$en {
 	@override String get showServerNameOnHubsDescription => '始终在推荐栏标题中显示服务器名称。';
 	@override String get groupLibrariesByServer => '按服务器分组媒体库';
 	@override String get groupLibrariesByServerDescription => '在侧边栏中按媒体服务器分组媒体库。';
+	@override String get collapseServerLibrariesByDefault => '默认折叠服务器媒体库';
+	@override String get collapseServerLibrariesByDefaultDescription => '侧边栏中各服务器下的媒体库列表默认处于折叠状态。';
+	@override String get showHiddenLibrariesInSidebar => '在侧边栏显示已隐藏的媒体库';
+	@override String get showHiddenLibrariesInSidebarDescription => '在侧边栏媒体库列表下方显示可折叠的“已隐藏”分组。';
 	@override String get alwaysKeepSidebarOpen => '始终保持侧边栏展开';
 	@override String get alwaysKeepSidebarOpenDescription => '侧边栏保持展开状态，内容区域自动调整';
 	@override String get showUnwatchedCount => '显示未观看数量';
@@ -3601,6 +3605,10 @@ extension on TranslationsZh {
 			'settings.showServerNameOnHubsDescription' => '始终在推荐栏标题中显示服务器名称。',
 			'settings.groupLibrariesByServer' => '按服务器分组媒体库',
 			'settings.groupLibrariesByServerDescription' => '在侧边栏中按媒体服务器分组媒体库。',
+			'settings.collapseServerLibrariesByDefault' => '默认折叠服务器媒体库',
+			'settings.collapseServerLibrariesByDefaultDescription' => '侧边栏中各服务器下的媒体库列表默认处于折叠状态。',
+			'settings.showHiddenLibrariesInSidebar' => '在侧边栏显示已隐藏的媒体库',
+			'settings.showHiddenLibrariesInSidebarDescription' => '在侧边栏媒体库列表下方显示可折叠的“已隐藏”分组。',
 			'settings.alwaysKeepSidebarOpen' => '始终保持侧边栏展开',
 			'settings.alwaysKeepSidebarOpenDescription' => '侧边栏保持展开状态，内容区域自动调整',
 			'settings.showUnwatchedCount' => '显示未观看数量',
@@ -3897,12 +3905,12 @@ extension on TranslationsZh {
 			'themeEditor.colors' => '颜色',
 			'themeEditor.preview' => '预览',
 			'themeEditor.slots.bg' => '背景',
+			_ => null,
+		} ?? switch (path) {
 			'themeEditor.slots.surface' => '表面',
 			'themeEditor.slots.outline' => '描边',
 			'themeEditor.slots.text' => '文字',
 			'themeEditor.slots.textMuted' => '次要文字',
-			_ => null,
-		} ?? switch (path) {
 			'themeEditor.slots.accent' => '强调色',
 			'themeEditor.opacity' => '不透明度',
 			'themeEditor.hexHint' => '#RRGGBB 或 #AARRGGBB',
@@ -4411,12 +4419,12 @@ extension on TranslationsZh {
 			'profiles.profileNameHint' => '例如：访客、儿童、客厅',
 			'profiles.pinProtectionOptional' => 'PIN 保护（可选）',
 			'profiles.pinExplain' => '切换用户资料时需要输入 4 位 PIN。',
+			_ => null,
+		} ?? switch (path) {
 			'profiles.continueButton' => '继续',
 			'profiles.pinsDontMatch' => 'PIN 不匹配',
 			'profiles.tokenIdentityMismatch' => 'Plex 用户资料令牌解析到了非预期服务器',
 			'connections.sectionTitle' => '连接',
-			_ => null,
-		} ?? switch (path) {
 			'connections.addConnection' => '添加连接',
 			'connections.addConnectionSubtitleNoProfile' => '使用 Plex 登录，或连接 Jellyfin 或 Emby 服务器',
 			'connections.addConnectionSubtitleScoped' => ({required Object displayName}) => '添加到 ${displayName}：Plex、Jellyfin、Emby，或其他用户资料的连接',
@@ -4925,12 +4933,12 @@ extension on TranslationsZh {
 			'liveTv.recordSettings.startEarly' => '提前开始（秒）',
 			'liveTv.recordSettings.endLate' => '延后结束（秒）',
 			'liveTv.recordSettings.newOnly' => '仅新剧集',
+			_ => null,
+		} ?? switch (path) {
 			'liveTv.recordSettings.anyChannel' => '在任意频道录制',
 			'liveTv.recordSettings.anyTime' => '在任意时间录制',
 			'liveTv.recordSettings.skipInLibrary' => '跳过媒体库中已有的剧集',
 			'liveTv.recordSettings.keepUpTo' => '保留的剧集数',
-			_ => null,
-		} ?? switch (path) {
 			'liveTv.recordSettings.keepUpToHint' => '0 表示保留全部剧集',
 			'liveTv.startingInMinutes' => ({required Object minutes}) => '${minutes} 分钟后开始',
 			'liveTv.dayAtTime' => ({required Object day, required Object time}) => '${day} ${time}',
@@ -5439,12 +5447,12 @@ extension on TranslationsZh {
 			'performanceOverlay.player' => '播放器',
 			'performanceOverlay.memory' => '内存',
 			'performanceOverlay.uiFps' => 'UI FPS',
+			_ => null,
+		} ?? switch (path) {
 			'performanceOverlay.fps' => 'FPS',
 			'performanceOverlay.decoderAndroidHw' => 'Android 硬件',
 			'performanceOverlay.decoderNvidiaHw' => 'NVIDIA 硬件',
 			'performanceOverlay.decoderQualcommHw' => 'Qualcomm 硬件',
-			_ => null,
-		} ?? switch (path) {
 			'performanceOverlay.decoderMediatekHw' => 'MediaTek 硬件',
 			'performanceOverlay.decoderExynosHw' => 'Exynos 硬件',
 			'performanceOverlay.decoderSoftware' => '软件',

@@ -659,6 +659,14 @@ class SettingsService extends BaseSharedPreferencesService {
   static const useGlobalHubs = BoolPref('use_global_hubs', defaultValue: true);
   static const showServerNameOnHubs = BoolPref('show_server_name_on_hubs');
   static const groupLibrariesByServer = BoolPref('group_libraries_by_server', defaultValue: true);
+  static const collapseServerLibrariesByDefault = BoolPref(
+    'collapse_server_libraries_by_default',
+    defaultValue: false,
+  );
+  static const showHiddenLibrariesInSidebar = BoolPref(
+    'show_hidden_libraries_in_sidebar',
+    defaultValue: true,
+  );
   static const sleepTimerDuration = IntPref('sleep_timer_duration', defaultValue: 30);
   static const audioSyncOffset = IntPref('audio_sync_offset');
   static const subtitleSyncOffset = IntPref('subtitle_sync_offset');
@@ -1599,6 +1607,8 @@ class SettingsService extends BaseSharedPreferencesService {
     useGlobalHubs,
     showServerNameOnHubs,
     groupLibrariesByServer,
+    collapseServerLibrariesByDefault,
+    showHiddenLibrariesInSidebar,
     rotationLocked,
     subAssOverride,
     subtitleRenderResolution,

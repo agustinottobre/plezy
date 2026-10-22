@@ -650,6 +650,18 @@ class Translations$settings$en {
 	/// en: 'Group sidebar libraries under each media server.'
 	String get groupLibrariesByServerDescription => 'Group sidebar libraries under each media server.';
 
+	/// en: 'Collapse Server Libraries by Default'
+	String get collapseServerLibrariesByDefault => 'Collapse Server Libraries by Default';
+
+	/// en: 'Start with library lists collapsed under each server in the sidebar.'
+	String get collapseServerLibrariesByDefaultDescription => 'Start with library lists collapsed under each server in the sidebar.';
+
+	/// en: 'Show Hidden Libraries in Sidebar'
+	String get showHiddenLibrariesInSidebar => 'Show Hidden Libraries in Sidebar';
+
+	/// en: 'Display the collapsible 'Hidden' section under libraries in the sidebar.'
+	String get showHiddenLibrariesInSidebarDescription => 'Display the collapsible \'Hidden\' section under libraries in the sidebar.';
+
 	/// en: 'Always Keep Sidebar Open'
 	String get alwaysKeepSidebarOpen => 'Always Keep Sidebar Open';
 
@@ -8361,6 +8373,10 @@ extension on Translations {
 			'settings.showServerNameOnHubsDescription' => 'Always show server names in hub titles.',
 			'settings.groupLibrariesByServer' => 'Group Libraries by Server',
 			'settings.groupLibrariesByServerDescription' => 'Group sidebar libraries under each media server.',
+			'settings.collapseServerLibrariesByDefault' => 'Collapse Server Libraries by Default',
+			'settings.collapseServerLibrariesByDefaultDescription' => 'Start with library lists collapsed under each server in the sidebar.',
+			'settings.showHiddenLibrariesInSidebar' => 'Show Hidden Libraries in Sidebar',
+			'settings.showHiddenLibrariesInSidebarDescription' => 'Display the collapsible \'Hidden\' section under libraries in the sidebar.',
 			'settings.alwaysKeepSidebarOpen' => 'Always Keep Sidebar Open',
 			'settings.alwaysKeepSidebarOpenDescription' => 'Sidebar stays expanded and content area adjusts to fit',
 			'settings.showUnwatchedCount' => 'Show Unwatched Count',
@@ -8657,12 +8673,12 @@ extension on Translations {
 			'themeEditor.colors' => 'Colors',
 			'themeEditor.preview' => 'Preview',
 			'themeEditor.slots.bg' => 'Background',
+			_ => null,
+		} ?? switch (path) {
 			'themeEditor.slots.surface' => 'Surface',
 			'themeEditor.slots.outline' => 'Outline',
 			'themeEditor.slots.text' => 'Text',
 			'themeEditor.slots.textMuted' => 'Secondary text',
-			_ => null,
-		} ?? switch (path) {
 			'themeEditor.slots.accent' => 'Accent',
 			'themeEditor.opacity' => 'Opacity',
 			'themeEditor.hexHint' => '#RRGGBB or #AARRGGBB',
@@ -9171,12 +9187,12 @@ extension on Translations {
 			'profiles.sourceProfileMissingParentAccount' => 'Source profile is missing its parent account.',
 			'profiles.failedToLoadHomeUsers' => 'Could not load your Plex Home users. Check your connection and try again.',
 			'profiles.failedToVerifyPin' => 'Failed to verify PIN.',
+			_ => null,
+		} ?? switch (path) {
 			'profiles.newProfile' => 'New profile',
 			'profiles.profileNameHint' => 'e.g. Guests, Kids, Family Room',
 			'profiles.pinProtectionOptional' => 'PIN protection (optional)',
 			'profiles.pinExplain' => '4-digit PIN required to switch profiles.',
-			_ => null,
-		} ?? switch (path) {
 			'profiles.continueButton' => 'Continue',
 			'profiles.pinsDontMatch' => 'PINs don\'t match',
 			'profiles.tokenIdentityMismatch' => 'The Plex profile token resolved to an unexpected server',
@@ -9685,12 +9701,12 @@ extension on Translations {
 			'liveTv.recordingsCount' => ({required Object count}) => '${count} scheduled',
 			'liveTv.editRule' => 'Edit rule',
 			'liveTv.editRuleAction' => 'Edit',
+			_ => null,
+		} ?? switch (path) {
 			'liveTv.recordingRuleUpdated' => 'Recording rule updated',
 			'liveTv.guideReloadRequested' => 'Guide refresh requested',
 			'liveTv.guideReloadFailed' => 'Couldn\'t refresh the guide',
 			'liveTv.rulesProcessRequested' => 'Rule re-evaluation requested',
-			_ => null,
-		} ?? switch (path) {
 			'liveTv.rulesProcessFailed' => 'Couldn\'t re-evaluate recording rules',
 			'liveTv.recordShow' => 'Record show',
 			'liveTv.recordSettings.startEarly' => 'Start early (seconds)',
@@ -10199,12 +10215,12 @@ extension on Translations {
 			'performanceOverlay.transfer' => 'Transfer',
 			'performanceOverlay.renderFps' => 'Render FPS',
 			'performanceOverlay.displayFps' => 'Display FPS',
+			_ => null,
+		} ?? switch (path) {
 			'performanceOverlay.avSync' => 'A/V Sync',
 			'performanceOverlay.dropped' => 'Dropped',
 			'performanceOverlay.dvRpus' => 'DV RPUs',
 			'performanceOverlay.dvRpuAverage' => 'DV RPU Avg',
-			_ => null,
-		} ?? switch (path) {
 			'performanceOverlay.dvSampleAverage' => 'DV Sample Avg',
 			'performanceOverlay.maxLuma' => 'Max Luma',
 			'performanceOverlay.minLuma' => 'Min Luma',
