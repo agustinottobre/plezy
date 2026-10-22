@@ -327,6 +327,10 @@ class _Translations$settings$kk extends Translations$settings$en {
 	@override String get showServerNameOnHubsDescription => 'Бөлім тақырыптарында әрдайым сервер атын көрсету.';
 	@override String get groupLibrariesByServer => 'Кітапханаларды сервер бойынша топтау';
 	@override String get groupLibrariesByServerDescription => 'Мүйістік мәзірдегі кітапханаларды серверлер бойынша топтау.';
+	@override String get collapseServerLibrariesByDefault => 'Сервер кітапханаларын әдепкі бойынша жию';
+	@override String get collapseServerLibrariesByDefaultDescription => 'Мүйістік мәзірде әр сервердің астындағы кітапханалар тізімін жиылған күйде бастау.';
+	@override String get showHiddenLibrariesInSidebar => 'Мүйістік мәзірде жасырылған кітапханаларды көрсету';
+	@override String get showHiddenLibrariesInSidebarDescription => 'Мүйістік мәзірдегі кітапханалар астында жиылатын \'Жасырылған\' бөлімін көрсету.';
 	@override String get alwaysKeepSidebarOpen => 'Сүйістік мәзірді әрдайым ашық ұстау';
 	@override String get alwaysKeepSidebarOpenDescription => 'Бүйірлік мәзір ашық күйінде қалады, мазмұн аймағы соған бейімделеді';
 	@override String get showUnwatchedCount => 'Көрілмегендер санын көрсету';
@@ -3613,6 +3617,10 @@ extension on TranslationsKk {
 			'settings.showServerNameOnHubsDescription' => 'Бөлім тақырыптарында әрдайым сервер атын көрсету.',
 			'settings.groupLibrariesByServer' => 'Кітапханаларды сервер бойынша топтау',
 			'settings.groupLibrariesByServerDescription' => 'Мүйістік мәзірдегі кітапханаларды серверлер бойынша топтау.',
+			'settings.collapseServerLibrariesByDefault' => 'Сервер кітапханаларын әдепкі бойынша жию',
+			'settings.collapseServerLibrariesByDefaultDescription' => 'Мүйістік мәзірде әр сервердің астындағы кітапханалар тізімін жиылған күйде бастау.',
+			'settings.showHiddenLibrariesInSidebar' => 'Мүйістік мәзірде жасырылған кітапханаларды көрсету',
+			'settings.showHiddenLibrariesInSidebarDescription' => 'Мүйістік мәзірдегі кітапханалар астында жиылатын \'Жасырылған\' бөлімін көрсету.',
 			'settings.alwaysKeepSidebarOpen' => 'Сүйістік мәзірді әрдайым ашық ұстау',
 			'settings.alwaysKeepSidebarOpenDescription' => 'Бүйірлік мәзір ашық күйінде қалады, мазмұн аймағы соған бейімделеді',
 			'settings.showUnwatchedCount' => 'Көрілмегендер санын көрсету',
@@ -3909,12 +3917,12 @@ extension on TranslationsKk {
 			'themeEditor.colors' => 'Түстер',
 			'themeEditor.preview' => 'Алдын ала қарау',
 			'themeEditor.slots.bg' => 'Фон',
+			_ => null,
+		} ?? switch (path) {
 			'themeEditor.slots.surface' => 'Беткі қабат',
 			'themeEditor.slots.outline' => 'Контур',
 			'themeEditor.slots.text' => 'Мәтін',
 			'themeEditor.slots.textMuted' => 'Қосалқы мәтін',
-			_ => null,
-		} ?? switch (path) {
 			'themeEditor.slots.accent' => 'Акцент',
 			'themeEditor.opacity' => 'Мөлдірлік',
 			'themeEditor.hexHint' => '#RRGGBB немесе #AARRGGBB',
@@ -4423,12 +4431,12 @@ extension on TranslationsKk {
 			'profiles.profileNameHint' => 'мысалы, Қонақтар, Балалар',
 			'profiles.pinProtectionOptional' => 'PIN қорғанысы (қосымша)',
 			'profiles.pinExplain' => 'Профильдер арасында ауысу үшін 4 таңбалы PIN код қажет.',
+			_ => null,
+		} ?? switch (path) {
 			'profiles.continueButton' => 'Жалғастыру',
 			'profiles.pinsDontMatch' => 'PIN кодтар сәйкес келмейді',
 			'profiles.tokenIdentityMismatch' => 'Plex профилінің токені күтілмеген серверді анықтады',
 			'connections.sectionTitle' => 'Қосылымдар',
-			_ => null,
-		} ?? switch (path) {
 			'connections.addConnection' => 'Қосылым қосу',
 			'connections.addConnectionSubtitleNoProfile' => 'Plex арқылы кіріңіз немесе Jellyfin не Emby серверіне қосылыңыз',
 			'connections.addConnectionSubtitleScoped' => ({required Object displayName}) => '${displayName} профиліне қосу: Plex, Jellyfin, Emby немесе басқа қосылым',
@@ -4937,12 +4945,12 @@ extension on TranslationsKk {
 			'liveTv.recordSettings.startEarly' => 'Ертерек бастау (секунд)',
 			'liveTv.recordSettings.endLate' => 'Кешірек аяқтау (секунд)',
 			'liveTv.recordSettings.newOnly' => 'Тек жаңа эпизодтар',
+			_ => null,
+		} ?? switch (path) {
 			'liveTv.recordSettings.anyChannel' => 'Кез келген арнадан жазу',
 			'liveTv.recordSettings.anyTime' => 'Кез келген уақытта жазу',
 			'liveTv.recordSettings.skipInLibrary' => 'Кітапханада бар эпизодтарды өткізіп жіберу',
 			'liveTv.recordSettings.keepUpTo' => 'Сақталатын эпизодтар',
-			_ => null,
-		} ?? switch (path) {
 			'liveTv.recordSettings.keepUpToHint' => '0 барлық эпизодты сақтайды',
 			'liveTv.startingInMinutes' => ({required Object minutes}) => '${minutes} мин кейін басталады',
 			'liveTv.dayAtTime' => ({required Object day, required Object time}) => '${day}, ${time}',
@@ -5451,12 +5459,12 @@ extension on TranslationsKk {
 			'performanceOverlay.player' => 'Ойнатқыш',
 			'performanceOverlay.memory' => 'Жады',
 			'performanceOverlay.uiFps' => 'Интерфейс (UI) FPS',
+			_ => null,
+		} ?? switch (path) {
 			'performanceOverlay.fps' => 'FPS',
 			'performanceOverlay.decoderAndroidHw' => 'Android HW',
 			'performanceOverlay.decoderNvidiaHw' => 'NVIDIA HW',
 			'performanceOverlay.decoderQualcommHw' => 'Qualcomm HW',
-			_ => null,
-		} ?? switch (path) {
 			'performanceOverlay.decoderMediatekHw' => 'MediaTek HW',
 			'performanceOverlay.decoderExynosHw' => 'Exynos HW',
 			'performanceOverlay.decoderSoftware' => 'Бағдарламалық',

@@ -539,7 +539,8 @@ void main() {
     sideNavKey.currentState!.focusActiveItem();
     await tester.pumpAndSettle();
 
-    // Home -> Libraries -> Search. The Movies row is skipped while collapsed.
+    // Home -> Playlists -> Libraries -> Search. The Movies row is skipped while collapsed.
+    await _press(tester, LogicalKeyboardKey.arrowDown);
     await _press(tester, LogicalKeyboardKey.arrowDown);
     await _press(tester, LogicalKeyboardKey.arrowDown);
     await _press(tester, LogicalKeyboardKey.enter);
@@ -602,8 +603,9 @@ void main() {
     sideNavKey.currentState!.focusActiveItem();
     await tester.pumpAndSettle();
 
-    // Home -> Libraries -> Search. The Movies row stays out of D-pad order
+    // Home -> Playlists -> Libraries -> Search. The Movies row stays out of D-pad order
     // while the rail is collapsed, so DOWN lands on the next real row.
+    await _press(tester, LogicalKeyboardKey.arrowDown);
     await _press(tester, LogicalKeyboardKey.arrowDown);
     await _press(tester, LogicalKeyboardKey.arrowDown);
     await _press(tester, LogicalKeyboardKey.enter);
@@ -824,7 +826,8 @@ void main() {
     sideNavKey.currentState!.focusActiveItem();
     await tester.pumpAndSettle();
 
-    // Home -> Libraries -> Search -> Settings. Downloads is hidden on Apple TV.
+    // Home -> Playlists -> Libraries -> Search -> Settings. Downloads is hidden on Apple TV.
+    await _press(tester, LogicalKeyboardKey.arrowDown);
     await _press(tester, LogicalKeyboardKey.arrowDown);
     await _press(tester, LogicalKeyboardKey.arrowDown);
     await _press(tester, LogicalKeyboardKey.arrowDown);
@@ -900,8 +903,8 @@ void main() {
     sideNavKey.currentState!.focusActiveItem();
     await tester.pumpAndSettle();
 
-    // Home -> Libraries -> Server A header -> visible A -> Server B header -> visible B -> Hidden Libraries.
-    for (var i = 0; i < 6; i++) {
+    // Home -> Playlists -> Libraries -> Server A header -> visible A -> Server B header -> visible B -> Hidden Libraries.
+    for (var i = 0; i < 7; i++) {
       await _press(tester, LogicalKeyboardKey.arrowDown);
     }
     await _press(tester, LogicalKeyboardKey.enter);
@@ -954,5 +957,152 @@ void main() {
     expect(focusNode.hasFocus, isTrue);
     expect(_railItemDecoration(tester, item)?.color, isNotNull);
     expect(parentBuilds, 1);
+  });
+
+  testWidgets('server libraries respect collapseServerLibrariesByDefault preference', (tester) async {
+    await SettingsService.getInstance();
+    await SettingsService.instance.write(SettingsService.collapseServerLibrariesByDefault, true);
+
+    final serverALibrary = _library(
+      id: '1',
+      title: 'Movies A',
+      serverId: ServerId('server-a'),
+      serverName: 'Server A',
+    );
+    final serverBLibrary = _library(
+      id: '2',
+      title: 'Movies B',
+      serverId: ServerId('server-b'),
+      serverName: 'Server B',
+    );
+
+    final librariesProvider = LibrariesProvider();
+    await librariesProvider.updateLibraryOrder([serverALibrary, serverBLibrary]);
+    addTearDown(librariesProvider.dispose);
+
+    final hiddenLibrariesProvider = HiddenLibrariesProvider();
+    await hiddenLibrariesProvider.ensureInitialized();
+    addTearDown(hiddenLibrariesProvider.dispose);
+
+    final manager = MultiServerManager();
+    final multiServerProvider = testMultiServerProvider(manager);
+    addTearDown(multiServerProvider.dispose);
+
+    final sideNavKey = GlobalKey<SideNavigationRailState>();
+
+    await tester.pumpWidget(
+      TranslationProvider(
+        child: MultiProvider(
+          providers: [
+            ChangeNotifierProvider<LibrariesProvider>.value(value: librariesProvider),
+            ChangeNotifierProvider<HiddenLibrariesProvider>.value(value: hiddenLibrariesProvider),
+            ChangeNotifierProvider<MultiServerProvider>.value(value: multiServerProvider),
+          ],
+          child: MaterialApp(
+            theme: ThemeData(extensions: const [testMonoTokens]),
+            home: Scaffold(
+              body: SideNavigationRail(
+                key: sideNavKey,
+                selectedTab: NavigationTabId.discover,
+                alwaysExpanded: true,
+                onDestinationSelected: (_) {},
+                onLibrarySelected: (_) {},
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    // Headers are visible
+    expect(find.text('Server A'), findsOneWidget);
+    expect(find.text('Server B'), findsOneWidget);
+
+    // Because collapseServerLibrariesByDefault is true, libraries start collapsed (hidden)
+    expect(find.text('Movies A'), findsNothing);
+    expect(find.text('Movies B'), findsNothing);
+
+    // Tap Server A header to expand it
+    await tester.tap(find.text('Server A'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Movies A'), findsOneWidget);
+    expect(find.text('Movies B'), findsNothing);
+
+    // Tap Server A header again to collapse it
+    await tester.tap(find.text('Server A'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Movies A'), findsNothing);
+    expect(find.text('Movies B'), findsNothing);
+  });
+
+  testWidgets('showHiddenLibrariesInSidebar controls rendering of the Hidden section in sidebar', (tester) async {
+    await SettingsService.getInstance();
+
+    final visibleLibrary = _library(
+      id: '1',
+      title: 'Movies',
+      serverId: ServerId('server-a'),
+      serverName: 'Server A',
+    );
+    final hiddenLibrary = _library(
+      id: '2',
+      title: 'Secret NSFW',
+      serverId: ServerId('server-a'),
+      serverName: 'Server A',
+    );
+
+    final librariesProvider = LibrariesProvider();
+    await librariesProvider.updateLibraryOrder([visibleLibrary, hiddenLibrary]);
+    addTearDown(librariesProvider.dispose);
+
+    final hiddenLibrariesProvider = HiddenLibrariesProvider();
+    await hiddenLibrariesProvider.ensureInitialized();
+    await hiddenLibrariesProvider.hideLibrary(hiddenLibrary.globalKey);
+    addTearDown(hiddenLibrariesProvider.dispose);
+
+    final manager = MultiServerManager();
+    final multiServerProvider = testMultiServerProvider(manager);
+    addTearDown(multiServerProvider.dispose);
+
+    Widget buildRail() => TranslationProvider(
+      child: MultiProvider(
+        providers: [
+          ChangeNotifierProvider<LibrariesProvider>.value(value: librariesProvider),
+          ChangeNotifierProvider<HiddenLibrariesProvider>.value(value: hiddenLibrariesProvider),
+          ChangeNotifierProvider<MultiServerProvider>.value(value: multiServerProvider),
+        ],
+        child: MaterialApp(
+          theme: ThemeData(extensions: const [testMonoTokens]),
+          home: Scaffold(
+            body: SideNavigationRail(
+              selectedTab: NavigationTabId.discover,
+              alwaysExpanded: true,
+              onDestinationSelected: (_) {},
+              onLibrarySelected: (_) {},
+            ),
+          ),
+        ),
+      ),
+    );
+
+    // Default: showHiddenLibrariesInSidebar is true
+    await tester.pumpWidget(buildRail());
+    await tester.pumpAndSettle();
+
+    // Hidden section header is visible
+    expect(find.byIcon(Symbols.visibility_off_rounded), findsOneWidget);
+    expect(find.text('Movies'), findsOneWidget);
+
+    // Now turn off showHiddenLibrariesInSidebar
+    await SettingsService.instance.write(SettingsService.showHiddenLibrariesInSidebar, false);
+    await tester.pumpAndSettle();
+
+    // Hidden section header is completely gone
+    expect(find.byIcon(Symbols.visibility_off_rounded), findsNothing);
+    expect(find.text('Secret NSFW'), findsNothing);
+    expect(find.text('Movies'), findsOneWidget);
   });
 }

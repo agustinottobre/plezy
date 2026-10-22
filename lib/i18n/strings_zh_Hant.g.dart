@@ -328,6 +328,10 @@ class _Translations$settings$zh_Hant extends Translations$settings$zh {
 	@override String get showServerNameOnHubsDescription => '一律在推薦區標題中顯示伺服器名稱。';
 	@override String get groupLibrariesByServer => '依伺服器將媒體庫分組';
 	@override String get groupLibrariesByServerDescription => '將側邊欄中的媒體庫依伺服器進行分組。';
+	@override String get collapseServerLibrariesByDefault => '預設折疊伺服器媒體庫';
+	@override String get collapseServerLibrariesByDefaultDescription => '側邊欄中各伺服器底下的媒體庫清單預設處於折疊狀態。';
+	@override String get showHiddenLibrariesInSidebar => '在側邊欄顯示已隱藏的媒體庫';
+	@override String get showHiddenLibrariesInSidebarDescription => '在側邊欄媒體庫清單下方顯示可折疊的「已隱藏」區塊。';
 	@override String get alwaysKeepSidebarOpen => '一律保持側邊欄展開';
 	@override String get alwaysKeepSidebarOpenDescription => '側邊欄保持展開狀態，內容區域自動調整';
 	@override String get showUnwatchedCount => '顯示未觀看數量';
@@ -3602,6 +3606,10 @@ extension on TranslationsZhHant {
 			'settings.showServerNameOnHubsDescription' => '一律在推薦區標題中顯示伺服器名稱。',
 			'settings.groupLibrariesByServer' => '依伺服器將媒體庫分組',
 			'settings.groupLibrariesByServerDescription' => '將側邊欄中的媒體庫依伺服器進行分組。',
+			'settings.collapseServerLibrariesByDefault' => '預設折疊伺服器媒體庫',
+			'settings.collapseServerLibrariesByDefaultDescription' => '側邊欄中各伺服器底下的媒體庫清單預設處於折疊狀態。',
+			'settings.showHiddenLibrariesInSidebar' => '在側邊欄顯示已隱藏的媒體庫',
+			'settings.showHiddenLibrariesInSidebarDescription' => '在側邊欄媒體庫清單下方顯示可折疊的「已隱藏」區塊。',
 			'settings.alwaysKeepSidebarOpen' => '一律保持側邊欄展開',
 			'settings.alwaysKeepSidebarOpenDescription' => '側邊欄保持展開狀態，內容區域自動調整',
 			'settings.showUnwatchedCount' => '顯示未觀看數量',
@@ -3898,12 +3906,12 @@ extension on TranslationsZhHant {
 			'themeEditor.colors' => '顏色',
 			'themeEditor.preview' => '預覽',
 			'themeEditor.slots.bg' => '背景',
+			_ => null,
+		} ?? switch (path) {
 			'themeEditor.slots.surface' => '面板',
 			'themeEditor.slots.outline' => '外框',
 			'themeEditor.slots.text' => '文字',
 			'themeEditor.slots.textMuted' => '次要文字',
-			_ => null,
-		} ?? switch (path) {
 			'themeEditor.slots.accent' => '強調色',
 			'themeEditor.opacity' => '不透明度',
 			'themeEditor.hexHint' => '#RRGGBB 或 #AARRGGBB',
@@ -4412,12 +4420,12 @@ extension on TranslationsZhHant {
 			'profiles.profileNameHint' => '例如：訪客、兒童、客廳',
 			'profiles.pinProtectionOptional' => 'PIN 碼保護（選填）',
 			'profiles.pinExplain' => '切換至此使用者設定檔時需要 4 位數 PIN 碼。',
+			_ => null,
+		} ?? switch (path) {
 			'profiles.continueButton' => '繼續',
 			'profiles.pinsDontMatch' => 'PIN 碼不符合',
 			'profiles.tokenIdentityMismatch' => 'Plex 使用者設定檔權杖解析到非預期的伺服器',
 			'connections.sectionTitle' => '連線',
-			_ => null,
-		} ?? switch (path) {
 			'connections.addConnection' => '新增連線',
 			'connections.addConnectionSubtitleNoProfile' => '使用 Plex 登入或連線至 Jellyfin 或 Emby 伺服器',
 			'connections.addConnectionSubtitleScoped' => ({required Object displayName}) => '新增至 ${displayName}：Plex、Jellyfin、Emby 或其他設定檔連線',
@@ -4926,12 +4934,12 @@ extension on TranslationsZhHant {
 			'liveTv.recordSettings.startEarly' => '提早開始（秒）',
 			'liveTv.recordSettings.endLate' => '延後結束（秒）',
 			'liveTv.recordSettings.newOnly' => '僅新劇集',
+			_ => null,
+		} ?? switch (path) {
 			'liveTv.recordSettings.anyChannel' => '在任何頻道錄影',
 			'liveTv.recordSettings.anyTime' => '在任何時間錄影',
 			'liveTv.recordSettings.skipInLibrary' => '略過媒體庫中已有的劇集',
 			'liveTv.recordSettings.keepUpTo' => '要保留的劇集數',
-			_ => null,
-		} ?? switch (path) {
 			'liveTv.recordSettings.keepUpToHint' => '0 表示保留所有劇集',
 			'liveTv.startingInMinutes' => ({required Object minutes}) => '${minutes} 分鐘後開始',
 			'liveTv.dayAtTime' => ({required Object day, required Object time}) => '${day} ${time}',
@@ -5440,12 +5448,12 @@ extension on TranslationsZhHant {
 			'performanceOverlay.player' => '播放器',
 			'performanceOverlay.memory' => '記憶體',
 			'performanceOverlay.uiFps' => '介面 FPS',
+			_ => null,
+		} ?? switch (path) {
 			'performanceOverlay.fps' => 'FPS',
 			'performanceOverlay.decoderAndroidHw' => 'Android 硬體',
 			'performanceOverlay.decoderNvidiaHw' => 'NVIDIA 硬體',
 			'performanceOverlay.decoderQualcommHw' => 'Qualcomm 硬體',
-			_ => null,
-		} ?? switch (path) {
 			'performanceOverlay.decoderMediatekHw' => 'MediaTek 硬體',
 			'performanceOverlay.decoderExynosHw' => 'Exynos 硬體',
 			'performanceOverlay.decoderSoftware' => '軟體',

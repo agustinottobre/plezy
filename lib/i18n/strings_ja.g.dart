@@ -327,6 +327,10 @@ class _Translations$settings$ja extends Translations$settings$en {
 	@override String get showServerNameOnHubsDescription => 'ハブのタイトルに常にサーバー名を表示します。';
 	@override String get groupLibrariesByServer => 'サーバーごとにライブラリをグループ化';
 	@override String get groupLibrariesByServerDescription => 'サイドバーのライブラリをメディアサーバーごとにまとめます。';
+	@override String get collapseServerLibrariesByDefault => 'デフォルトでサーバーライブラリを折りたたむ';
+	@override String get collapseServerLibrariesByDefaultDescription => 'サイドバーの各サーバー下のライブラリリストを折りたたんだ状態で開始します。';
+	@override String get showHiddenLibrariesInSidebar => 'サイドバーに非表示のライブラリを表示';
+	@override String get showHiddenLibrariesInSidebarDescription => 'サイドバーのライブラリの下に折りたたみ可能な「非表示」セクションを表示します。';
 	@override String get alwaysKeepSidebarOpen => 'サイドバーを常に開いておく';
 	@override String get alwaysKeepSidebarOpenDescription => 'サイドバーを展開したままにし、コンテンツ領域を幅に合わせて調整します';
 	@override String get showUnwatchedCount => '未視聴数を表示';
@@ -3601,6 +3605,10 @@ extension on TranslationsJa {
 			'settings.showServerNameOnHubsDescription' => 'ハブのタイトルに常にサーバー名を表示します。',
 			'settings.groupLibrariesByServer' => 'サーバーごとにライブラリをグループ化',
 			'settings.groupLibrariesByServerDescription' => 'サイドバーのライブラリをメディアサーバーごとにまとめます。',
+			'settings.collapseServerLibrariesByDefault' => 'デフォルトでサーバーライブラリを折りたたむ',
+			'settings.collapseServerLibrariesByDefaultDescription' => 'サイドバーの各サーバー下のライブラリリストを折りたたんだ状態で開始します。',
+			'settings.showHiddenLibrariesInSidebar' => 'サイドバーに非表示のライブラリを表示',
+			'settings.showHiddenLibrariesInSidebarDescription' => 'サイドバーのライブラリの下に折りたたみ可能な「非表示」セクションを表示します。',
 			'settings.alwaysKeepSidebarOpen' => 'サイドバーを常に開いておく',
 			'settings.alwaysKeepSidebarOpenDescription' => 'サイドバーを展開したままにし、コンテンツ領域を幅に合わせて調整します',
 			'settings.showUnwatchedCount' => '未視聴数を表示',
@@ -3897,12 +3905,12 @@ extension on TranslationsJa {
 			'themeEditor.colors' => '色',
 			'themeEditor.preview' => 'プレビュー',
 			'themeEditor.slots.bg' => '背景',
+			_ => null,
+		} ?? switch (path) {
 			'themeEditor.slots.surface' => 'サーフェス',
 			'themeEditor.slots.outline' => '枠線',
 			'themeEditor.slots.text' => 'テキスト',
 			'themeEditor.slots.textMuted' => '補助テキスト',
-			_ => null,
-		} ?? switch (path) {
 			'themeEditor.slots.accent' => 'アクセント',
 			'themeEditor.opacity' => '不透明度',
 			'themeEditor.hexHint' => '#RRGGBB または #AARRGGBB',
@@ -4411,12 +4419,12 @@ extension on TranslationsJa {
 			'profiles.profileNameHint' => '例：ゲスト、キッズ、ファミリールーム',
 			'profiles.pinProtectionOptional' => 'PIN保護（オプション）',
 			'profiles.pinExplain' => 'プロフィール切り替えには4桁のPINが必要です。',
+			_ => null,
+		} ?? switch (path) {
 			'profiles.continueButton' => '続ける',
 			'profiles.pinsDontMatch' => 'PINが一致しません',
 			'profiles.tokenIdentityMismatch' => 'Plexプロフィールのトークンから予期しないサーバーが特定されました',
 			'connections.sectionTitle' => '接続',
-			_ => null,
-		} ?? switch (path) {
 			'connections.addConnection' => '接続を追加',
 			'connections.addConnectionSubtitleNoProfile' => 'Plexでサインインするか、JellyfinまたはEmbyサーバーに接続',
 			'connections.addConnectionSubtitleScoped' => ({required Object displayName}) => '${displayName}に追加：Plex、Jellyfin、Emby、または別のプロフィールの接続',
@@ -4925,12 +4933,12 @@ extension on TranslationsJa {
 			'liveTv.recordSettings.startEarly' => '早めに開始（秒）',
 			'liveTv.recordSettings.endLate' => '遅めに終了（秒）',
 			'liveTv.recordSettings.newOnly' => '新しいエピソードのみ',
+			_ => null,
+		} ?? switch (path) {
 			'liveTv.recordSettings.anyChannel' => 'すべてのチャンネルで録画',
 			'liveTv.recordSettings.anyTime' => 'すべての時間帯で録画',
 			'liveTv.recordSettings.skipInLibrary' => 'ライブラリにあるエピソードをスキップ',
 			'liveTv.recordSettings.keepUpTo' => '保持するエピソード数',
-			_ => null,
-		} ?? switch (path) {
 			'liveTv.recordSettings.keepUpToHint' => '0 ですべてのエピソードを保持',
 			'liveTv.startingInMinutes' => ({required Object minutes}) => '${minutes}分後に開始',
 			'liveTv.dayAtTime' => ({required Object day, required Object time}) => '${day} ${time}',
@@ -5439,12 +5447,12 @@ extension on TranslationsJa {
 			'performanceOverlay.player' => 'プレーヤー',
 			'performanceOverlay.memory' => 'メモリ',
 			'performanceOverlay.uiFps' => 'UI FPS',
+			_ => null,
+		} ?? switch (path) {
 			'performanceOverlay.fps' => 'FPS',
 			'performanceOverlay.decoderAndroidHw' => 'Android HW',
 			'performanceOverlay.decoderNvidiaHw' => 'NVIDIA HW',
 			'performanceOverlay.decoderQualcommHw' => 'Qualcomm HW',
-			_ => null,
-		} ?? switch (path) {
 			'performanceOverlay.decoderMediatekHw' => 'MediaTek HW',
 			'performanceOverlay.decoderExynosHw' => 'Exynos HW',
 			'performanceOverlay.decoderSoftware' => 'ソフトウェア',

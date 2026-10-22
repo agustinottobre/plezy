@@ -481,7 +481,15 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
   static const _kLibraryItemPrefix = 'library';
 
   bool _hiddenLibrariesExpanded = false;
-  final Set<String> _collapsedServerGroupKeys = {};
+  final Set<String> _userToggledServerGroupKeys = {};
+  bool? _lastCollapseByDefault;
+
+  bool _isServerGroupCollapsed(_LibraryNavSection section, ServerId serverId) {
+    final groupKey = _serverGroupStateKey(section, serverId);
+    final isToggled = _userToggledServerGroupKeys.contains(groupKey);
+    final collapseByDefault = SettingsService.instance.read(SettingsService.collapseServerLibrariesByDefault);
+    return collapseByDefault ? !isToggled : isToggled;
+  }
 
   // Unified focus state tracker for all nav items (main + libraries)
   late final FocusMemoryTracker _focusTracker;
@@ -729,8 +737,9 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
           ),
         );
       }
-      if (serverKey.isEmpty ||
-          !_collapsedServerGroupKeys.contains(_serverGroupStateKey(section, ServerId(serverKey)))) {
+      final isCollapsed = serverKey.isNotEmpty &&
+          _isServerGroupCollapsed(section, ServerId(serverKey));
+      if (!isCollapsed) {
         for (final lib in bucket) {
           result.add(_LibraryItemRow(section: section, library: lib));
         }
@@ -896,13 +905,15 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
     final musicService = context.watch<MusicPlaybackService?>();
     final nowPlayingTrack = widget.isOfflineMode || !PlatformDetector.isTV() ? null : musicService?.currentTrack;
 
-    // Listen to fullscreen + the groupLibrariesByServer / showExploreTab
-    // settings so the rail rebuilds when they are toggled in Appearance, and to
+    // Listen to fullscreen + the groupLibrariesByServer / collapseServerLibrariesByDefault /
+    // showExploreTab settings so the rail rebuilds when they are toggled in Appearance, and to
     // librariesSectionExpanded so the Libraries header toggle repaints.
     return ListenableBuilder(
       listenable: Listenable.merge([
         FullscreenStateManager(),
         SettingsService.instance.listenable(SettingsService.groupLibrariesByServer),
+        SettingsService.instance.listenable(SettingsService.collapseServerLibrariesByDefault),
+        SettingsService.instance.listenable(SettingsService.showHiddenLibrariesInSidebar),
         SettingsService.instance.listenable(SettingsService.showExploreTab),
         SettingsService.instance.listenable(SettingsService.librariesSectionExpanded),
       ]),
@@ -910,8 +921,15 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
         final hasExplore = hasExploreSource && SettingsService.instance.read(SettingsService.showExploreTab);
         // Server grouping: only when multi-server AND the user-facing toggle is on.
         final groupByServerSetting = SettingsService.instance.read(SettingsService.groupLibrariesByServer);
+        final collapseByDefault = SettingsService.instance.read(SettingsService.collapseServerLibrariesByDefault);
+        final showHiddenLibraries = SettingsService.instance.read(SettingsService.showHiddenLibrariesInSidebar);
+        if (_lastCollapseByDefault != null && _lastCollapseByDefault != collapseByDefault) {
+          _userToggledServerGroupKeys.clear();
+        }
+        _lastCollapseByDefault = collapseByDefault;
+
         final showServerHeaders = serverIds.length > 1 && groupByServerSetting;
-        _collapsedServerGroupKeys.retainAll(
+        _userToggledServerGroupKeys.retainAll(
           _buildServerGroupStateKeys(visibleLibraries, hiddenLibraries, showServerHeaders: showServerHeaders),
         );
         final visibleRows = _buildLibraryRows(
@@ -924,11 +942,12 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
           section: _LibraryNavSection.hidden,
           showServerHeaders: showServerHeaders,
         );
+        final effectiveHasHiddenLibraries = hiddenLibraries.isNotEmpty && showHiddenLibraries;
         _focusTracker.pruneExcept(
           _buildValidFocusKeys(
             visibleRows: visibleRows,
             hiddenRows: hiddenRows,
-            hasHiddenLibraries: hiddenLibraries.isNotEmpty,
+            hasHiddenLibraries: effectiveHasHiddenLibraries,
             hasLiveTv: hasLiveTv,
             hasNowPlaying: nowPlayingTrack != null,
             hasExplore: hasExplore,
@@ -937,7 +956,7 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
         final focusOrder = _buildFocusOrder(
           visibleRows,
           hiddenRows,
-          hasHiddenLibraries: hiddenLibraries.isNotEmpty,
+          hasHiddenLibraries: effectiveHasHiddenLibraries,
           hasLiveTv: hasLiveTv,
           hasNowPlaying: nowPlayingTrack != null,
           hasExplore: hasExplore,
@@ -1051,7 +1070,7 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
                                       _buildLibrariesSection(
                                         visibleRows,
                                         hiddenRows,
-                                        hiddenLibraries.length,
+                                        showHiddenLibraries ? hiddenLibraries.length : 0,
                                         t,
                                         isCollapsed: isCollapsed,
                                       ),
@@ -1420,7 +1439,7 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
       label: serverName,
       labelStyle: TextStyle(fontSize: 11, fontWeight: .w600, letterSpacing: 0.4, color: t.textMuted),
       verticalPadding: 6,
-      isExpanded: !_collapsedServerGroupKeys.contains(_serverGroupStateKey(section, serverId)),
+      isExpanded: !_isServerGroupCollapsed(section, serverId),
       onToggle: () => _toggleServerCollapse(section, serverId),
       t: t,
     );
@@ -1429,8 +1448,8 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
   void _toggleServerCollapse(_LibraryNavSection section, ServerId serverId) {
     final groupKey = _serverGroupStateKey(section, serverId);
     setState(() {
-      if (!_collapsedServerGroupKeys.add(groupKey)) {
-        _collapsedServerGroupKeys.remove(groupKey);
+      if (!_userToggledServerGroupKeys.add(groupKey)) {
+        _userToggledServerGroupKeys.remove(groupKey);
       }
     });
   }

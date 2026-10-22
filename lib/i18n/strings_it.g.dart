@@ -327,6 +327,10 @@ class _Translations$settings$it extends Translations$settings$en {
 	@override String get showServerNameOnHubsDescription => 'Mostra sempre i nomi dei server nei titoli delle sezioni.';
 	@override String get groupLibrariesByServer => 'Raggruppa le librerie per server';
 	@override String get groupLibrariesByServerDescription => 'Raggruppa le librerie della barra laterale sotto ciascun server multimediale.';
+	@override String get collapseServerLibrariesByDefault => 'Comprimi librerie del server come predefinito';
+	@override String get collapseServerLibrariesByDefaultDescription => 'Inizia con gli elenchi delle librerie compressi sotto ciascun server nella barra laterale.';
+	@override String get showHiddenLibrariesInSidebar => 'Mostra librerie nascoste nella barra laterale';
+	@override String get showHiddenLibrariesInSidebarDescription => 'Visualizza la sezione comprimibile \'Nascoste\' sotto le librerie nella barra laterale.';
 	@override String get alwaysKeepSidebarOpen => 'Mantieni sempre aperta la barra laterale';
 	@override String get alwaysKeepSidebarOpenDescription => 'La barra laterale rimane espansa e l\'area del contenuto si adatta';
 	@override String get showUnwatchedCount => 'Mostra il numero di episodi non visti';
@@ -3613,6 +3617,10 @@ extension on TranslationsIt {
 			'settings.showServerNameOnHubsDescription' => 'Mostra sempre i nomi dei server nei titoli delle sezioni.',
 			'settings.groupLibrariesByServer' => 'Raggruppa le librerie per server',
 			'settings.groupLibrariesByServerDescription' => 'Raggruppa le librerie della barra laterale sotto ciascun server multimediale.',
+			'settings.collapseServerLibrariesByDefault' => 'Comprimi librerie del server come predefinito',
+			'settings.collapseServerLibrariesByDefaultDescription' => 'Inizia con gli elenchi delle librerie compressi sotto ciascun server nella barra laterale.',
+			'settings.showHiddenLibrariesInSidebar' => 'Mostra librerie nascoste nella barra laterale',
+			'settings.showHiddenLibrariesInSidebarDescription' => 'Visualizza la sezione comprimibile \'Nascoste\' sotto le librerie nella barra laterale.',
 			'settings.alwaysKeepSidebarOpen' => 'Mantieni sempre aperta la barra laterale',
 			'settings.alwaysKeepSidebarOpenDescription' => 'La barra laterale rimane espansa e l\'area del contenuto si adatta',
 			'settings.showUnwatchedCount' => 'Mostra il numero di episodi non visti',
@@ -3909,12 +3917,12 @@ extension on TranslationsIt {
 			'themeEditor.colors' => 'Colori',
 			'themeEditor.preview' => 'Anteprima',
 			'themeEditor.slots.bg' => 'Sfondo',
+			_ => null,
+		} ?? switch (path) {
 			'themeEditor.slots.surface' => 'Superficie',
 			'themeEditor.slots.outline' => 'Contorno',
 			'themeEditor.slots.text' => 'Testo',
 			'themeEditor.slots.textMuted' => 'Testo secondario',
-			_ => null,
-		} ?? switch (path) {
 			'themeEditor.slots.accent' => 'Accento',
 			'themeEditor.opacity' => 'Opacità',
 			'themeEditor.hexHint' => '#RRGGBB o #AARRGGBB',
@@ -4423,12 +4431,12 @@ extension on TranslationsIt {
 			'profiles.profileNameHint' => 'es. Ospiti, Bambini, Soggiorno',
 			'profiles.pinProtectionOptional' => 'Protezione PIN (opzionale)',
 			'profiles.pinExplain' => 'PIN a 4 cifre richiesto per cambiare profilo.',
+			_ => null,
+		} ?? switch (path) {
 			'profiles.continueButton' => 'Continua',
 			'profiles.pinsDontMatch' => 'I PIN non corrispondono',
 			'profiles.tokenIdentityMismatch' => 'Il token del profilo Plex è stato associato a un server imprevisto',
 			'connections.sectionTitle' => 'Connessioni',
-			_ => null,
-		} ?? switch (path) {
 			'connections.addConnection' => 'Aggiungi connessione',
 			'connections.addConnectionSubtitleNoProfile' => 'Accedi con Plex o collega un server Jellyfin o Emby',
 			'connections.addConnectionSubtitleScoped' => ({required Object displayName}) => 'Aggiungi a ${displayName}: Plex, Jellyfin, Emby o la connessione di un altro profilo',
@@ -4937,12 +4945,12 @@ extension on TranslationsIt {
 			'liveTv.recordSettings.startEarly' => 'Inizia in anticipo (secondi)',
 			'liveTv.recordSettings.endLate' => 'Termina in ritardo (secondi)',
 			'liveTv.recordSettings.newOnly' => 'Solo nuovi episodi',
+			_ => null,
+		} ?? switch (path) {
 			'liveTv.recordSettings.anyChannel' => 'Registra su qualsiasi canale',
 			'liveTv.recordSettings.anyTime' => 'Registra a qualsiasi ora',
 			'liveTv.recordSettings.skipInLibrary' => 'Salta gli episodi già presenti nella libreria',
 			'liveTv.recordSettings.keepUpTo' => 'Episodi da conservare',
-			_ => null,
-		} ?? switch (path) {
 			'liveTv.recordSettings.keepUpToHint' => '0 conserva tutti gli episodi',
 			'liveTv.startingInMinutes' => ({required Object minutes}) => 'Inizia tra ${minutes} min',
 			'liveTv.dayAtTime' => ({required Object day, required Object time}) => '${day} alle ${time}',
@@ -5451,12 +5459,12 @@ extension on TranslationsIt {
 			'performanceOverlay.player' => 'Lettore',
 			'performanceOverlay.memory' => 'Memoria',
 			'performanceOverlay.uiFps' => 'FPS UI',
+			_ => null,
+		} ?? switch (path) {
 			'performanceOverlay.fps' => 'FPS',
 			'performanceOverlay.decoderAndroidHw' => 'Android HW',
 			'performanceOverlay.decoderNvidiaHw' => 'NVIDIA HW',
 			'performanceOverlay.decoderQualcommHw' => 'Qualcomm HW',
-			_ => null,
-		} ?? switch (path) {
 			'performanceOverlay.decoderMediatekHw' => 'MediaTek HW',
 			'performanceOverlay.decoderExynosHw' => 'Exynos HW',
 			'performanceOverlay.decoderSoftware' => 'Software',

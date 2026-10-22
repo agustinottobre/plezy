@@ -34,7 +34,10 @@ void main() {
     await tester.pumpWidget(
       ChangeNotifierProvider<ThemeProvider>.value(
         value: theme,
-        child: MaterialApp(theme: monoTheme(MonoPalette.dark), home: const AppearanceSettingsScreen()),
+        child: MaterialApp(
+          theme: monoTheme(MonoPalette.dark).copyWith(platform: TargetPlatform.macOS),
+          home: const AppearanceSettingsScreen(),
+        ),
       ),
     );
     await tester.pumpAndSettle();
@@ -103,5 +106,98 @@ void main() {
       find.descendant(of: find.byType(AppearanceSettingsScreen), matching: find.text(t.settings.plumTheme)),
       findsOneWidget,
     );
+  });
+
+  testWidgets('collapseServerLibrariesByDefault tile renders below groupLibrariesByServer and reflects state', (tester) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(1000, 3000);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(tester.view.resetPhysicalSize);
+
+    final supporter = SupporterService.forTesting(availability: SupporterAvailability.hidden);
+    addTearDown(supporter.dispose);
+    final theme = ThemeProvider(supporter: supporter);
+    addTearDown(theme.dispose);
+
+    await tester.pumpWidget(
+      ChangeNotifierProvider<ThemeProvider>.value(
+        value: theme,
+        child: MaterialApp(
+          theme: monoTheme(MonoPalette.dark).copyWith(platform: TargetPlatform.macOS),
+          home: const AppearanceSettingsScreen(),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final scrollable = find.byType(Scrollable).first;
+    await tester.scrollUntilVisible(find.text(t.settings.groupLibrariesByServer), 500, scrollable: scrollable);
+
+    expect(find.text(t.settings.groupLibrariesByServer), findsOneWidget);
+    expect(find.text(t.settings.collapseServerLibrariesByDefault), findsOneWidget);
+
+    // Initial state is false
+    expect(SettingsService.instance.read(SettingsService.collapseServerLibrariesByDefault), isFalse);
+
+    // Tap to toggle
+    await tester.tap(find.text(t.settings.collapseServerLibrariesByDefault));
+    await tester.pumpAndSettle();
+
+    expect(SettingsService.instance.read(SettingsService.collapseServerLibrariesByDefault), isTrue);
+
+    // If groupLibrariesByServer is turned off, the tile is disabled
+    await tester.tap(find.text(t.settings.groupLibrariesByServer));
+    await tester.pumpAndSettle();
+
+    expect(SettingsService.instance.read(SettingsService.groupLibrariesByServer), isFalse);
+
+    // Tapping disabled tile does not change preference
+    await tester.tap(find.text(t.settings.collapseServerLibrariesByDefault));
+    await tester.pumpAndSettle();
+
+    expect(SettingsService.instance.read(SettingsService.collapseServerLibrariesByDefault), isTrue);
+  });
+
+  testWidgets('showHiddenLibrariesInSidebar tile renders and toggles preference', (tester) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(1000, 3000);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(tester.view.resetPhysicalSize);
+
+    final supporter = SupporterService.forTesting(availability: SupporterAvailability.hidden);
+    addTearDown(supporter.dispose);
+    final theme = ThemeProvider(supporter: supporter);
+    addTearDown(theme.dispose);
+
+    await tester.pumpWidget(
+      ChangeNotifierProvider<ThemeProvider>.value(
+        value: theme,
+        child: MaterialApp(
+          theme: monoTheme(MonoPalette.dark).copyWith(platform: TargetPlatform.macOS),
+          home: const AppearanceSettingsScreen(),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final scrollable = find.byType(Scrollable).first;
+    await tester.scrollUntilVisible(find.text(t.settings.showHiddenLibrariesInSidebar), 500, scrollable: scrollable);
+
+    expect(find.text(t.settings.showHiddenLibrariesInSidebar), findsOneWidget);
+
+    // Initial state is true
+    expect(SettingsService.instance.read(SettingsService.showHiddenLibrariesInSidebar), isTrue);
+
+    // Tap to toggle off
+    await tester.tap(find.text(t.settings.showHiddenLibrariesInSidebar));
+    await tester.pumpAndSettle();
+
+    expect(SettingsService.instance.read(SettingsService.showHiddenLibrariesInSidebar), isFalse);
+
+    // Tap to toggle on
+    await tester.tap(find.text(t.settings.showHiddenLibrariesInSidebar));
+    await tester.pumpAndSettle();
+
+    expect(SettingsService.instance.read(SettingsService.showHiddenLibrariesInSidebar), isTrue);
   });
 }
