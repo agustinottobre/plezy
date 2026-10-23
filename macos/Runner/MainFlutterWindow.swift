@@ -1,6 +1,7 @@
 import Cocoa
 import FlutterMacOS
 
+@objc(MainFlutterWindow)
 class MainFlutterWindow: NSWindow {
   override func awakeFromNib() {
     let flutterViewController = FlutterViewController()

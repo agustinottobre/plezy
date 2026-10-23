@@ -277,9 +277,7 @@ class MpvPlayerCore: MpvPlayerCoreBase {
     guard let videoLayer else { return }
     let shouldEnableEDR = hdrEnabled && sigPeak > 1.0
     withoutLayerAnimations {
-      if #available(macOS 26.0, *) {
-        videoLayer.preferredDynamicRange = shouldEnableEDR ? .high : .standard
-      } else {
+      if #available(macOS 14.0, *) {
         videoLayer.wantsExtendedDynamicRangeContent = shouldEnableEDR
       }
     }

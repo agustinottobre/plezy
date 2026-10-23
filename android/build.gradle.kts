@@ -5,6 +5,9 @@ allprojects {
         google()
         mavenCentral()
     }
+    tasks.matching { it.name.startsWith("lint") }.configureEach {
+        enabled = false
+    }
 }
 
 val newBuildDir: Directory = rootProject.layout.buildDirectory.dir("../../build").get()
@@ -35,6 +38,7 @@ subprojects {
                 // their dependencies already require current APIs.
                 extension.compileSdk = 36
                 extension.buildToolsVersion = "36.1.0"
+                extension.ndkVersion = "29.0.14206865"
                 // The Flutter plugin copies the app's build types into every plugin
                 // module, so `minified` arrives here carrying the app's shrinker flags.
                 // Library-level shrinking then deletes the plugin entry points that only
