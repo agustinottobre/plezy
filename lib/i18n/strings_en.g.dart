@@ -84,6 +84,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final Translations$downloads$en downloads = Translations$downloads$en.internal(_root);
 	late final Translations$shaders$en shaders = Translations$shaders$en.internal(_root);
 	late final Translations$companionRemote$en companionRemote = Translations$companionRemote$en.internal(_root);
+	late final Translations$deviceTransfer$en deviceTransfer = Translations$deviceTransfer$en.internal(_root);
 	late final Translations$videoSettings$en videoSettings = Translations$videoSettings$en.internal(_root);
 	late final Translations$performanceOverlay$en performanceOverlay = Translations$performanceOverlay$en.internal(_root);
 	late final Translations$externalPlayer$en externalPlayer = Translations$externalPlayer$en.internal(_root);
@@ -5155,6 +5156,150 @@ class Translations$companionRemote$en {
 	String get closedBeforeAuth => 'The connection closed before authentication';
 }
 
+// Path: deviceTransfer
+class Translations$deviceTransfer$en {
+	Translations$deviceTransfer$en.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Nearby Device Transfer (Wi-Fi)'
+	String get title => 'Nearby Device Transfer (Wi-Fi)';
+
+	/// en: 'Quick Setup from Another Device'
+	String get quickSetup => 'Quick Setup from Another Device';
+
+	/// en: 'Send Setup to Nearby Device'
+	String get sendSetupToNearbyDevice => 'Send Setup to Nearby Device';
+
+	/// en: 'Clone your servers & settings to a TV or phone nearby'
+	String get sendSetupToNearbyDeviceDescription => 'Clone your servers & settings to a TV or phone nearby';
+
+	/// en: 'Receive Setup on this Device'
+	String get receiveSetupOnThisDevice => 'Receive Setup on this Device';
+
+	/// en: 'Display QR code & PIN to receive setup from another device'
+	String get receiveSetupOnThisDeviceDescription => 'Display QR code & PIN to receive setup from another device';
+
+	/// en: 'Receive Setup from Device'
+	String get receiveTitle => 'Receive Setup from Device';
+
+	/// en: 'Scan with your phone or select "Send Setup" in Plezy on your other device:'
+	String get receiveInstructions => 'Scan with your phone or select "Send Setup" in Plezy on your other device:';
+
+	/// en: 'PIN CODE'
+	String get pinCode => 'PIN CODE';
+
+	/// en: 'Waiting for incoming setup...'
+	String get waitingForIncoming => 'Waiting for incoming setup...';
+
+	/// en: 'Applying received servers and settings...'
+	String get applyingReceivedSetup => 'Applying received servers and settings...';
+
+	/// en: 'Setup Transferred!'
+	String get setupTransferredTitle => 'Setup Transferred!';
+
+	/// en: 'Transferred ${summary}.'
+	String transferredSummary({required Object summary}) => 'Transferred ${summary}.';
+
+	/// en: 'Setup applied successfully'
+	String get setupAppliedSuccess => 'Setup applied successfully';
+
+	/// en: 'Failed to start receiver on local network: ${error}'
+	String receiveError({required Object error}) => 'Failed to start receiver on local network: ${error}';
+
+	/// en: 'Failed to apply setup: ${error}'
+	String applyError({required Object error}) => 'Failed to apply setup: ${error}';
+
+	/// en: 'An error occurred during transfer.'
+	String get generalError => 'An error occurred during transfer.';
+
+	/// en: 'Send Setup to Device'
+	String get sendTitle => 'Send Setup to Device';
+
+	/// en: 'Target Device:'
+	String get targetDevice => 'Target Device:';
+
+	/// en: 'Ready on local Wi-Fi · ${ip}'
+	String readyOnWifi({required Object ip}) => 'Ready on local Wi-Fi · ${ip}';
+
+	/// en: 'Scanning Wi-Fi for nearby devices...'
+	String get scanningNearbyDevices => 'Scanning Wi-Fi for nearby devices...';
+
+	/// en: 'Can't find device? Enter IP manually'
+	String get cantFindDevice => 'Can\'t find device? Enter IP manually';
+
+	/// en: 'Hide manual address'
+	String get hideManualAddress => 'Hide manual address';
+
+	/// en: 'Target IP Address'
+	String get targetIp => 'Target IP Address';
+
+	/// en: 'e.g. 192.168.1.50'
+	String get targetIpHint => 'e.g. 192.168.1.50';
+
+	/// en: 'Port'
+	String get port => 'Port';
+
+	/// en: '54321'
+	String get portHint => '54321';
+
+	/// en: '6-Digit PIN shown on target screen'
+	String get pinLabel => '6-Digit PIN shown on target screen';
+
+	/// en: '6-Digit PIN on ${device}'
+	String pinLabelDevice({required Object device}) => '6-Digit PIN on ${device}';
+
+	/// en: 'e.g. 482915'
+	String get pinHint => 'e.g. 482915';
+
+	/// en: 'Include in Transfer:'
+	String get includeInTransfer => 'Include in Transfer:';
+
+	/// en: 'App & Player Settings'
+	String get appAndPlayerSettings => 'App & Player Settings';
+
+	/// en: 'Theme, subtitles, audio passthrough, layout'
+	String get appAndPlayerSettingsDescription => 'Theme, subtitles, audio passthrough, layout';
+
+	/// en: 'Server Accounts & Logins'
+	String get serverAccountsAndLogins => 'Server Accounts & Logins';
+
+	/// en: 'Plex & Jellyfin servers and credentials'
+	String get serverAccountsAndLoginsDescription => 'Plex & Jellyfin servers and credentials';
+
+	/// en: 'Please select a target device or enter its IP address.'
+	String get validationSelectTarget => 'Please select a target device or enter its IP address.';
+
+	/// en: 'Please enter a valid port number.'
+	String get validationValidPort => 'Please enter a valid port number.';
+
+	/// en: 'Please enter the 6-digit PIN shown on the target screen.'
+	String get validationEnterPin => 'Please enter the 6-digit PIN shown on the target screen.';
+
+	/// en: 'Please select at least one item to transfer.'
+	String get validationSelectItems => 'Please select at least one item to transfer.';
+
+	/// en: 'Send to ${device}'
+	String sendToDevice({required Object device}) => 'Send to ${device}';
+
+	/// en: 'Send Setup'
+	String get sendSetup => 'Send Setup';
+
+	/// en: 'Setup delivered to ${device} successfully!'
+	String setupDeliveredSuccess({required Object device}) => 'Setup delivered to ${device} successfully!';
+
+	/// en: '${count} servers'
+	String serversCount({required Object count}) => '${count} servers';
+
+	/// en: '${count} custom playlists'
+	String playlistsCount({required Object count}) => '${count} custom playlists';
+
+	/// en: '${count} settings'
+	String settingsCount({required Object count}) => '${count} settings';
+}
+
 // Path: videoSettings
 class Translations$videoSettings$en {
 	Translations$videoSettings$en.internal(this._root);
@@ -10159,6 +10304,51 @@ extension on Translations {
 			'companionRemote.errors.connectionLostAfterAttempts' => ({required Object attempts}) => 'Connection lost after ${attempts} attempts',
 			'companionRemote.errors.connectionLost' => 'Connection lost',
 			'companionRemote.closedBeforeAuth' => 'The connection closed before authentication',
+			'deviceTransfer.title' => 'Nearby Device Transfer (Wi-Fi)',
+			'deviceTransfer.quickSetup' => 'Quick Setup from Another Device',
+			'deviceTransfer.sendSetupToNearbyDevice' => 'Send Setup to Nearby Device',
+			'deviceTransfer.sendSetupToNearbyDeviceDescription' => 'Clone your servers & settings to a TV or phone nearby',
+			'deviceTransfer.receiveSetupOnThisDevice' => 'Receive Setup on this Device',
+			'deviceTransfer.receiveSetupOnThisDeviceDescription' => 'Display QR code & PIN to receive setup from another device',
+			'deviceTransfer.receiveTitle' => 'Receive Setup from Device',
+			'deviceTransfer.receiveInstructions' => 'Scan with your phone or select "Send Setup" in Plezy on your other device:',
+			'deviceTransfer.pinCode' => 'PIN CODE',
+			'deviceTransfer.waitingForIncoming' => 'Waiting for incoming setup...',
+			'deviceTransfer.applyingReceivedSetup' => 'Applying received servers and settings...',
+			'deviceTransfer.setupTransferredTitle' => 'Setup Transferred!',
+			'deviceTransfer.transferredSummary' => ({required Object summary}) => 'Transferred ${summary}.',
+			'deviceTransfer.setupAppliedSuccess' => 'Setup applied successfully',
+			'deviceTransfer.receiveError' => ({required Object error}) => 'Failed to start receiver on local network: ${error}',
+			'deviceTransfer.applyError' => ({required Object error}) => 'Failed to apply setup: ${error}',
+			'deviceTransfer.generalError' => 'An error occurred during transfer.',
+			'deviceTransfer.sendTitle' => 'Send Setup to Device',
+			'deviceTransfer.targetDevice' => 'Target Device:',
+			'deviceTransfer.readyOnWifi' => ({required Object ip}) => 'Ready on local Wi-Fi · ${ip}',
+			'deviceTransfer.scanningNearbyDevices' => 'Scanning Wi-Fi for nearby devices...',
+			'deviceTransfer.cantFindDevice' => 'Can\'t find device? Enter IP manually',
+			'deviceTransfer.hideManualAddress' => 'Hide manual address',
+			'deviceTransfer.targetIp' => 'Target IP Address',
+			'deviceTransfer.targetIpHint' => 'e.g. 192.168.1.50',
+			'deviceTransfer.port' => 'Port',
+			'deviceTransfer.portHint' => '54321',
+			'deviceTransfer.pinLabel' => '6-Digit PIN shown on target screen',
+			'deviceTransfer.pinLabelDevice' => ({required Object device}) => '6-Digit PIN on ${device}',
+			'deviceTransfer.pinHint' => 'e.g. 482915',
+			'deviceTransfer.includeInTransfer' => 'Include in Transfer:',
+			'deviceTransfer.appAndPlayerSettings' => 'App & Player Settings',
+			'deviceTransfer.appAndPlayerSettingsDescription' => 'Theme, subtitles, audio passthrough, layout',
+			'deviceTransfer.serverAccountsAndLogins' => 'Server Accounts & Logins',
+			'deviceTransfer.serverAccountsAndLoginsDescription' => 'Plex & Jellyfin servers and credentials',
+			'deviceTransfer.validationSelectTarget' => 'Please select a target device or enter its IP address.',
+			'deviceTransfer.validationValidPort' => 'Please enter a valid port number.',
+			'deviceTransfer.validationEnterPin' => 'Please enter the 6-digit PIN shown on the target screen.',
+			'deviceTransfer.validationSelectItems' => 'Please select at least one item to transfer.',
+			'deviceTransfer.sendToDevice' => ({required Object device}) => 'Send to ${device}',
+			'deviceTransfer.sendSetup' => 'Send Setup',
+			'deviceTransfer.setupDeliveredSuccess' => ({required Object device}) => 'Setup delivered to ${device} successfully!',
+			'deviceTransfer.serversCount' => ({required Object count}) => '${count} servers',
+			'deviceTransfer.playlistsCount' => ({required Object count}) => '${count} custom playlists',
+			'deviceTransfer.settingsCount' => ({required Object count}) => '${count} settings',
 			'videoSettings.playbackSpeed' => 'Playback Speed',
 			'videoSettings.normalSpeed' => 'Normal',
 			'videoSettings.sleepTimerActive' => ({required Object duration}) => 'Active (${duration})',
@@ -10167,6 +10357,8 @@ extension on Translations {
 			'videoSettings.audioSync' => 'Audio Sync',
 			'videoSettings.subtitleSync' => 'Subtitle Sync',
 			'videoSettings.hdr' => 'HDR',
+			_ => null,
+		} ?? switch (path) {
 			'videoSettings.hdrUnsupported' => 'HDR isn\'t available here — this desktop compositor or video output can\'t carry it.',
 			'videoSettings.hdrToneMapping' => 'HDR Tone Mapping',
 			'videoSettings.hdrToneMappingCompositor' => 'Compositor',
@@ -10212,8 +10404,6 @@ extension on Translations {
 			'performanceOverlay.renderFps' => 'Render FPS',
 			'performanceOverlay.displayFps' => 'Display FPS',
 			'performanceOverlay.avSync' => 'A/V Sync',
-			_ => null,
-		} ?? switch (path) {
 			'performanceOverlay.dropped' => 'Dropped',
 			'performanceOverlay.dvRpus' => 'DV RPUs',
 			'performanceOverlay.dvRpuAverage' => 'DV RPU Avg',

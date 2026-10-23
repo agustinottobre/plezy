@@ -25,6 +25,7 @@ import '../../services/download_storage_service.dart';
 import '../../services/file_picker_service.dart';
 import '../../services/saf_storage_service.dart';
 import '../../services/settings_export_service.dart';
+import 'device_transfer_dialogs.dart';
 import '../../providers/theme_provider.dart';
 import '../../providers/seerr_account_provider.dart';
 import '../../services/account_preferences_accounts.dart';
@@ -122,6 +123,8 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
   static const _kWatchTogetherRelay = 'watch_together_relay';
   static const _kExportSettings = 'export_settings';
   static const _kImportSettings = 'import_settings';
+  static const _kSendSetup = 'send_setup';
+  static const _kReceiveSetup = 'receive_setup';
   static const _kAccountPreferences = 'account_preferences';
 
   KeyboardShortcutsService? _keyboardService;
@@ -236,7 +239,9 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
 
                   if (UpdateService.isUpdateCheckAvailable) ...[_buildUpdateSection()],
 
-                  // Hidden on Android TV / tvOS (no document picker); desktop in
+                  _buildDeviceTransferSection(),
+
+                  // File backup is hidden on Android TV / tvOS (no document picker); desktop in
                   // force-TV mode keeps it — FilePickerService works there.
                   if (!PlatformDetector.isTV() || PlatformDetector.isDesktopOS()) _buildBackupSection(),
 
@@ -623,6 +628,28 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
     );
   }
 
+  Widget _buildDeviceTransferSection() {
+    return SettingsGroup(
+      title: t.deviceTransfer.title,
+      children: [
+        SettingNavigationTile(
+          focusNode: _focusTracker.get(_kSendSetup),
+          icon: Symbols.send_rounded,
+          title: t.deviceTransfer.sendSetupToNearbyDevice,
+          subtitle: t.deviceTransfer.sendSetupToNearbyDeviceDescription,
+          onTap: _showSendSetupDialog,
+        ),
+        SettingNavigationTile(
+          focusNode: _focusTracker.get(_kReceiveSetup),
+          icon: Symbols.phonelink_setup_rounded,
+          title: t.deviceTransfer.receiveSetupOnThisDevice,
+          subtitle: t.deviceTransfer.receiveSetupOnThisDeviceDescription,
+          onTap: _showReceiveSetupDialog,
+        ),
+      ],
+    );
+  }
+
   Widget _buildBackupSection() {
     return SettingsGroup(
       title: t.settings.backup,
@@ -852,6 +879,24 @@ class _SettingsScreenState extends State<SettingsScreen> with FocusableTab, Moun
       showSuccessSnackBar(context, t.settings.resetSettingsSuccess);
     } else {
       showErrorSnackBar(context, failures.first.display);
+    }
+  }
+
+  Future<void> _showSendSetupDialog() async {
+    await showScopedDialog<void>(context: context, builder: (_) => const SendSetupDialog());
+  }
+
+  Future<void> _showReceiveSetupDialog() async {
+    final hiddenLibrariesProvider = context.read<HiddenLibrariesProvider>();
+    final librariesProvider = context.read<LibrariesProvider>();
+    final completed = await showScopedDialog<bool>(context: context, builder: (_) => const ReceiveSetupDialog());
+    if (completed == true) {
+      _settingsService.refreshListenables();
+      await hiddenLibrariesProvider.refresh();
+      unawaited(librariesProvider.refresh());
+      if (mounted) {
+        showSuccessSnackBar(context, t.deviceTransfer.setupAppliedSuccess);
+      }
     }
   }
 

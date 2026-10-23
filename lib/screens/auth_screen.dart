@@ -30,9 +30,11 @@ import '../navigation/profile_session_screen.dart';
 import '../utils/navigation_transitions.dart';
 import '../widgets/backend_badge.dart';
 import '../widgets/dialog_action_button.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'auth/plex_pin_auth_flow.dart';
 import 'profile/profile_switch_screen.dart';
 import 'settings/add_jellyfin_screen.dart';
+import 'settings/device_transfer_dialogs.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({
@@ -248,6 +250,33 @@ class _AuthScreenState extends State<AuthScreen> {
     unawaited(Navigator.pushReplacement(context, fadeRoute(const ProfileSessionScreen())));
   }
 
+  Future<void> _showQuickSetup() async {
+    final activeProfiles = context.read<ActiveProfileProvider>();
+    final plexHome = context.read<PlexHomeService>();
+    final connections = context.read<ConnectionRegistry>();
+    final completed = await showScopedDialog<bool>(
+      context: context,
+      builder: (_) => const ReceiveSetupDialog(),
+    );
+    if (!mounted || completed != true) return;
+    final settings = await SettingsService.getInstance();
+    final allConns = await connections.list();
+    final plexConn = allConns.whereType<PlexAccountConnection>().firstOrNull;
+
+    final promptHandled = shouldPromptForInitialProfileSelection(
+      activeProfile: activeProfiles.active,
+      hasProfiles: activeProfiles.profiles.isNotEmpty,
+      accountHasHomeUsers: plexConn != null && plexHome.current[plexConn.id]?.isNotEmpty == true,
+      requireProfileSelectionOnOpen: activeProfiles.requiresSelectionOnOpen(settings),
+    );
+
+    if (!mounted) return;
+    unawaited(Navigator.pushReplacement(
+      context,
+      fadeRoute(ProfileSessionScreen(initialPromptHandled: promptHandled)),
+    ));
+  }
+
   void _showDebugTokenDialog() {
     unawaited(
       showScopedDialog<void>(
@@ -451,6 +480,16 @@ class _AuthScreenState extends State<AuthScreen> {
             style: OutlinedButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 16)),
             icon: const BackendBadge(backend: MediaBackend.emby, size: 18),
             label: Text(t.auth.connectToMediaBrowser(product: embyDialect.productName)),
+          ),
+        ),
+        const SizedBox(height: 12),
+        FocusableButton(
+          onPressed: _showQuickSetup,
+          child: OutlinedButton.icon(
+            onPressed: _showQuickSetup,
+            style: OutlinedButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 16)),
+            icon: const Icon(Symbols.phonelink_setup_rounded, size: 18),
+            label: Text(t.deviceTransfer.quickSetup),
           ),
         ),
         if (kDebugMode) ...[
