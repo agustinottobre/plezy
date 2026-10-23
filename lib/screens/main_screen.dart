@@ -1121,11 +1121,21 @@ class _MainScreenState extends State<MainScreen>
   /// dispatch here or interpret a canceled close as permission to force exit.
   Future<void> _exitDesktopGracefully() async {
     try {
-      await AppExitService.requestGracefulExit();
+      if (PlatformDetector.isDesktopOS()) {
+        await windowManager.setPreventClose(false);
+      }
+      final exited = await AppExitService.requestGracefulExit();
+      if (exited) {
+        exit(0);
+      }
     } catch (e, st) {
       appLogger.w('Graceful window close failed; destroying window', error: e, stackTrace: st);
       try {
+        if (PlatformDetector.isDesktopOS()) {
+          await windowManager.setPreventClose(false);
+        }
         await windowManager.destroy().timeout(const Duration(seconds: 3));
+        exit(0);
       } catch (fallbackError, fallbackStack) {
         appLogger.e('Window destruction failed; forcing exit', error: fallbackError, stackTrace: fallbackStack);
         exit(1);

@@ -1,0 +1,51 @@
+name: Attach Artifacts to Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: Actions Run ID containing the built artifacts
+        required: true
+        default: '42600045636'
+      release_tag:
+        description: Release tag to attach artifacts to
+        required: true
+        default: 'v2.26.0-ao.1'
+
+jobs:
+  attach:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - name: Download artifacts from run
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh run download "${{ inputs.run_id }}" --repo "${{ github.repository }}" --dir artifacts
+          echo "Downloaded artifacts:"
+          ls -laR artifacts
+
+      - name: Upload binaries to release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          FILES=$(find artifacts -type f \( \
+            -name "*.apk" -o \
+            -name "*.dmg" -o \
+            -name "*.ipa" -o \
+            -name "*.AppImage*" -o \
+            -name "*.deb" -o \
+            -name "*.rpm" -o \
+            -name "*.pkg.tar.zst" -o \
+            -name "*.flatpak" -o \
+            -name "*.tar.gz" \
+          \))
+          if [ -z "$FILES" ]; then
+            echo "No artifact files found to upload!" >&2
+            exit 1
+          fi
+          echo "Uploading files:"
+          echo "$FILES"
+          echo "$FILES" | xargs gh release upload "${{ inputs.release_tag }}" --repo "${{ github.repository }}" --clobber

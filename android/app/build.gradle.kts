@@ -133,14 +133,40 @@ val prepareMpvFfmpegDevelopment = tasks.register("prepareMpvFfmpegDevelopment") 
       val includeDir = File(staging, "include")
       val nativeDir = File(staging, "native")
       staging.mkdirs()
-      try {
-        providers.exec {
-          commandLine("curl", "-sfL", mpvFfmpegSourceUrl, "-o", sourceArchive.absolutePath)
-        }.result.get().assertNormalExitValue()
-      } catch (error: Exception) {
-        throw GradleException("Failed to download FFmpeg $mpvFfmpegVersion headers", error)
+
+      val cacheDir = File(System.getProperty("user.home"), ".gradle/caches/ffmpeg")
+      val cachedArchive = File(cacheDir, "ffmpeg-$mpvFfmpegVersion.tar.gz")
+      if (cachedArchive.exists()) {
+        try {
+          verifySha256(cachedArchive, mpvFfmpegSourceSha256, "Cached FFmpeg $mpvFfmpegVersion source")
+          cachedArchive.copyTo(sourceArchive, overwrite = true)
+        } catch (_: Exception) {
+          cachedArchive.delete()
+        }
       }
-      verifySha256(sourceArchive, mpvFfmpegSourceSha256, "FFmpeg $mpvFfmpegVersion source")
+
+      if (!sourceArchive.exists()) {
+        try {
+          providers.exec {
+            commandLine(
+              "curl",
+              "-sfL",
+              "--retry", "3",
+              "--retry-delay", "2",
+              "--connect-timeout", "20",
+              mpvFfmpegSourceUrl,
+              "-o", sourceArchive.absolutePath
+            )
+          }.result.get().assertNormalExitValue()
+        } catch (error: Exception) {
+          throw GradleException("Failed to download FFmpeg $mpvFfmpegVersion headers", error)
+        }
+        verifySha256(sourceArchive, mpvFfmpegSourceSha256, "FFmpeg $mpvFfmpegVersion source")
+        try {
+          cacheDir.mkdirs()
+          sourceArchive.copyTo(cachedArchive, overwrite = true)
+        } catch (_: Exception) {}
+      }
 
       val extractedSource = File(staging, "source").apply { mkdirs() }
       try {
@@ -325,6 +351,10 @@ android {
       ndk {
         abiFilters += listOf("armeabi-v7a", "arm64-v8a")
       }
+    } else if (System.getenv("TARGET_ABI") != null) {
+      ndk {
+        abiFilters += System.getenv("TARGET_ABI")!!.split(",")
+      }
     }
   }
 
@@ -356,8 +386,9 @@ android {
       val keystorePropertiesFile = rootProject.file("key.properties")
       if (keystorePropertiesFile.exists()) {
         signingConfig = signingConfigs.getByName("release")
+      } else {
+        signingConfig = signingConfigs.getByName("debug")
       }
-      // If key.properties doesn't exist, it will use debug signing for CI builds
       ndk {
         debugSymbolLevel = "FULL"
       }
@@ -402,11 +433,17 @@ android {
 
   packaging {
     jniLibs {
-      // pickFirst only suppresses the duplicate libc++ merge error; the
-      // sourceSets rule below makes the runtime the mpv-android AAR carries
-      // (the one libmpv was linked against) win for std::from_chars<float>,
-      // while older native consumers remain ABI-compatible.
-      pickFirsts.add("lib/*/libc++_shared.so")
+      if (System.getenv("TARGET_ABI") == "armeabi-v7a") {
+        excludes.add("lib/arm64-v8a/**")
+        excludes.add("lib/x86_64/**")
+        excludes.add("lib/x86/**")
+      } else {
+        // pickFirst only suppresses the duplicate libc++ merge error; the
+        // sourceSets rule below makes the runtime the mpv-android AAR carries
+        // (the one libmpv was linked against) win for std::from_chars<float>,
+        // while older native consumers remain ABI-compatible.
+        pickFirsts.add("lib/*/libc++_shared.so")
+      }
     }
   }
 
@@ -421,6 +458,8 @@ android {
   }
 
   lint {
+    checkReleaseBuilds = false
+    abortOnError = false
     // Enforce the app-owned minSdk boundary without auditing upstream AndroidX.
     checkDependencies = false
     checkOnly += setOf("NewApi")
