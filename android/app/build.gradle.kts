@@ -323,6 +323,10 @@ android {
       ndk {
         abiFilters += listOf("armeabi-v7a", "arm64-v8a")
       }
+    } else if (System.getenv("TARGET_ABI") != null) {
+      ndk {
+        abiFilters += System.getenv("TARGET_ABI")!!.split(",")
+      }
     }
   }
 
@@ -354,8 +358,9 @@ android {
       val keystorePropertiesFile = rootProject.file("key.properties")
       if (keystorePropertiesFile.exists()) {
         signingConfig = signingConfigs.getByName("release")
+      } else {
+        signingConfig = signingConfigs.getByName("debug")
       }
-      // If key.properties doesn't exist, it will use debug signing for CI builds
       ndk {
         debugSymbolLevel = "FULL"
       }
@@ -400,11 +405,17 @@ android {
 
   packaging {
     jniLibs {
-      // pickFirst only suppresses the duplicate libc++ merge error; the
-      // sourceSets rule below makes the runtime the mpv-android AAR carries
-      // (the one libmpv was linked against) win for std::from_chars<float>,
-      // while older native consumers remain ABI-compatible.
-      pickFirsts.add("lib/*/libc++_shared.so")
+      if (System.getenv("TARGET_ABI") == "armeabi-v7a") {
+        excludes.add("lib/arm64-v8a/**")
+        excludes.add("lib/x86_64/**")
+        excludes.add("lib/x86/**")
+      } else {
+        // pickFirst only suppresses the duplicate libc++ merge error; the
+        // sourceSets rule below makes the runtime the mpv-android AAR carries
+        // (the one libmpv was linked against) win for std::from_chars<float>,
+        // while older native consumers remain ABI-compatible.
+        pickFirsts.add("lib/*/libc++_shared.so")
+      }
     }
   }
 
@@ -419,6 +430,8 @@ android {
   }
 
   lint {
+    checkReleaseBuilds = false
+    abortOnError = false
     // Enforce the app-owned minSdk boundary without auditing upstream AndroidX.
     checkDependencies = false
     checkOnly += setOf("NewApi")

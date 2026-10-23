@@ -554,6 +554,15 @@ class MpvPlayerCoreBase: NSObject {
       // it has to be an option here. The iOS and tvOS libmpv is built without
       // Lua, so neither the hook nor this option exists there.
       checkError(mpv_set_option_string(mpv, "ytdl", "no"))
+      checkError(mpv_set_option_string(mpv, "load-scripts", "no"))
+      checkError(mpv_set_option_string(mpv, "load-stats-overlay", "no"))
+      checkError(mpv_set_option_string(mpv, "load-console", "no"))
+      checkError(mpv_set_option_string(mpv, "load-osd-console", "no"))
+      checkError(mpv_set_option_string(mpv, "load-auto-profiles", "no"))
+      checkError(mpv_set_option_string(mpv, "load-select", "no"))
+      checkError(mpv_set_option_string(mpv, "load-positioning", "no"))
+      checkError(mpv_set_option_string(mpv, "load-commands", "no"))
+      checkError(mpv_set_option_string(mpv, "load-context-menu", "no"))
     #endif
 
     applyPlatformAudioOutput(mpv: mpv)

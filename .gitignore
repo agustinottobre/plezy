@@ -75,3 +75,10 @@ maestro/**/*.png
 
 server/deploy.sh
 server/Caddyfile
+
+# FVM and mobile packages
+.fvm/
+.fvmrc
+*.ipa
+*.dmg
+*.apk
