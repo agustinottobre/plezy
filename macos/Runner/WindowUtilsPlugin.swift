@@ -24,9 +24,11 @@ class ForwardingToolbar: NSToolbar, NSToolbarDelegate {
 
     self.allowsUserCustomization = false
     self.allowsExtensionItems = false
+    #if compiler(>=6.0)
     if #available(macOS 15.0, *) {
       self.allowsDisplayModeCustomization = false
     }
+    #endif
   }
 
   func toolbarDefaultItemIdentifiers(_ toolbar: NSToolbar) -> [NSToolbarItem.Identifier] {

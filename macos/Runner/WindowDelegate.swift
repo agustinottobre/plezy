@@ -79,4 +79,8 @@ class WindowDelegate: NSObject, NSWindowDelegate {
     applyWindowedChrome(to: window)
     emit("windowDidExitFullScreen")
   }
+
+  func windowWillClose(_ notification: Notification) {
+    NSApp.terminate(nil)
+  }
 }
