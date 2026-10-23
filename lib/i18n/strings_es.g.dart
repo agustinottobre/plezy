@@ -93,6 +93,7 @@ class TranslationsEs extends Translations with BaseTranslations<AppLocale, Trans
 	@override late final _Translations$seerr$es seerr = _Translations$seerr$es._(_root);
 	@override late final _Translations$services$es services = _Translations$services$es._(_root);
 	@override late final _Translations$addServer$es addServer = _Translations$addServer$es._(_root);
+	@override late final _Translations$deviceTransfer$es deviceTransfer = _Translations$deviceTransfer$es._(_root);
 }
 
 // Path: app
@@ -2464,6 +2465,60 @@ class _Translations$addServer$es extends Translations$addServer$en {
 	@override String redirectDifferentHost({required Object product}) => 'El servidor redirigió a un host diferente. Introduce directamente la URL final de ${product}.';
 	@override String get redirectInsecure => 'El servidor redirigió de HTTPS a una URL no segura';
 	@override String redirectUnsupportedEnterFinal({required Object product}) => 'El servidor redirigió a una URL no compatible. Introduce directamente la URL final de ${product}.';
+}
+
+// Path: deviceTransfer
+class _Translations$deviceTransfer$es extends Translations$deviceTransfer$en {
+	_Translations$deviceTransfer$es._(TranslationsEs root) : this._root = root, super.internal(root);
+
+	final TranslationsEs _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Transferencia entre dispositivos cercanos (Wi-Fi)';
+	@override String get quickSetup => 'Configuración rápida desde otro dispositivo';
+	@override String get sendSetupToNearbyDevice => 'Enviar configuración a dispositivo cercano';
+	@override String get sendSetupToNearbyDeviceDescription => 'Clona tus servidores y ajustes a un televisor o teléfono cercano';
+	@override String get receiveSetupOnThisDevice => 'Recibir configuración en este dispositivo';
+	@override String get receiveSetupOnThisDeviceDescription => 'Muestra el código QR y PIN para recibir la configuración de otro dispositivo';
+	@override String get receiveTitle => 'Recibir configuración desde dispositivo';
+	@override String get receiveInstructions => 'Escanea con tu teléfono o selecciona "Enviar configuración" en Plezy en tu otro dispositivo:';
+	@override String get pinCode => 'CÓDIGO PIN';
+	@override String get waitingForIncoming => 'Esperando configuración entrante...';
+	@override String get applyingReceivedSetup => 'Aplicando servidores y ajustes recibidos...';
+	@override String get setupTransferredTitle => '¡Configuración transferida!';
+	@override String transferredSummary({required Object summary}) => 'Se transfirió ${summary}.';
+	@override String get setupAppliedSuccess => 'Configuración aplicada correctamente';
+	@override String receiveError({required Object error}) => 'Error al iniciar el receptor en la red local: ${error}';
+	@override String applyError({required Object error}) => 'Error al aplicar la configuración: ${error}';
+	@override String get generalError => 'Ocurrió un error durante la transferencia.';
+	@override String get sendTitle => 'Enviar configuración al dispositivo';
+	@override String get targetDevice => 'Dispositivo destino:';
+	@override String readyOnWifi({required Object ip}) => 'Listo en Wi-Fi local · ${ip}';
+	@override String get scanningNearbyDevices => 'Buscando dispositivos cercanos en Wi-Fi...';
+	@override String get cantFindDevice => '¿No encuentras el dispositivo? Ingresa la IP manualmente';
+	@override String get hideManualAddress => 'Ocultar dirección manual';
+	@override String get targetIp => 'Dirección IP destino';
+	@override String get targetIpHint => 'ej. 192.168.1.50';
+	@override String get port => 'Puerto';
+	@override String get portHint => '54321';
+	@override String get pinLabel => 'PIN de 6 dígitos mostrado en la pantalla destino';
+	@override String pinLabelDevice({required Object device}) => 'PIN de 6 dígitos en ${device}';
+	@override String get pinHint => 'ej. 482915';
+	@override String get includeInTransfer => 'Incluir en la transferencia:';
+	@override String get appAndPlayerSettings => 'Ajustes de la aplicación y reproductor';
+	@override String get appAndPlayerSettingsDescription => 'Tema, subtítulos, paso directo de audio, diseño';
+	@override String get serverAccountsAndLogins => 'Cuentas de servidor e inicios de sesión';
+	@override String get serverAccountsAndLoginsDescription => 'Servidores y credenciales de Plex y Jellyfin';
+	@override String get validationSelectTarget => 'Por favor selecciona un dispositivo destino o ingresa su dirección IP.';
+	@override String get validationValidPort => 'Por favor ingresa un número de puerto válido.';
+	@override String get validationEnterPin => 'Por favor ingresa el PIN de 6 dígitos mostrado en la pantalla destino.';
+	@override String get validationSelectItems => 'Por favor selecciona al menos un elemento para transferir.';
+	@override String sendToDevice({required Object device}) => 'Enviar a ${device}';
+	@override String get sendSetup => 'Enviar configuración';
+	@override String setupDeliveredSuccess({required Object device}) => '¡Configuración enviada a ${device} exitosamente!';
+	@override String serversCount({required Object count}) => '${count} servidores';
+	@override String playlistsCount({required Object count}) => '${count} listas de reproducción personalizadas';
+	@override String settingsCount({required Object count}) => '${count} ajustes';
 }
 
 // Path: appIcon.names
@@ -5723,6 +5778,51 @@ extension on TranslationsEs {
 			'addServer.redirectDifferentHost' => ({required Object product}) => 'El servidor redirigió a un host diferente. Introduce directamente la URL final de ${product}.',
 			'addServer.redirectInsecure' => 'El servidor redirigió de HTTPS a una URL no segura',
 			'addServer.redirectUnsupportedEnterFinal' => ({required Object product}) => 'El servidor redirigió a una URL no compatible. Introduce directamente la URL final de ${product}.',
+			'deviceTransfer.title' => 'Transferencia entre dispositivos cercanos (Wi-Fi)',
+			'deviceTransfer.quickSetup' => 'Configuración rápida desde otro dispositivo',
+			'deviceTransfer.sendSetupToNearbyDevice' => 'Enviar configuración a dispositivo cercano',
+			'deviceTransfer.sendSetupToNearbyDeviceDescription' => 'Clona tus servidores y ajustes a un televisor o teléfono cercano',
+			'deviceTransfer.receiveSetupOnThisDevice' => 'Recibir configuración en este dispositivo',
+			'deviceTransfer.receiveSetupOnThisDeviceDescription' => 'Muestra el código QR y PIN para recibir la configuración de otro dispositivo',
+			'deviceTransfer.receiveTitle' => 'Recibir configuración desde dispositivo',
+			'deviceTransfer.receiveInstructions' => 'Escanea con tu teléfono o selecciona "Enviar configuración" en Plezy en tu otro dispositivo:',
+			'deviceTransfer.pinCode' => 'CÓDIGO PIN',
+			'deviceTransfer.waitingForIncoming' => 'Esperando configuración entrante...',
+			'deviceTransfer.applyingReceivedSetup' => 'Aplicando servidores y ajustes recibidos...',
+			'deviceTransfer.setupTransferredTitle' => '¡Configuración transferida!',
+			'deviceTransfer.transferredSummary' => ({required Object summary}) => 'Se transfirió ${summary}.',
+			'deviceTransfer.setupAppliedSuccess' => 'Configuración aplicada correctamente',
+			'deviceTransfer.receiveError' => ({required Object error}) => 'Error al iniciar el receptor en la red local: ${error}',
+			'deviceTransfer.applyError' => ({required Object error}) => 'Error al aplicar la configuración: ${error}',
+			'deviceTransfer.generalError' => 'Ocurrió un error durante la transferencia.',
+			'deviceTransfer.sendTitle' => 'Enviar configuración al dispositivo',
+			'deviceTransfer.targetDevice' => 'Dispositivo destino:',
+			'deviceTransfer.readyOnWifi' => ({required Object ip}) => 'Listo en Wi-Fi local · ${ip}',
+			'deviceTransfer.scanningNearbyDevices' => 'Buscando dispositivos cercanos en Wi-Fi...',
+			'deviceTransfer.cantFindDevice' => '¿No encuentras el dispositivo? Ingresa la IP manualmente',
+			'deviceTransfer.hideManualAddress' => 'Ocultar dirección manual',
+			'deviceTransfer.targetIp' => 'Dirección IP destino',
+			'deviceTransfer.targetIpHint' => 'ej. 192.168.1.50',
+			'deviceTransfer.port' => 'Puerto',
+			'deviceTransfer.portHint' => '54321',
+			'deviceTransfer.pinLabel' => 'PIN de 6 dígitos mostrado en la pantalla destino',
+			'deviceTransfer.pinLabelDevice' => ({required Object device}) => 'PIN de 6 dígitos en ${device}',
+			'deviceTransfer.pinHint' => 'ej. 482915',
+			'deviceTransfer.includeInTransfer' => 'Incluir en la transferencia:',
+			'deviceTransfer.appAndPlayerSettings' => 'Ajustes de la aplicación y reproductor',
+			'deviceTransfer.appAndPlayerSettingsDescription' => 'Tema, subtítulos, paso directo de audio, diseño',
+			'deviceTransfer.serverAccountsAndLogins' => 'Cuentas de servidor e inicios de sesión',
+			'deviceTransfer.serverAccountsAndLoginsDescription' => 'Servidores y credenciales de Plex y Jellyfin',
+			'deviceTransfer.validationSelectTarget' => 'Por favor selecciona un dispositivo destino o ingresa su dirección IP.',
+			'deviceTransfer.validationValidPort' => 'Por favor ingresa un número de puerto válido.',
+			'deviceTransfer.validationEnterPin' => 'Por favor ingresa el PIN de 6 dígitos mostrado en la pantalla destino.',
+			'deviceTransfer.validationSelectItems' => 'Por favor selecciona al menos un elemento para transferir.',
+			'deviceTransfer.sendToDevice' => ({required Object device}) => 'Enviar a ${device}',
+			'deviceTransfer.sendSetup' => 'Enviar configuración',
+			'deviceTransfer.setupDeliveredSuccess' => ({required Object device}) => '¡Configuración enviada a ${device} exitosamente!',
+			'deviceTransfer.serversCount' => ({required Object count}) => '${count} servidores',
+			'deviceTransfer.playlistsCount' => ({required Object count}) => '${count} listas de reproducción personalizadas',
+			'deviceTransfer.settingsCount' => ({required Object count}) => '${count} ajustes',
 			_ => null,
 		};
 	}
