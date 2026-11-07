@@ -327,6 +327,9 @@ class Translations$common$en {
 	/// en: 'Offline'
 	String get offline => 'Offline';
 
+	/// en: 'Online'
+	String get online => 'Online';
+
 	/// en: 'View All'
 	String get viewAll => 'View All';
 
@@ -3154,6 +3157,18 @@ class Translations$connections$en {
 
 	/// en: 'Session expired for ${count} servers'
 	String sessionExpiredMany({required Object count}) => 'Session expired for ${count} servers';
+
+	/// en: 'Session expired for ${names}'
+	String sessionExpiredNamedMany({required Object names}) => 'Session expired for ${names}';
+
+	/// en: 'Session expired'
+	String get sessionExpired => 'Session expired';
+
+	/// en: 'Expired Server Sessions'
+	String get expiredSessionsTitle => 'Expired Server Sessions';
+
+	/// en: 'The following servers require you to sign in again to restore access:'
+	String get expiredSessionsSubtitle => 'The following servers require you to sign in again to restore access:';
 
 	/// en: '${name} refused access for this account'
 	String accessDeniedOne({required Object name}) => '${name} refused access for this account';
@@ -8396,6 +8411,7 @@ extension on Translations {
 			'common.chapterNumber' => ({required Object number}) => 'Chapter ${number}',
 			'common.reconnect' => 'Reconnect',
 			'common.offline' => 'Offline',
+			'common.online' => 'Online',
 			'common.viewAll' => 'View All',
 			'common.checkingNetwork' => 'Checking network...',
 			'common.loadingServers' => 'Loading servers...',
@@ -8820,9 +8836,9 @@ extension on Translations {
 			'themeEditor.startFrom' => 'Start from',
 			'themeEditor.startFromDescription' => 'Copy all colors from another theme',
 			'themeEditor.colors' => 'Colors',
-			'themeEditor.preview' => 'Preview',
 			_ => null,
 		} ?? switch (path) {
+			'themeEditor.preview' => 'Preview',
 			'themeEditor.slots.bg' => 'Background',
 			'themeEditor.slots.surface' => 'Surface',
 			'themeEditor.slots.outline' => 'Outline',
@@ -9334,9 +9350,9 @@ extension on Translations {
 			'profiles.incorrectPin' => 'Incorrect PIN.',
 			'profiles.incorrectPinTryAgain' => 'Incorrect PIN. Please try again.',
 			'profiles.sourceProfileMissingParentAccount' => 'Source profile is missing its parent account.',
-			'profiles.failedToLoadHomeUsers' => 'Could not load your Plex Home users. Check your connection and try again.',
 			_ => null,
 		} ?? switch (path) {
+			'profiles.failedToLoadHomeUsers' => 'Could not load your Plex Home users. Check your connection and try again.',
 			'profiles.failedToVerifyPin' => 'Failed to verify PIN.',
 			'profiles.newProfile' => 'New profile',
 			'profiles.profileNameHint' => 'e.g. Guests, Kids, Family Room',
@@ -9351,6 +9367,10 @@ extension on Translations {
 			'connections.addConnectionSubtitleScoped' => ({required Object displayName}) => 'Add to ${displayName}: Plex, Jellyfin, Emby, or another profile connection',
 			'connections.sessionExpiredOne' => ({required Object name}) => 'Session expired for ${name}',
 			'connections.sessionExpiredMany' => ({required Object count}) => 'Session expired for ${count} servers',
+			'connections.sessionExpiredNamedMany' => ({required Object names}) => 'Session expired for ${names}',
+			'connections.sessionExpired' => 'Session expired',
+			'connections.expiredSessionsTitle' => 'Expired Server Sessions',
+			'connections.expiredSessionsSubtitle' => 'The following servers require you to sign in again to restore access:',
 			'connections.accessDeniedOne' => ({required Object name}) => '${name} refused access for this account',
 			'connections.accessDeniedMany' => ({required Object count}) => '${count} servers refused access for this account',
 			'connections.signInAgain' => 'Sign in again',
@@ -9844,13 +9864,13 @@ extension on Translations {
 			'liveTv.recordingTargetMissing' => 'Couldn\'t determine recording library',
 			'liveTv.recordNotAvailable' => 'Recording not available for this program',
 			'liveTv.recordingCancelled' => 'Recording canceled',
+			_ => null,
+		} ?? switch (path) {
 			'liveTv.recordingRuleDeleted' => 'Recording rule deleted',
 			'liveTv.processRecordingRules' => 'Re-evaluate rules',
 			'liveTv.recordingInProgress' => 'Recording now',
 			'liveTv.recordingsCount' => ({required Object count}) => '${count} scheduled',
 			'liveTv.editRule' => 'Edit rule',
-			_ => null,
-		} ?? switch (path) {
 			'liveTv.editRuleAction' => 'Edit',
 			'liveTv.recordingRuleUpdated' => 'Recording rule updated',
 			'liveTv.guideReloadRequested' => 'Guide refresh requested',
@@ -10358,13 +10378,13 @@ extension on Translations {
 			'deviceTransfer.playlistsCount' => ({required Object count}) => '${count} custom playlists',
 			'deviceTransfer.settingsCount' => ({required Object count}) => '${count} settings',
 			'videoSettings.playbackSpeed' => 'Playback Speed',
+			_ => null,
+		} ?? switch (path) {
 			'videoSettings.normalSpeed' => 'Normal',
 			'videoSettings.sleepTimerActive' => ({required Object duration}) => 'Active (${duration})',
 			'videoSettings.zoom' => 'Zoom',
 			'videoSettings.sleepTimer' => 'Sleep Timer',
 			'videoSettings.audioSync' => 'Audio Sync',
-			_ => null,
-		} ?? switch (path) {
 			'videoSettings.subtitleSync' => 'Subtitle Sync',
 			'videoSettings.hdr' => 'HDR',
 			'videoSettings.hdrUnsupported' => 'HDR isn\'t available here — this desktop compositor or video output can\'t carry it.',

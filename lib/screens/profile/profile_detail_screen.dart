@@ -27,7 +27,10 @@ import '../../widgets/focusable_popup_menu_button.dart';
 import '../../widgets/focused_scroll_scaffold.dart';
 import '../../widgets/settings_section.dart';
 import '../../utils/dialogs.dart';
+import '../../media/ids.dart';
+import '../../providers/multi_server_provider.dart';
 import '../settings/add_connection_screen.dart';
+import '../settings/add_jellyfin_screen.dart';
 import '../settings/edit_jellyfin_connection_screen.dart';
 import 'pin_entry_dialog.dart';
 import 'pin_status_row.dart';
@@ -226,10 +229,27 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> with Controll
     unawaited(context.read<ActiveProfileBinder>().rebindIfActive(_profile.id));
   }
 
+  Future<void> _reauthConnection(Connection conn) async {
+    if (conn is! JellyfinConnection) return;
+    final changed = await Navigator.of(context).push<bool>(
+      MaterialPageRoute(
+        builder: (_) => AddJellyfinScreen(
+          targetProfile: _profile,
+          initialServerUrl: conn.baseUrl,
+          initialUsername: conn.userName,
+          dialect: conn.dialect,
+        ),
+      ),
+    );
+    if (changed != true || !mounted) return;
+    setState(() {});
+    unawaited(context.read<ActiveProfileBinder>().rebindIfActive(_profile.id));
+  }
+
   // Raw machine ids rather than the ServerId-typed twin in
   // profile_connection_cleanup.dart: these are differenced against retained
   // ids and matched to download global keys, which carry the unparsed id.
-  Set<String> _serverIdsForConnection(Connection conn) {
+  static Set<String> _serverIdsForConnection(Connection conn) {
     return switch (conn) {
       PlexAccountConnection(:final servers) => servers.map((s) => s.clientIdentifier).toSet(),
       JellyfinConnection(:final serverMachineId) => {serverMachineId},
@@ -346,6 +366,7 @@ class _ProfileDetailScreenState extends State<ProfileDetailScreen> with Controll
                 profile: _profile,
                 onRemove: _removeConnection,
                 onEdit: _editConnection,
+                onReauth: _reauthConnection,
                 onSignOutParent: _signOutParentAccount,
               ),
               const SizedBox(height: 24),
@@ -372,12 +393,14 @@ class _ConnectionsList extends StatefulWidget {
   final Profile profile;
   final Future<void> Function(ProfileConnection pc, Connection conn) onRemove;
   final Future<void> Function(Connection conn) onEdit;
+  final Future<void> Function(Connection conn) onReauth;
   final Future<void> Function(Connection conn) onSignOutParent;
 
   const _ConnectionsList({
     required this.profile,
     required this.onRemove,
     required this.onEdit,
+    required this.onReauth,
     required this.onSignOutParent,
   });
 
@@ -409,6 +432,7 @@ class _ConnectionsListState extends State<_ConnectionsList> {
     final theme = Theme.of(context);
     final profile = widget.profile;
     final pcRegistry = context.read<ProfileConnectionRegistry>();
+    final multiServer = context.watch<MultiServerProvider>();
 
     return StreamBuilder<List<ProfileConnection>>(
       stream: _pcsStream,
@@ -468,30 +492,122 @@ class _ConnectionsListState extends State<_ConnectionsList> {
                         ),
                       ),
                     for (final pc in visiblePcs)
-                      if (byId[pc.connectionId] case final conn?)
-                        ListTile(
+                      if (byId[pc.connectionId] case final conn?) () {
+                        final serverIds = _ProfileDetailScreenState._serverIdsForConnection(conn);
+                        final hasAuthError = serverIds.any((id) => multiServer.authErrorServerIds.contains(id));
+                        final isOffline = serverIds.isNotEmpty && serverIds.every((id) => !multiServer.isServerOnline(ServerId(id)));
+                        final isOnline = serverIds.any((id) => multiServer.isServerOnline(ServerId(id)));
+
+                        return ListTile(
                           leading: BackendBadge(backend: conn.backend, size: 24),
-                          title: Text(conn.displayLabel),
-                          subtitle: _ConnectionSubtitle.build(conn: conn, pc: pc, homeCache: homeCache, theme: theme),
-                          trailing: FocusablePopupMenuButton<String>(
-                            icon: const AppIcon(Symbols.more_vert_rounded, fill: 1),
-                            tooltip: t.profiles.manage,
-                            onSelected: (value) {
-                              if (value == 'default') {
-                                unawaited(pcRegistry.setDefault(profile.id, pc.connectionId));
-                              } else if (value == 'edit') {
-                                unawaited(widget.onEdit(conn));
-                              } else if (value == 'remove') {
-                                unawaited(widget.onRemove(pc, conn));
-                              }
-                            },
-                            itemBuilder: (_) => [
-                              if (!pc.isDefault) AppMenuItem(value: 'default', label: t.profiles.makeDefault),
-                              if (conn is JellyfinConnection) AppMenuItem(value: 'edit', label: t.common.edit),
-                              AppMenuItem(value: 'remove', label: t.profiles.removeConnection),
+                          title: Row(
+                            children: [
+                              Flexible(child: Text(conn.displayLabel, overflow: TextOverflow.ellipsis)),
+                              const SizedBox(width: 8),
+                              if (hasAuthError)
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFFFA726).withValues(alpha: 0.15),
+                                    borderRadius: BorderRadius.circular(4),
+                                    border: Border.all(color: const Color(0xFFFFA726).withValues(alpha: 0.5)),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const AppIcon(Symbols.lock_rounded, size: 12, color: Color(0xFFFFA726)),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        t.connections.sessionExpired,
+                                        style: const TextStyle(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xFFFFA726),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              else if (isOffline)
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                  decoration: BoxDecoration(
+                                    color: Colors.red.withValues(alpha: 0.15),
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: Text(
+                                    t.common.offline,
+                                    style: const TextStyle(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.redAccent,
+                                    ),
+                                  ),
+                                )
+                              else if (isOnline)
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                  decoration: BoxDecoration(
+                                    color: Colors.green.withValues(alpha: 0.15),
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: Text(
+                                    t.common.online,
+                                    style: const TextStyle(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xFF4CAF50),
+                                    ),
+                                  ),
+                                ),
                             ],
                           ),
-                        ),
+                          subtitle: _ConnectionSubtitle.build(conn: conn, pc: pc, homeCache: homeCache, theme: theme),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (hasAuthError && conn is JellyfinConnection)
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 6),
+                                  child: FilledButton.tonal(
+                                    style: FilledButton.styleFrom(
+                                      visualDensity: VisualDensity.compact,
+                                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                      backgroundColor: const Color(0xFFFFA726).withValues(alpha: 0.2),
+                                      foregroundColor: const Color(0xFFFFA726),
+                                    ),
+                                    onPressed: () => unawaited(widget.onReauth(conn)),
+                                    child: Text(t.connections.signInAgain, style: const TextStyle(fontSize: 12)),
+                                  ),
+                                ),
+                              FocusablePopupMenuButton<String>(
+                                icon: const AppIcon(Symbols.more_vert_rounded, fill: 1),
+                                tooltip: t.profiles.manage,
+                                onSelected: (value) {
+                                  if (value == 'default') {
+                                    unawaited(pcRegistry.setDefault(profile.id, pc.connectionId));
+                                  } else if (value == 'reauth') {
+                                    unawaited(widget.onReauth(conn));
+                                  } else if (value == 'edit') {
+                                    unawaited(widget.onEdit(conn));
+                                  } else if (value == 'remove') {
+                                    unawaited(widget.onRemove(pc, conn));
+                                  }
+                                },
+                                itemBuilder: (_) => [
+                                  if (!pc.isDefault) AppMenuItem(value: 'default', label: t.profiles.makeDefault),
+                                  if (conn is JellyfinConnection) ...[
+                                    if (hasAuthError)
+                                      AppMenuItem(value: 'reauth', label: t.connections.signInAgain),
+                                    AppMenuItem(value: 'edit', label: t.common.edit),
+                                  ],
+                                  AppMenuItem(value: 'remove', label: t.profiles.removeConnection),
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      }(),
                   ],
                 );
               },

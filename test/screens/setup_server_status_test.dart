@@ -114,6 +114,13 @@ void main() {
           backend: MediaBackend.plex,
           connected: false,
         ),
+        'expired': StartupServerEntry(
+          serverId: 'expired',
+          name: 'Expired Server',
+          backend: MediaBackend.jellyfin,
+          connected: false,
+          isAuthError: true,
+        ),
       };
 
       await tester.pumpWidget(
@@ -126,9 +133,11 @@ void main() {
       expect(icons, contains(Symbols.circle_rounded));
       expect(icons, contains(Symbols.check_circle_rounded));
       expect(icons, contains(Symbols.cancel_rounded));
+      expect(icons, contains(Symbols.lock_rounded));
+      expect(find.text('expired'), findsOneWidget);
     });
 
-    testWidgets('renders a large number of servers cleanly in Wrap without overflow', (tester) async {
+    testWidgets('renders a large number of servers cleanly in tabular grid without overflow', (tester) async {
       final servers = <String, StartupServerEntry>{};
       for (var i = 0; i < 24; i++) {
         servers['s-$i'] = StartupServerEntry(
