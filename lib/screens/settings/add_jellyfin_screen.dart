@@ -89,6 +89,8 @@ class AddJellyfinScreen extends StatefulWidget {
   /// profile (typical for the global Connections screen entry point).
   final Profile? targetProfile;
   final MediaBrowserDialect dialect;
+  final String? initialServerUrl;
+  final String? initialUsername;
   final FutureOr<JellyfinConnectionAuthService> Function()? _authServiceFactory;
   final FutureOr<List<DiscoveredJellyfinServer>> Function()? _localDiscoveryFactory;
 
@@ -96,6 +98,8 @@ class AddJellyfinScreen extends StatefulWidget {
     super.key,
     this.targetProfile,
     this.dialect = MediaBrowserDialect.jellyfin,
+    this.initialServerUrl,
+    this.initialUsername,
     @visibleForTesting this._authServiceFactory,
     @visibleForTesting this._localDiscoveryFactory,
   });
@@ -106,8 +110,8 @@ class AddJellyfinScreen extends StatefulWidget {
 
 class _AddJellyfinScreenState extends State<AddJellyfinScreen>
     with AsyncFormStateMixin, QuickConnectFlowMixin, ControllerDisposerMixin {
-  late final _urlController = createTextEditingController();
-  late final _usernameController = createTextEditingController();
+  late final _urlController = createTextEditingController(text: widget.initialServerUrl ?? '');
+  late final _usernameController = createTextEditingController(text: widget.initialUsername ?? '');
   late final _passwordController = createTextEditingController();
   final _urlFocus = FocusNode(debugLabel: 'AddJellyfin:Url');
   final _findServerFocus = FocusNode(debugLabel: 'AddJellyfin:FindServer');
@@ -133,6 +137,11 @@ class _AddJellyfinScreenState extends State<AddJellyfinScreen>
   @override
   void initState() {
     super.initState();
+    if (widget.initialServerUrl != null && widget.initialServerUrl!.isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _probe();
+      });
+    }
     unawaited(_discoverLocalServers());
   }
 
@@ -254,7 +263,13 @@ class _AddJellyfinScreenState extends State<AddJellyfinScreen>
         // to Quick Connect when the server supports it. Mirrors the
         // PlatformDetector.isTV() default in add_plex_account_screen.dart.
         final autoStart = qcEnabled && PlatformDetector.isTV();
-        if (!autoStart) requestFocusAfterFrame(_usernameFocus);
+        if (!autoStart) {
+          if (_usernameController.text.trim().isNotEmpty) {
+            requestFocusAfterFrame(_passwordFocus);
+          } else {
+            requestFocusAfterFrame(_usernameFocus);
+          }
+        }
         return autoStart;
       },
       errorMapper: (e) =>

@@ -2148,8 +2148,15 @@ class StartupServerEntry {
   final String name;
   final MediaBackend backend;
   bool? connected;
+  bool isAuthError;
 
-  StartupServerEntry({required this.serverId, required this.name, required this.backend, this.connected});
+  StartupServerEntry({
+    required this.serverId,
+    required this.name,
+    required this.backend,
+    this.connected,
+    this.isAuthError = false,
+  });
 }
 
 @visibleForTesting
@@ -2158,36 +2165,44 @@ Widget buildStartupServerCard(BuildContext context, StartupServerEntry entry) {
   final dimColor = Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6);
   const successColor = Color(0xFF4CAF50);
   const failColor = Color(0xFFEF5350);
+  const authColor = Color(0xFFFFA726);
 
   final Widget statusIcon;
+  final Color borderColor;
+  final Color textColor;
+
   if (entry.connected == null) {
     statusIcon = AppIcon(Symbols.circle_rounded, size: 12, color: dimColor);
+    borderColor = Theme.of(context).colorScheme.outlineVariant.withValues(alpha: 0.25);
+    textColor = dimColor;
+  } else if (entry.isAuthError) {
+    statusIcon = const AppIcon(Symbols.lock_rounded, size: 14, color: authColor);
+    borderColor = authColor.withValues(alpha: 0.6);
+    textColor = authColor;
   } else if (entry.connected!) {
     statusIcon = const AppIcon(Symbols.check_circle_rounded, size: 15, color: successColor);
+    borderColor = Theme.of(context).colorScheme.outlineVariant.withValues(alpha: 0.25);
+    textColor = dimColor;
   } else {
     statusIcon = const AppIcon(Symbols.cancel_rounded, size: 15, color: failColor);
+    borderColor = failColor.withValues(alpha: 0.5);
+    textColor = failColor.withValues(alpha: 0.9);
   }
 
   return Container(
     key: ValueKey(entry.serverId),
-    constraints: const BoxConstraints(minWidth: 140, maxWidth: 220),
-    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
     decoration: BoxDecoration(
       color: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.35),
       borderRadius: BorderRadius.circular(8),
-      border: Border.all(
-        color: entry.connected == false
-            ? failColor.withValues(alpha: 0.5)
-            : Theme.of(context).colorScheme.outlineVariant.withValues(alpha: 0.25),
-        width: 1,
-      ),
+      border: Border.all(color: borderColor, width: 1),
     ),
     child: Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         statusIcon,
         const SizedBox(width: 8),
-        BackendBadge(backend: entry.backend, size: 14, color: dimColor),
+        BackendBadge(backend: entry.backend, size: 14, color: textColor),
         const SizedBox(width: 6),
         Flexible(
           child: Text(
@@ -2195,11 +2210,25 @@ Widget buildStartupServerCard(BuildContext context, StartupServerEntry entry) {
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
             style: textTheme.bodySmall?.copyWith(
-              color: entry.connected == false ? failColor.withValues(alpha: 0.9) : dimColor,
+              color: textColor,
               fontWeight: FontWeight.w500,
             ),
           ),
         ),
+        if (entry.isAuthError) ...[
+          const SizedBox(width: 4),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+            decoration: BoxDecoration(
+              color: authColor.withValues(alpha: 0.15),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: const Text(
+              'expired',
+              style: TextStyle(fontSize: 9, fontWeight: FontWeight.bold, color: authColor),
+            ),
+          ),
+        ],
       ],
     ),
   );
@@ -2225,10 +2254,42 @@ Widget buildStartupServerStatusList(BuildContext context, Map<String, StartupSer
     });
   }
 
+  Widget buildTabularGrid(List<StartupServerEntry> list) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final width = constraints.maxWidth;
+        // Tabular grid: 2 columns on small screens, 3 on medium, 4 on desktop/TV
+        final int crossAxisCount = width < 480 ? 2 : (width < 720 ? 3 : 4);
+        final rowCount = (list.length / crossAxisCount).ceil();
+
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            for (var r = 0; r < rowCount; r++) ...[
+              if (r > 0) const SizedBox(height: 6),
+              Row(
+                children: [
+                  for (var c = 0; c < crossAxisCount; c++) ...[
+                    if (c > 0) const SizedBox(width: 8),
+                    Expanded(
+                      child: (r * crossAxisCount + c < list.length)
+                          ? buildStartupServerCard(context, list[r * crossAxisCount + c])
+                          : const SizedBox.shrink(),
+                    ),
+                  ],
+                ],
+              ),
+            ],
+          ],
+        );
+      },
+    );
+  }
+
   if (byBackend.length > 1) {
     return Column(
       mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         for (final backend in sortedBackends) ...[
           Padding(
@@ -2245,23 +2306,13 @@ Widget buildStartupServerStatusList(BuildContext context, Map<String, StartupSer
               ],
             ),
           ),
-          Wrap(
-            alignment: WrapAlignment.center,
-            spacing: 8,
-            runSpacing: 8,
-            children: byBackend[backend]!.map((entry) => buildStartupServerCard(context, entry)).toList(),
-          ),
+          buildTabularGrid(byBackend[backend]!),
         ],
       ],
     );
   }
 
-  return Wrap(
-    alignment: WrapAlignment.center,
-    spacing: 8,
-    runSpacing: 8,
-    children: byBackend.values.first.map((entry) => buildStartupServerCard(context, entry)).toList(),
-  );
+  return buildTabularGrid(byBackend.values.first);
 }
 
 class _SetupScreenState extends State<SetupScreen> with MountedSetStateMixin {
@@ -2532,17 +2583,20 @@ class _SetupScreenState extends State<SetupScreen> with MountedSetStateMixin {
         final multiServer = context.read<MultiServerProvider>();
         setState(() {
           for (final id in multiServer.expectedServerIds) {
+            final isAuth = manager.authErrorServerIds.contains(id);
             if (!_serverStatus.containsKey(id)) {
               _serverStatus[id] = StartupServerEntry(
                 serverId: id,
                 name: manager.serverDisplayName(ServerId(id)),
                 backend: manager.serverBackend(ServerId(id)) ?? MediaBackend.plex,
                 connected: manager.isServerOnline(ServerId(id)),
+                isAuthError: isAuth,
               );
             }
           }
           for (final entry in _serverStatus.values) {
             entry.connected ??= manager.isServerOnline(ServerId(entry.serverId));
+            entry.isAuthError = manager.authErrorServerIds.contains(entry.serverId);
           }
         });
       }
@@ -2611,9 +2665,11 @@ class _SetupScreenState extends State<SetupScreen> with MountedSetStateMixin {
       if (!mounted) return;
       setState(() {
         for (final entry in status.entries) {
+          final isAuth = manager.authErrorServerIds.contains(entry.key);
           final existing = _serverStatus[entry.key];
           if (existing != null) {
             existing.connected = entry.value;
+            existing.isAuthError = isAuth;
           } else {
             final name = manager.serverDisplayName(ServerId(entry.key));
             final backend = manager.serverBackend(ServerId(entry.key)) ?? MediaBackend.plex;
@@ -2622,6 +2678,7 @@ class _SetupScreenState extends State<SetupScreen> with MountedSetStateMixin {
               name: name,
               backend: backend,
               connected: entry.value,
+              isAuthError: isAuth,
             );
           }
         }
