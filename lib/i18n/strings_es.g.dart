@@ -194,6 +194,7 @@ class _Translations$common$es extends Translations$common$en {
 	@override String episodeNumberTitle({required Object number, required Object title}) => 'Episodio ${number} - ${title}';
 	@override String chapterNumber({required Object number}) => 'Capítulo ${number}';
 	@override String get reconnect => 'Reconectar';
+	@override String get offline => 'Desconectado';
 	@override String get viewAll => 'Ver todo';
 	@override String get checkingNetwork => 'Comprobando red...';
 	@override String get loadingServers => 'Cargando servidores...';
@@ -3546,6 +3547,7 @@ extension on TranslationsEs {
 			'common.episodeNumberTitle' => ({required Object number, required Object title}) => 'Episodio ${number} - ${title}',
 			'common.chapterNumber' => ({required Object number}) => 'Capítulo ${number}',
 			'common.reconnect' => 'Reconectar',
+			'common.offline' => 'Desconectado',
 			'common.viewAll' => 'Ver todo',
 			'common.checkingNetwork' => 'Comprobando red...',
 			'common.loadingServers' => 'Cargando servidores...',
@@ -3971,9 +3973,9 @@ extension on TranslationsEs {
 			'themeEditor.startFromDescription' => 'Copia todos los colores de otro tema',
 			'themeEditor.colors' => 'Colores',
 			'themeEditor.preview' => 'Vista previa',
-			'themeEditor.slots.bg' => 'Fondo',
 			_ => null,
 		} ?? switch (path) {
+			'themeEditor.slots.bg' => 'Fondo',
 			'themeEditor.slots.surface' => 'Superficie',
 			'themeEditor.slots.outline' => 'Contorno',
 			'themeEditor.slots.text' => 'Texto',
@@ -4485,9 +4487,9 @@ extension on TranslationsEs {
 			'profiles.newProfile' => 'Nuevo perfil',
 			'profiles.profileNameHint' => 'p. ej., Invitados, Niños, Sala familiar',
 			'profiles.pinProtectionOptional' => 'Protección con PIN (opcional)',
-			'profiles.pinExplain' => 'Se requiere PIN de 4 dígitos para cambiar de perfil.',
 			_ => null,
 		} ?? switch (path) {
+			'profiles.pinExplain' => 'Se requiere PIN de 4 dígitos para cambiar de perfil.',
 			'profiles.continueButton' => 'Continuar',
 			'profiles.pinsDontMatch' => 'Los PIN no coinciden',
 			'profiles.tokenIdentityMismatch' => 'El token del perfil de Plex correspondía a un servidor inesperado',
@@ -4999,9 +5001,9 @@ extension on TranslationsEs {
 			'liveTv.recordShow' => 'Grabar programa',
 			'liveTv.recordSettings.startEarly' => 'Empezar antes (segundos)',
 			'liveTv.recordSettings.endLate' => 'Terminar después (segundos)',
-			'liveTv.recordSettings.newOnly' => 'Solo episodios nuevos',
 			_ => null,
 		} ?? switch (path) {
+			'liveTv.recordSettings.newOnly' => 'Solo episodios nuevos',
 			'liveTv.recordSettings.anyChannel' => 'Grabar en cualquier canal',
 			'liveTv.recordSettings.anyTime' => 'Grabar a cualquier hora',
 			'liveTv.recordSettings.skipInLibrary' => 'Omitir episodios que ya están en la biblioteca',
@@ -5513,9 +5515,9 @@ extension on TranslationsEs {
 			'performanceOverlay.speed' => 'Velocidad',
 			'performanceOverlay.player' => 'Reproductor',
 			'performanceOverlay.memory' => 'Memoria',
-			'performanceOverlay.uiFps' => 'FPS UI',
 			_ => null,
 		} ?? switch (path) {
+			'performanceOverlay.uiFps' => 'FPS UI',
 			'performanceOverlay.fps' => 'FPS',
 			'performanceOverlay.decoderAndroidHw' => 'HW de Android',
 			'performanceOverlay.decoderNvidiaHw' => 'HW de NVIDIA',

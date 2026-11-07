@@ -324,6 +324,9 @@ class Translations$common$en {
 	/// en: 'Reconnect'
 	String get reconnect => 'Reconnect';
 
+	/// en: 'Offline'
+	String get offline => 'Offline';
+
 	/// en: 'View All'
 	String get viewAll => 'View All';
 
@@ -8389,6 +8392,7 @@ extension on Translations {
 			'common.episodeNumberTitle' => ({required Object number, required Object title}) => 'Episode ${number} - ${title}',
 			'common.chapterNumber' => ({required Object number}) => 'Chapter ${number}',
 			'common.reconnect' => 'Reconnect',
+			'common.offline' => 'Offline',
 			'common.viewAll' => 'View All',
 			'common.checkingNetwork' => 'Checking network...',
 			'common.loadingServers' => 'Loading servers...',
@@ -8814,9 +8818,9 @@ extension on Translations {
 			'themeEditor.startFromDescription' => 'Copy all colors from another theme',
 			'themeEditor.colors' => 'Colors',
 			'themeEditor.preview' => 'Preview',
-			'themeEditor.slots.bg' => 'Background',
 			_ => null,
 		} ?? switch (path) {
+			'themeEditor.slots.bg' => 'Background',
 			'themeEditor.slots.surface' => 'Surface',
 			'themeEditor.slots.outline' => 'Outline',
 			'themeEditor.slots.text' => 'Text',
@@ -9328,9 +9332,9 @@ extension on Translations {
 			'profiles.sourceProfileMissingParentAccount' => 'Source profile is missing its parent account.',
 			'profiles.failedToLoadHomeUsers' => 'Could not load your Plex Home users. Check your connection and try again.',
 			'profiles.failedToVerifyPin' => 'Failed to verify PIN.',
-			'profiles.newProfile' => 'New profile',
 			_ => null,
 		} ?? switch (path) {
+			'profiles.newProfile' => 'New profile',
 			'profiles.profileNameHint' => 'e.g. Guests, Kids, Family Room',
 			'profiles.pinProtectionOptional' => 'PIN protection (optional)',
 			'profiles.pinExplain' => '4-digit PIN required to switch profiles.',
@@ -9842,9 +9846,9 @@ extension on Translations {
 			'liveTv.recordingsCount' => ({required Object count}) => '${count} scheduled',
 			'liveTv.editRule' => 'Edit rule',
 			'liveTv.editRuleAction' => 'Edit',
-			'liveTv.recordingRuleUpdated' => 'Recording rule updated',
 			_ => null,
 		} ?? switch (path) {
+			'liveTv.recordingRuleUpdated' => 'Recording rule updated',
 			'liveTv.guideReloadRequested' => 'Guide refresh requested',
 			'liveTv.guideReloadFailed' => 'Couldn\'t refresh the guide',
 			'liveTv.rulesProcessRequested' => 'Rule re-evaluation requested',
@@ -10356,9 +10360,9 @@ extension on Translations {
 			'videoSettings.sleepTimer' => 'Sleep Timer',
 			'videoSettings.audioSync' => 'Audio Sync',
 			'videoSettings.subtitleSync' => 'Subtitle Sync',
-			'videoSettings.hdr' => 'HDR',
 			_ => null,
 		} ?? switch (path) {
+			'videoSettings.hdr' => 'HDR',
 			'videoSettings.hdrUnsupported' => 'HDR isn\'t available here — this desktop compositor or video output can\'t carry it.',
 			'videoSettings.hdrToneMapping' => 'HDR Tone Mapping',
 			'videoSettings.hdrToneMappingCompositor' => 'Compositor',

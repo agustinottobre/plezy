@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 
 import '../connection/connection.dart';
 import '../i18n/app_locale_utils.dart';
+import '../media/media_backend.dart';
 import '../media/media_server_client.dart';
 import '../exceptions/media_server_exceptions.dart';
 
@@ -189,6 +190,7 @@ class MultiServerManager {
   final Map<String, JellyfinClient> _jellyfinByCompoundId = {};
   final Map<String, String> _activeJellyfinMachine = {};
   final Map<String, HealthStatus> _jellyfinHealthByCompoundId = {};
+  final Map<String, JellyfinConnection> _jellyfinConnections = {};
 
   /// Debounce timers for endpoint-exhaustion-triggered reconnection (per server)
   final Map<String, Timer> _reconnectDebounce = {};
@@ -404,7 +406,25 @@ class MultiServerManager {
   }
 
   String serverDisplayName(ServerId serverId) =>
-      _clients[serverId]?.serverName ?? _plexServers[serverId]?.name ?? serverId;
+      _clients[serverId]?.serverName ??
+      _plexServers[serverId]?.name ??
+      _jellyfinConnections[serverId]?.serverName ??
+      serverId;
+
+  /// Returns the backend kind (Plex, Jellyfin, Emby) for [serverId], even if offline.
+  MediaBackend? serverBackend(ServerId serverId) {
+    final client = _clients[serverId];
+    if (client != null) return client.backend;
+    if (_plexServers.containsKey(serverId)) return MediaBackend.plex;
+    final conn = _jellyfinConnections[serverId];
+    if (conn != null) return conn.kind;
+    final activeCompound = _activeJellyfinMachine[serverId];
+    if (activeCompound != null) {
+      final jClient = _jellyfinByCompoundId[activeCompound];
+      if (jClient != null) return jClient.backend;
+    }
+    return null;
+  }
 
   /// Backend-neutral "is this user an owner/admin on [serverId]?" probe used
   /// by UI gates that hide destructive admin entries (delete, edit metadata,
@@ -671,6 +691,7 @@ class MultiServerManager {
     _plexScopeByServer.remove(serverId);
     _serverStatus.remove(serverId);
     _refusedServers.remove(serverId);
+    _jellyfinConnections.remove(serverId);
     return client;
   }
 
@@ -831,6 +852,7 @@ class MultiServerManager {
   /// Adding the second user's connection doesn't close the first user's
   /// client (preserves any in-flight operations on the prior profile).
   Future<bool> addJellyfinConnection(JellyfinConnection connection) async {
+    _jellyfinConnections[connection.serverMachineId] = connection;
     try {
       // Every close path detaches the client from [_jellyfinByCompoundId]
       // before closing it, so a client found here is never mid-close.
@@ -911,6 +933,7 @@ class MultiServerManager {
       final healthy = health == HealthStatus.online;
       _jellyfinHealthByCompoundId[compoundId] = health;
       _applyHealth(ServerId(machineId), health);
+      _connectProgressController.add((serverId: machineId, online: healthy));
 
       appLogger.i(
         'Added ${resolvedConnection.dialect.productName} server: '
@@ -923,6 +946,9 @@ class MultiServerManager {
         error: e,
         stackTrace: stackTrace,
       );
+      _serverStatus[connection.serverMachineId] = false;
+      _applyHealth(ServerId(connection.serverMachineId), HealthStatus.offline);
+      _connectProgressController.add((serverId: connection.serverMachineId, online: false));
       return false;
     }
   }
@@ -979,6 +1005,7 @@ class MultiServerManager {
       _emitStatus();
     }
     final healthy = health == HealthStatus.online;
+    _connectProgressController.add((serverId: machineId, online: healthy));
     appLogger.i(
       'Reusing existing Jellyfin client for ${client.connection.serverName}'
       '${healthy ? '' : ' (unhealthy)'} (connection unchanged)',
