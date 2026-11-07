@@ -195,6 +195,7 @@ class _Translations$common$es extends Translations$common$en {
 	@override String chapterNumber({required Object number}) => 'Capítulo ${number}';
 	@override String get reconnect => 'Reconectar';
 	@override String get offline => 'Desconectado';
+	@override String get online => 'En línea';
 	@override String get viewAll => 'Ver todo';
 	@override String get checkingNetwork => 'Comprobando red...';
 	@override String get loadingServers => 'Cargando servidores...';
@@ -1264,6 +1265,10 @@ class _Translations$connections$es extends Translations$connections$en {
 	@override String addConnectionSubtitleScoped({required Object displayName}) => 'Añadir a ${displayName}: Plex, Jellyfin, Emby u otra conexión de perfil';
 	@override String sessionExpiredOne({required Object name}) => 'Sesión caducada para ${name}';
 	@override String sessionExpiredMany({required Object count}) => 'Sesión caducada para ${count} servidores';
+	@override String sessionExpiredNamedMany({required Object names}) => 'Sesión caducada para ${names}';
+	@override String get sessionExpired => 'Sesión caducada';
+	@override String get expiredSessionsTitle => 'Sesiones de servidor caducadas';
+	@override String get expiredSessionsSubtitle => 'Los siguientes servidores requieren iniciar sesión de nuevo para restaurar el acceso:';
 	@override String accessDeniedOne({required Object name}) => '${name} denegó el acceso a esta cuenta';
 	@override String accessDeniedMany({required Object count}) => '${count} servidores denegaron el acceso a esta cuenta';
 	@override String get signInAgain => 'Iniciar sesión de nuevo';
@@ -3548,6 +3553,7 @@ extension on TranslationsEs {
 			'common.chapterNumber' => ({required Object number}) => 'Capítulo ${number}',
 			'common.reconnect' => 'Reconectar',
 			'common.offline' => 'Desconectado',
+			'common.online' => 'En línea',
 			'common.viewAll' => 'Ver todo',
 			'common.checkingNetwork' => 'Comprobando red...',
 			'common.loadingServers' => 'Cargando servidores...',
@@ -3972,9 +3978,9 @@ extension on TranslationsEs {
 			'themeEditor.startFrom' => 'Partir de',
 			'themeEditor.startFromDescription' => 'Copia todos los colores de otro tema',
 			'themeEditor.colors' => 'Colores',
-			'themeEditor.preview' => 'Vista previa',
 			_ => null,
 		} ?? switch (path) {
+			'themeEditor.preview' => 'Vista previa',
 			'themeEditor.slots.bg' => 'Fondo',
 			'themeEditor.slots.surface' => 'Superficie',
 			'themeEditor.slots.outline' => 'Contorno',
@@ -4486,9 +4492,9 @@ extension on TranslationsEs {
 			'profiles.failedToVerifyPin' => 'No se pudo verificar el PIN.',
 			'profiles.newProfile' => 'Nuevo perfil',
 			'profiles.profileNameHint' => 'p. ej., Invitados, Niños, Sala familiar',
-			'profiles.pinProtectionOptional' => 'Protección con PIN (opcional)',
 			_ => null,
 		} ?? switch (path) {
+			'profiles.pinProtectionOptional' => 'Protección con PIN (opcional)',
 			'profiles.pinExplain' => 'Se requiere PIN de 4 dígitos para cambiar de perfil.',
 			'profiles.continueButton' => 'Continuar',
 			'profiles.pinsDontMatch' => 'Los PIN no coinciden',
@@ -4499,6 +4505,10 @@ extension on TranslationsEs {
 			'connections.addConnectionSubtitleScoped' => ({required Object displayName}) => 'Añadir a ${displayName}: Plex, Jellyfin, Emby u otra conexión de perfil',
 			'connections.sessionExpiredOne' => ({required Object name}) => 'Sesión caducada para ${name}',
 			'connections.sessionExpiredMany' => ({required Object count}) => 'Sesión caducada para ${count} servidores',
+			'connections.sessionExpiredNamedMany' => ({required Object names}) => 'Sesión caducada para ${names}',
+			'connections.sessionExpired' => 'Sesión caducada',
+			'connections.expiredSessionsTitle' => 'Sesiones de servidor caducadas',
+			'connections.expiredSessionsSubtitle' => 'Los siguientes servidores requieren iniciar sesión de nuevo para restaurar el acceso:',
 			'connections.accessDeniedOne' => ({required Object name}) => '${name} denegó el acceso a esta cuenta',
 			'connections.accessDeniedMany' => ({required Object count}) => '${count} servidores denegaron el acceso a esta cuenta',
 			'connections.signInAgain' => 'Iniciar sesión de nuevo',
@@ -4996,13 +5006,13 @@ extension on TranslationsEs {
 			'liveTv.recordingRuleUpdated' => 'Regla de grabación actualizada',
 			'liveTv.guideReloadRequested' => 'Solicitada actualización de la guía',
 			'liveTv.guideReloadFailed' => 'No se pudo actualizar la guía',
+			_ => null,
+		} ?? switch (path) {
 			'liveTv.rulesProcessRequested' => 'Solicitada reevaluación de reglas',
 			'liveTv.rulesProcessFailed' => 'No se pudieron reevaluar las reglas de grabación',
 			'liveTv.recordShow' => 'Grabar programa',
 			'liveTv.recordSettings.startEarly' => 'Empezar antes (segundos)',
 			'liveTv.recordSettings.endLate' => 'Terminar después (segundos)',
-			_ => null,
-		} ?? switch (path) {
 			'liveTv.recordSettings.newOnly' => 'Solo episodios nuevos',
 			'liveTv.recordSettings.anyChannel' => 'Grabar en cualquier canal',
 			'liveTv.recordSettings.anyTime' => 'Grabar a cualquier hora',
@@ -5510,13 +5520,13 @@ extension on TranslationsEs {
 			'performanceOverlay.minLuma' => 'Luma mín.',
 			'performanceOverlay.maxCll' => 'MaxCLL',
 			'performanceOverlay.maxFall' => 'MaxFALL',
+			_ => null,
+		} ?? switch (path) {
 			'performanceOverlay.cacheUsed' => 'Caché usada',
 			'performanceOverlay.cacheLimit' => 'Límite de caché',
 			'performanceOverlay.speed' => 'Velocidad',
 			'performanceOverlay.player' => 'Reproductor',
 			'performanceOverlay.memory' => 'Memoria',
-			_ => null,
-		} ?? switch (path) {
 			'performanceOverlay.uiFps' => 'FPS UI',
 			'performanceOverlay.fps' => 'FPS',
 			'performanceOverlay.decoderAndroidHw' => 'HW de Android',
