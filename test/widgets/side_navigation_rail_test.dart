@@ -539,13 +539,14 @@ void main() {
     sideNavKey.currentState!.focusActiveItem();
     await tester.pumpAndSettle();
 
-    // Home -> Playlists -> Libraries -> Search. The Movies row is skipped while collapsed.
+    // Home -> Search -> Playlists -> Libraries -> Downloads. The Movies row is skipped while collapsed.
+    await _press(tester, LogicalKeyboardKey.arrowDown);
     await _press(tester, LogicalKeyboardKey.arrowDown);
     await _press(tester, LogicalKeyboardKey.arrowDown);
     await _press(tester, LogicalKeyboardKey.arrowDown);
     await _press(tester, LogicalKeyboardKey.enter);
 
-    expect(selectedTab, NavigationTabId.search);
+    expect(selectedTab, NavigationTabId.downloads);
   });
 
   testWidgets('collapsed rail with expanded Libraries skips focus-excluded library rows', (tester) async {
@@ -603,14 +604,15 @@ void main() {
     sideNavKey.currentState!.focusActiveItem();
     await tester.pumpAndSettle();
 
-    // Home -> Playlists -> Libraries -> Search. The Movies row stays out of D-pad order
+    // Home -> Search -> Playlists -> Libraries -> Downloads. The Movies row stays out of D-pad order
     // while the rail is collapsed, so DOWN lands on the next real row.
+    await _press(tester, LogicalKeyboardKey.arrowDown);
     await _press(tester, LogicalKeyboardKey.arrowDown);
     await _press(tester, LogicalKeyboardKey.arrowDown);
     await _press(tester, LogicalKeyboardKey.arrowDown);
     await _press(tester, LogicalKeyboardKey.enter);
 
-    expect(selectedTab, NavigationTabId.search);
+    expect(selectedTab, NavigationTabId.downloads);
   });
 
   testWidgets('hover expands the rail as an overlay and collapses on exit', (tester) async {
@@ -679,6 +681,7 @@ void main() {
     expect(tester.getSize(rail).width, SideNavigationRailState.expandedWidth);
 
     await gesture.moveTo(tester.getBottomRight(rail) + const Offset(100, -10));
+    await tester.pump(const Duration(milliseconds: 200));
     await tester.pumpAndSettle();
 
     expect(tester.getSize(rail).width, SideNavigationRailState.collapsedWidth);
@@ -709,6 +712,7 @@ void main() {
     expect(scrimReports.last, isTrue);
 
     await gesture.moveTo(tester.getBottomRight(rail) + const Offset(100, -10));
+    await tester.pump(const Duration(milliseconds: 200));
     await tester.pumpAndSettle();
     expect(scrimReports.last, isFalse);
   });
@@ -739,6 +743,7 @@ void main() {
     expect(_railSurfaceOpacity(tester).opacity, 1.0);
 
     await gesture.moveTo(tester.getBottomRight(rail) + const Offset(100, -10));
+    await tester.pump(const Duration(milliseconds: 200));
     await tester.pumpAndSettle();
 
     expect(tester.getSize(rail).width, SideNavigationRailState.tvCollapsedWidth);
@@ -903,8 +908,8 @@ void main() {
     sideNavKey.currentState!.focusActiveItem();
     await tester.pumpAndSettle();
 
-    // Home -> Playlists -> Libraries -> Server A header -> visible A -> Server B header -> visible B -> Hidden Libraries.
-    for (var i = 0; i < 7; i++) {
+    // Home -> Search -> Playlists -> Libraries -> Server A header -> visible A -> Server B header -> visible B -> Hidden Libraries.
+    for (var i = 0; i < 8; i++) {
       await _press(tester, LogicalKeyboardKey.arrowDown);
     }
     await _press(tester, LogicalKeyboardKey.enter);
@@ -1104,5 +1109,62 @@ void main() {
     expect(find.byIcon(Symbols.visibility_off_rounded), findsNothing);
     expect(find.text('Secret NSFW'), findsNothing);
     expect(find.text('Movies'), findsOneWidget);
+  });
+
+  testWidgets('offline servers remain visible in the sidebar with offline indicator', (tester) async {
+    await SettingsService.getInstance();
+    await SettingsService.instance.write(SettingsService.groupLibrariesByServer, true);
+
+    final onlineLibrary = _library(
+      id: '1',
+      title: 'Online Movies',
+      serverId: ServerId('online-plex'),
+      serverName: 'Plex Main',
+    );
+
+    final librariesProvider = LibrariesProvider();
+    await librariesProvider.updateLibraryOrder([onlineLibrary]);
+    addTearDown(librariesProvider.dispose);
+
+    final hiddenLibrariesProvider = HiddenLibrariesProvider();
+    await hiddenLibrariesProvider.ensureInitialized();
+    addTearDown(hiddenLibrariesProvider.dispose);
+
+    final manager = MultiServerManager();
+    final multiServerProvider = testMultiServerProvider(manager);
+    multiServerProvider.setExpectedVisibleServerIds({'online-plex', 'offline-jf'});
+    addTearDown(multiServerProvider.dispose);
+
+    await tester.pumpWidget(
+      TranslationProvider(
+        child: MultiProvider(
+          providers: [
+            ChangeNotifierProvider<LibrariesProvider>.value(value: librariesProvider),
+            ChangeNotifierProvider<HiddenLibrariesProvider>.value(value: hiddenLibrariesProvider),
+            ChangeNotifierProvider<MultiServerProvider>.value(value: multiServerProvider),
+          ],
+          child: MaterialApp(
+            theme: ThemeData(extensions: const [testMonoTokens]),
+            home: Scaffold(
+              body: SideNavigationRail(
+                selectedTab: NavigationTabId.discover,
+                alwaysExpanded: true,
+                onDestinationSelected: (_) {},
+                onLibrarySelected: (_) {},
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    // Both servers are visible in the sidebar
+    expect(find.text('Plex Main'), findsOneWidget);
+    expect(find.text('offline-jf'), findsOneWidget);
+    // Offline indicator appears for the unreachable server (header badge + child item)
+    expect(find.text(t.common.offline), findsNWidgets(2));
+    // Online library is present
+    expect(find.text('Online Movies'), findsOneWidget);
   });
 }

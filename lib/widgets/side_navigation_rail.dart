@@ -29,6 +29,7 @@ import '../utils/scroll_utils.dart';
 import '../utils/library_grouping.dart';
 import 'music/equalizer_icon.dart';
 import '../providers/multi_server_provider.dart';
+import '../services/multi_server_manager.dart';
 import '../services/fullscreen_state_manager.dart';
 import '../theme/mono_tokens.dart';
 import '../widgets/backend_badge.dart';
@@ -45,8 +46,21 @@ sealed class _LibraryNavRow {
 final class _LibraryServerHeaderRow extends _LibraryNavRow {
   final String serverId;
   final String serverName;
+  final bool isOnline;
 
-  const _LibraryServerHeaderRow({required super.section, required this.serverId, required this.serverName});
+  const _LibraryServerHeaderRow({
+    required super.section,
+    required this.serverId,
+    required this.serverName,
+    this.isOnline = true,
+  });
+}
+
+final class _LibraryOfflineServerRow extends _LibraryNavRow {
+  final String serverId;
+  final String serverName;
+
+  const _LibraryOfflineServerRow({required super.section, required this.serverId, required this.serverName});
 }
 
 final class _LibraryItemRow extends _LibraryNavRow {
@@ -676,6 +690,8 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
   String _focusKeyForLibraryRow(_LibraryNavRow row) => switch (row) {
     _LibraryServerHeaderRow(:final section, :final serverId) => _serverHeaderFocusKey(section, ServerId(serverId)),
     _LibraryItemRow(:final section, :final library) => _libraryItemFocusKey(section, library),
+    _LibraryOfflineServerRow(:final section, :final serverId) =>
+      '$_kLibraryItemPrefix:${section.name}:offline:$serverId',
   };
 
   Iterable<String> _focusKeysForLibraryRows(List<_LibraryNavRow> rows) => rows.map(_focusKeyForLibraryRow);
@@ -713,35 +729,90 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
     List<MediaLibrary> libs, {
     required _LibraryNavSection section,
     required bool showServerHeaders,
+    required Set<String> expectedServerIds,
+    required MultiServerManager serverManager,
   }) {
     if (!showServerHeaders) {
       final nonUniqueNames = _getNonUniqueLibraryNames(libs);
-      return libs.map((lib) {
-        return _LibraryItemRow(
-          section: section,
-          library: lib,
-          showServerName: nonUniqueNames.contains(lib.title) && lib.serverName != null,
-        );
-      }).toList();
-    }
-    final grouped = groupLibrariesByFirstAppearance(libs);
-    final result = <_LibraryNavRow>[];
-    for (final serverKey in grouped.serverOrder) {
-      final bucket = grouped.byServer[serverKey]!;
-      if (serverKey.isNotEmpty) {
-        result.add(
-          _LibraryServerHeaderRow(
+      final sortedLibs = List<MediaLibrary>.from(libs)
+        ..sort((a, b) {
+          final serverIdA = a.serverId ?? '';
+          final serverIdB = b.serverId ?? '';
+          if (serverIdA != serverIdB) {
+            final backendA = serverManager.serverBackend(ServerId(serverIdA))?.index ?? 99;
+            final backendB = serverManager.serverBackend(ServerId(serverIdB))?.index ?? 99;
+            if (backendA != backendB) return backendA.compareTo(backendB);
+
+            final sNameA = (a.serverName ?? serverManager.serverDisplayName(ServerId(serverIdA))).toLowerCase();
+            final sNameB = (b.serverName ?? serverManager.serverDisplayName(ServerId(serverIdB))).toLowerCase();
+            final sCompare = sNameA.compareTo(sNameB);
+            if (sCompare != 0) return sCompare;
+          }
+          return 0;
+        });
+
+      final rows = <_LibraryNavRow>[];
+      for (final lib in sortedLibs) {
+        rows.add(
+          _LibraryItemRow(
             section: section,
-            serverId: serverKey,
-            serverName: bucket.first.serverName ?? serverKey,
+            library: lib,
+            showServerName: nonUniqueNames.contains(lib.title) && lib.serverName != null,
           ),
         );
       }
-      final isCollapsed = serverKey.isNotEmpty &&
-          _isServerGroupCollapsed(section, ServerId(serverKey));
+
+      if (section == _LibraryNavSection.visible) {
+        final offlineServerIds = expectedServerIds.where((id) => !serverManager.isServerOnline(ServerId(id))).toList()
+          ..sort((a, b) {
+            final backendA = serverManager.serverBackend(ServerId(a))?.index ?? 99;
+            final backendB = serverManager.serverBackend(ServerId(b))?.index ?? 99;
+            if (backendA != backendB) return backendA.compareTo(backendB);
+            return serverManager
+                .serverDisplayName(ServerId(a))
+                .toLowerCase()
+                .compareTo(serverManager.serverDisplayName(ServerId(b)).toLowerCase());
+          });
+        for (final offlineId in offlineServerIds) {
+          rows.add(
+            _LibraryOfflineServerRow(
+              section: section,
+              serverId: offlineId,
+              serverName: serverManager.serverDisplayName(ServerId(offlineId)),
+            ),
+          );
+        }
+      }
+
+      return rows;
+    }
+
+    final grouped = groupLibrariesDeterministically(
+      libs,
+      serverManager: serverManager,
+      extraServerIds: section == _LibraryNavSection.visible ? expectedServerIds : null,
+    );
+    final result = <_LibraryNavRow>[];
+    for (final serverKey in grouped.serverOrder) {
+      final bucket = grouped.byServer[serverKey]!;
+      final isOnline = serverKey.isEmpty || serverManager.isServerOnline(ServerId(serverKey));
+      final serverName = serverKey.isNotEmpty
+          ? (bucket.firstOrNull?.serverName ?? serverManager.serverDisplayName(ServerId(serverKey)))
+          : '';
+
+      if (serverKey.isNotEmpty) {
+        result.add(
+          _LibraryServerHeaderRow(section: section, serverId: serverKey, serverName: serverName, isOnline: isOnline),
+        );
+      }
+      final isCollapsed = serverKey.isNotEmpty && _isServerGroupCollapsed(section, ServerId(serverKey));
       if (!isCollapsed) {
-        for (final lib in bucket) {
-          result.add(_LibraryItemRow(section: section, library: lib));
+        if (bucket.isNotEmpty) {
+          for (final lib in bucket) {
+            result.add(_LibraryItemRow(section: section, library: lib));
+          }
+        } else if (!isOnline && serverKey.isNotEmpty) {
+          result.add(_LibraryOfflineServerRow(section: section, serverId: serverKey, serverName: serverName));
         }
       }
     }
@@ -752,12 +823,15 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
     List<MediaLibrary> visibleLibraries,
     List<MediaLibrary> hiddenLibraries, {
     required bool showServerHeaders,
+    Set<String>? expectedServerIds,
   }) {
     if (!showServerHeaders) return {};
 
     return {
       for (final lib in visibleLibraries)
         if (lib.serverId != null) _serverGroupStateKey(_LibraryNavSection.visible, ServerId(lib.serverId!)),
+      if (expectedServerIds != null)
+        for (final id in expectedServerIds) _serverGroupStateKey(_LibraryNavSection.visible, ServerId(id)),
       for (final lib in hiddenLibraries)
         if (lib.serverId != null) _serverGroupStateKey(_LibraryNavSection.hidden, ServerId(lib.serverId!)),
     };
@@ -777,6 +851,7 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
       if (widget.isOfflineMode && widget.onReconnect != null) _kReconnect,
       if (!widget.isOfflineMode) ...[
         _kHome,
+        _kSearch,
         _kPlaylists,
         if (hasNowPlaying) _kNowPlaying,
         _kLibraries,
@@ -792,7 +867,6 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
         ],
         if (hasLiveTv) 'liveTv',
         if (hasExplore) _kExplore,
-        _kSearch,
       ],
       if (_showDownloads) _kDownloads,
       _kSettings,
@@ -894,7 +968,10 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
     final isCollapsed = !_shouldExpand;
     final effectiveCollapsedWidth = collapsedWidthForContext(context);
     final horizontalPadding = horizontalPaddingForContext(context, isCollapsed: isCollapsed);
-    final hasLiveTv = context.watch<MultiServerProvider>().hasLiveTv;
+    final multiServer = context.watch<MultiServerProvider>();
+    final hasLiveTv = multiServer.hasLiveTv;
+    final expectedServerIds = multiServer.expectedServerIds.toSet();
+    final allKnownServerIds = {...expectedServerIds, ...serverIds};
     // Nullable watch: rail tests (and any host without the profile session
     // scope) simply never show the Explore item.
     final hasExploreSource = context.watch<CatalogSourcesProvider?>()?.hasAnySource ?? false;
@@ -928,19 +1005,28 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
         }
         _lastCollapseByDefault = collapseByDefault;
 
-        final showServerHeaders = serverIds.length > 1 && groupByServerSetting;
+        final showServerHeaders = allKnownServerIds.length > 1 && groupByServerSetting;
         _userToggledServerGroupKeys.retainAll(
-          _buildServerGroupStateKeys(visibleLibraries, hiddenLibraries, showServerHeaders: showServerHeaders),
+          _buildServerGroupStateKeys(
+            visibleLibraries,
+            hiddenLibraries,
+            showServerHeaders: showServerHeaders,
+            expectedServerIds: expectedServerIds,
+          ),
         );
         final visibleRows = _buildLibraryRows(
           visibleLibraries,
           section: _LibraryNavSection.visible,
           showServerHeaders: showServerHeaders,
+          expectedServerIds: expectedServerIds,
+          serverManager: multiServer.serverManager,
         );
         final hiddenRows = _buildLibraryRows(
           hiddenLibraries,
           section: _LibraryNavSection.hidden,
           showServerHeaders: showServerHeaders,
+          expectedServerIds: const {},
+          serverManager: multiServer.serverManager,
         );
         final effectiveHasHiddenLibraries = hiddenLibraries.isNotEmpty && showHiddenLibraries;
         _focusTracker.pruneExcept(
@@ -1053,6 +1139,16 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
                                       ),
                                       const SizedBox(height: _itemGap),
                                       _buildNavItem(
+                                        icon: Symbols.search_rounded,
+                                        selectedIcon: Symbols.search_rounded,
+                                        label: Translations.of(context).common.search,
+                                        isSelected: widget.selectedTab == NavigationTabId.search,
+                                        onTap: () => widget.onDestinationSelected(NavigationTabId.search),
+                                        focusNode: _focusTracker.get(_kSearch),
+                                        isCollapsed: isCollapsed,
+                                      ),
+                                      const SizedBox(height: _itemGap),
+                                      _buildNavItem(
                                         icon: Symbols.playlist_play_rounded,
                                         selectedIcon: Symbols.playlist_play_rounded,
                                         label: Translations.of(context).playlists.title,
@@ -1099,16 +1195,6 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
                                         ),
                                         const SizedBox(height: _itemGap),
                                       ],
-                                      _buildNavItem(
-                                        icon: Symbols.search_rounded,
-                                        selectedIcon: Symbols.search_rounded,
-                                        label: Translations.of(context).common.search,
-                                        isSelected: widget.selectedTab == NavigationTabId.search,
-                                        onTap: () => widget.onDestinationSelected(NavigationTabId.search),
-                                        focusNode: _focusTracker.get(_kSearch),
-                                        isCollapsed: isCollapsed,
-                                      ),
-                                      const SizedBox(height: _itemGap),
                                     ],
                                     // Downloads (hidden on Apple TV — no user
                                     // file storage)
@@ -1409,39 +1495,84 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
       crossAxisAlignment: .start,
       children: rows.map((row) {
         return switch (row) {
-          _LibraryServerHeaderRow(:final section, :final serverId, :final serverName) => _buildServerHeader(
-            section,
-            ServerId(serverId),
-            serverName,
-            t,
-          ),
+          _LibraryServerHeaderRow(:final section, :final serverId, :final serverName, :final isOnline) =>
+            _buildServerHeader(section, ServerId(serverId), serverName, t, isOnline: isOnline),
           _LibraryItemRow(:final section, :final library, :final showServerName) => _buildLibraryItem(
             section,
             library,
             t,
             showServerName: showServerName,
           ),
+          _LibraryOfflineServerRow(:final section, :final serverId, :final serverName) => _buildOfflineServerItem(
+            section,
+            ServerId(serverId),
+            serverName,
+            t,
+          ),
         };
       }).toList(),
     );
   }
 
-  Widget _buildServerHeader(_LibraryNavSection section, ServerId serverId, String serverName, dynamic t) {
+  Widget _buildServerHeader(
+    _LibraryNavSection section,
+    ServerId serverId,
+    String serverName,
+    dynamic t, {
+    bool isOnline = true,
+  }) {
     // Resolve backend per server so the badge matches the brand. Falls back
     // to the generic `dns` icon if the client isn't registered yet (rare —
     // can happen during a profile switch before the manager rehydrates).
-    final backend = context.read<MultiServerProvider>().serverManager.getClient(serverId)?.backend;
+    final serverManager = context.read<MultiServerProvider>().serverManager;
+    final backend = serverManager.serverBackend(serverId);
     return _buildCollapsibleHeader(
       focusKey: _serverHeaderFocusKey(section, serverId),
       icon: Symbols.dns_rounded,
       iconSize: 14,
-      leading: backend == null ? null : BackendBadge(backend: backend, size: 14, color: t.textMuted),
+      leading: backend == null
+          ? null
+          : BackendBadge(
+              backend: backend,
+              size: 14,
+              color: isOnline ? t.textMuted : t.textMuted.withValues(alpha: 0.4),
+            ),
       label: serverName,
-      labelStyle: TextStyle(fontSize: 11, fontWeight: .w600, letterSpacing: 0.4, color: t.textMuted),
+      labelStyle: TextStyle(
+        fontSize: 11,
+        fontWeight: .w600,
+        letterSpacing: 0.4,
+        color: isOnline ? t.textMuted : t.textMuted.withValues(alpha: 0.5),
+      ),
+      isOnline: isOnline,
       verticalPadding: 6,
       isExpanded: !_isServerGroupCollapsed(section, serverId),
       onToggle: () => _toggleServerCollapse(section, serverId),
       t: t,
+    );
+  }
+
+  Widget _buildOfflineServerItem(_LibraryNavSection section, ServerId serverId, String serverName, dynamic t) {
+    final focusKey = '$_kLibraryItemPrefix:${section.name}:offline:$serverId';
+    final focusNode = _focusTracker.get(focusKey);
+
+    return NavigationRailItem(
+      icon: Symbols.cloud_off_rounded,
+      selectedIcon: Symbols.cloud_off_rounded,
+      label: Text(
+        '${Translations.of(context).common.offline} · ${Translations.of(context).common.retry}',
+        style: TextStyle(fontSize: 12, color: t.textMuted.withValues(alpha: 0.6), fontStyle: FontStyle.italic),
+        overflow: TextOverflow.ellipsis,
+      ),
+      isSelected: false,
+      onTap: () {
+        unawaited(context.read<MultiServerProvider>().serverManager.reconnectOfflineServers());
+      },
+      focusNode: focusNode,
+      iconSize: 16,
+      expandedHeight: 36,
+      suppressSelectedBackground: true,
+      onNavigateRight: widget.onNavigateToContent,
     );
   }
 
@@ -1479,6 +1610,7 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
     required bool isExpanded,
     required VoidCallback onToggle,
     required dynamic t,
+    bool isOnline = true,
   }) {
     final focusNode = _focusTracker.get(focusKey);
     final radius = BorderRadius.circular(MonoTokens.radiusFull);
@@ -1519,6 +1651,20 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
                         Expanded(
                           child: Text(label, style: labelStyle, overflow: .ellipsis),
                         ),
+                        if (!isOnline) ...[
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
+                            decoration: BoxDecoration(
+                              color: Colors.red.withValues(alpha: 0.15),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: Text(
+                              Translations.of(context).common.offline,
+                              style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w600, color: Colors.redAccent),
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                        ],
                         AppIcon(
                           isExpanded ? Symbols.expand_less_rounded : Symbols.expand_more_rounded,
                           fill: 1,

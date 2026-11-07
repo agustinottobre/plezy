@@ -94,6 +94,7 @@
     "episodeNumberTitle": "Episode ${number} - ${title}",
     "chapterNumber": "Chapter ${number}",
     "reconnect": "Reconnect",
+    "offline": "Offline",
     "viewAll": "View All",
     "checkingNetwork": "Checking network...",
     "loadingServers": "Loading servers...",
