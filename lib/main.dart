@@ -17,6 +17,9 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'connection/connection.dart';
 import 'connection/connection_bootstrap.dart';
 import 'connection/connection_registry.dart';
+import 'media/ids.dart';
+import 'media/media_backend.dart';
+import 'widgets/backend_badge.dart';
 import 'navigation/profile_navigation_scope.dart';
 import 'navigation/profile_session_screen.dart';
 import 'profiles/active_profile_binder.dart';
@@ -2139,12 +2142,134 @@ class SetupScreen extends StatefulWidget {
   State<SetupScreen> createState() => _SetupScreenState();
 }
 
+@visibleForTesting
+class StartupServerEntry {
+  final String serverId;
+  final String name;
+  final MediaBackend backend;
+  bool? connected;
+
+  StartupServerEntry({required this.serverId, required this.name, required this.backend, this.connected});
+}
+
+@visibleForTesting
+Widget buildStartupServerCard(BuildContext context, StartupServerEntry entry) {
+  final textTheme = Theme.of(context).textTheme;
+  final dimColor = Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6);
+  const successColor = Color(0xFF4CAF50);
+  const failColor = Color(0xFFEF5350);
+
+  final Widget statusIcon;
+  if (entry.connected == null) {
+    statusIcon = AppIcon(Symbols.circle_rounded, size: 12, color: dimColor);
+  } else if (entry.connected!) {
+    statusIcon = const AppIcon(Symbols.check_circle_rounded, size: 15, color: successColor);
+  } else {
+    statusIcon = const AppIcon(Symbols.cancel_rounded, size: 15, color: failColor);
+  }
+
+  return Container(
+    key: ValueKey(entry.serverId),
+    constraints: const BoxConstraints(minWidth: 140, maxWidth: 220),
+    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+    decoration: BoxDecoration(
+      color: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.35),
+      borderRadius: BorderRadius.circular(8),
+      border: Border.all(
+        color: entry.connected == false
+            ? failColor.withValues(alpha: 0.5)
+            : Theme.of(context).colorScheme.outlineVariant.withValues(alpha: 0.25),
+        width: 1,
+      ),
+    ),
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        statusIcon,
+        const SizedBox(width: 8),
+        BackendBadge(backend: entry.backend, size: 14, color: dimColor),
+        const SizedBox(width: 6),
+        Flexible(
+          child: Text(
+            entry.name,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            style: textTheme.bodySmall?.copyWith(
+              color: entry.connected == false ? failColor.withValues(alpha: 0.9) : dimColor,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+@visibleForTesting
+Widget buildStartupServerStatusList(BuildContext context, Map<String, StartupServerEntry> servers) {
+  if (servers.isEmpty) return const SizedBox.shrink();
+  final textTheme = Theme.of(context).textTheme;
+  final dimColor = Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6);
+
+  final byBackend = <MediaBackend, List<StartupServerEntry>>{};
+  for (final entry in servers.values) {
+    byBackend.putIfAbsent(entry.backend, () => []).add(entry);
+  }
+
+  final sortedBackends = byBackend.keys.toList()..sort((a, b) => a.index.compareTo(b.index));
+  for (final list in byBackend.values) {
+    list.sort((a, b) {
+      final nameComp = a.name.toLowerCase().compareTo(b.name.toLowerCase());
+      if (nameComp != 0) return nameComp;
+      return a.serverId.compareTo(b.serverId);
+    });
+  }
+
+  if (byBackend.length > 1) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        for (final backend in sortedBackends) ...[
+          Padding(
+            padding: const EdgeInsets.only(top: 10, bottom: 6),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                BackendBadge(backend: backend, size: 14, color: dimColor),
+                const SizedBox(width: 6),
+                Text(
+                  '${backend.displayName} (${byBackend[backend]!.length})',
+                  style: textTheme.labelMedium?.copyWith(color: dimColor, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+          Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 8,
+            runSpacing: 8,
+            children: byBackend[backend]!.map((entry) => buildStartupServerCard(context, entry)).toList(),
+          ),
+        ],
+      ],
+    );
+  }
+
+  return Wrap(
+    alignment: WrapAlignment.center,
+    spacing: 8,
+    runSpacing: 8,
+    children: byBackend.values.first.map((entry) => buildStartupServerCard(context, entry)).toList(),
+  );
+}
+
 class _SetupScreenState extends State<SetupScreen> with MountedSetStateMixin {
   String _statusMessage = '';
   bool _enteringOffline = false;
 
-  // Per-server connection status: serverId -> (name, connected?)
-  final Map<String, (String name, bool? connected)> _serverStatus = {};
+  // Per-server connection status: serverId -> StartupServerEntry
+  final Map<String, StartupServerEntry> _serverStatus = {};
 
   @override
   void initState() {
@@ -2292,10 +2417,20 @@ class _SetupScreenState extends State<SetupScreen> with MountedSetStateMixin {
         for (final conn in allConnections) {
           if (conn is PlexAccountConnection) {
             for (final s in conn.servers) {
-              _serverStatus[s.clientIdentifier] = (s.name, null);
+              _serverStatus[s.clientIdentifier] = StartupServerEntry(
+                serverId: s.clientIdentifier,
+                name: s.name,
+                backend: MediaBackend.plex,
+                connected: null,
+              );
             }
           } else if (conn is JellyfinConnection) {
-            _serverStatus[conn.serverMachineId] = (conn.serverName, null);
+            _serverStatus[conn.serverMachineId] = StartupServerEntry(
+              serverId: conn.serverMachineId,
+              name: conn.serverName,
+              backend: conn.kind,
+              connected: null,
+            );
           }
         }
       });
@@ -2392,6 +2527,26 @@ class _SetupScreenState extends State<SetupScreen> with MountedSetStateMixin {
       }
       AndroidExitDiagnostics.markStartupPhase(AndroidStartupPhase.bindingSettled);
 
+      if (mounted) {
+        final manager = _serverManagerFromContext();
+        final multiServer = context.read<MultiServerProvider>();
+        setState(() {
+          for (final id in multiServer.expectedServerIds) {
+            if (!_serverStatus.containsKey(id)) {
+              _serverStatus[id] = StartupServerEntry(
+                serverId: id,
+                name: manager.serverDisplayName(ServerId(id)),
+                backend: manager.serverBackend(ServerId(id)) ?? MediaBackend.plex,
+                connected: manager.isServerOnline(ServerId(id)),
+              );
+            }
+          }
+          for (final entry in _serverStatus.values) {
+            entry.connected ??= manager.isServerOnline(ServerId(entry.serverId));
+          }
+        });
+      }
+
       if (shouldEnterOfflineModeAfterStartupBind(
         bindingSucceeded: bindingSucceeded,
         hasOnlineServers: _serverManagerFromContext().onlineServerIds.isNotEmpty,
@@ -2436,10 +2591,20 @@ class _SetupScreenState extends State<SetupScreen> with MountedSetStateMixin {
     final manager = _serverManagerFromContext();
     _connectProgressSub = manager.connectProgressStream.listen((progress) {
       if (!mounted) return;
-      final existing = _serverStatus[progress.serverId];
-      if (existing == null) return;
       setState(() {
-        _serverStatus[progress.serverId] = (existing.$1, progress.online);
+        final existing = _serverStatus[progress.serverId];
+        if (existing != null) {
+          existing.connected = progress.online;
+        } else {
+          final name = manager.serverDisplayName(ServerId(progress.serverId));
+          final backend = manager.serverBackend(ServerId(progress.serverId)) ?? MediaBackend.plex;
+          _serverStatus[progress.serverId] = StartupServerEntry(
+            serverId: progress.serverId,
+            name: name,
+            backend: backend,
+            connected: progress.online,
+          );
+        }
       });
     });
     _statusSub = manager.statusStream.listen((status) {
@@ -2448,7 +2613,16 @@ class _SetupScreenState extends State<SetupScreen> with MountedSetStateMixin {
         for (final entry in status.entries) {
           final existing = _serverStatus[entry.key];
           if (existing != null) {
-            _serverStatus[entry.key] = (existing.$1, entry.value);
+            existing.connected = entry.value;
+          } else {
+            final name = manager.serverDisplayName(ServerId(entry.key));
+            final backend = manager.serverBackend(ServerId(entry.key)) ?? MediaBackend.plex;
+            _serverStatus[entry.key] = StartupServerEntry(
+              serverId: entry.key,
+              name: name,
+              backend: backend,
+              connected: entry.value,
+            );
           }
         }
       });
@@ -2478,98 +2652,47 @@ class _SetupScreenState extends State<SetupScreen> with MountedSetStateMixin {
     );
   }
 
-  Widget _buildServerStatusList(BuildContext context) {
-    if (_serverStatus.isEmpty) return const SizedBox.shrink();
-    final textTheme = Theme.of(context).textTheme;
-    final dimColor = Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5);
-    const successColor = Color(0xFF4CAF50);
-    const failColor = Color(0xFFEF5350);
-
-    return Column(
-      mainAxisSize: .min,
-      children: _serverStatus.entries.map((entry) {
-        final (name, connected) = entry.value;
-        final Widget statusIcon;
-        if (connected == null) {
-          statusIcon = AppIcon(Symbols.circle_rounded, size: 10, color: dimColor);
-        } else if (connected) {
-          statusIcon = const AppIcon(Symbols.check_circle_rounded, size: 14, color: successColor);
-        } else {
-          statusIcon = const AppIcon(Symbols.cancel_rounded, size: 14, color: failColor);
-        }
-        return Padding(
-          key: ValueKey(entry.key),
-          padding: const EdgeInsets.symmetric(vertical: 2),
-          child: Row(
-            mainAxisSize: .min,
-            children: [
-              statusIcon,
-              const SizedBox(width: 8),
-              Text(name, style: textTheme.bodySmall?.copyWith(color: dimColor)),
-            ],
-          ),
-        );
-      }).toList(),
-    );
-  }
+  Widget _buildServerStatusList(BuildContext context) => buildStartupServerStatusList(context, _serverStatus);
 
   @override
   Widget build(BuildContext context) {
     const coralColor = Color(0xFFE5A00D);
-    final height = MediaQuery.sizeOf(context).height;
-    // The stacked layout below hangs its two rows off fixed ±170/180 offsets from the middle, which
-    // needs roughly 700 logical pixels of height. A car at a large interface scale — and a phone in
-    // landscape — has less than that, and the rows would collide or fall outside the Stack's clip.
-    if (height < 700) {
-      return ColoredBox(
-        color: Theme.of(context).scaffoldBackgroundColor,
-        child: SafeArea(
-          child: Center(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(vertical: 16),
+    final size = MediaQuery.sizeOf(context);
+    final height = size.height;
+    final serverCount = _serverStatus.length;
+    final double logoSize = height < 600 || serverCount > 8 ? 100 : (height < 750 || serverCount > 4 ? 140 : 200);
+
+    return ColoredBox(
+      color: Theme.of(context).scaffoldBackgroundColor,
+      child: SafeArea(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 860),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
               child: Column(
-                mainAxisSize: MainAxisSize.min,
                 children: [
-                  SvgPicture.asset('assets/plezy_adaptive_foreground.svg', width: 160, height: 160),
+                  SvgPicture.asset('assets/plezy_adaptive_foreground.svg', width: logoSize, height: logoSize),
                   _buildStatusText(context),
                   const SizedBox(height: 16),
-                  Center(
-                    child: _serverStatus.isEmpty
-                        ? const SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(strokeWidth: 2, color: coralColor),
-                          )
-                        : _buildServerStatusList(context),
+                  Expanded(
+                    child: Center(
+                      child: SingleChildScrollView(
+                        child: _serverStatus.isEmpty
+                            ? const SizedBox(
+                                width: 24,
+                                height: 24,
+                                child: CircularProgressIndicator(strokeWidth: 2, color: coralColor),
+                              )
+                            : _buildServerStatusList(context),
+                      ),
+                    ),
                   ),
                 ],
               ),
             ),
           ),
         ),
-      );
-    }
-    return ColoredBox(
-      color: Theme.of(context).scaffoldBackgroundColor,
-      child: Stack(
-        children: [
-          Center(child: SvgPicture.asset('assets/plezy_adaptive_foreground.svg', width: 288, height: 288)),
-          Positioned(left: 0, right: 0, bottom: height * 0.5 - 170, child: _buildStatusText(context)),
-          Positioned(
-            left: 0,
-            right: 0,
-            top: height * 0.5 + 180,
-            child: Center(
-              child: _serverStatus.isEmpty
-                  ? const SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2, color: coralColor),
-                    )
-                  : _buildServerStatusList(context),
-            ),
-          ),
-        ],
       ),
     );
   }

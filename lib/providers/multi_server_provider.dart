@@ -1,6 +1,7 @@
 import 'dart:async';
 import '../exceptions/media_server_exceptions.dart';
 import '../media/ids.dart';
+import '../media/media_backend.dart';
 
 import 'package:flutter/foundation.dart';
 
@@ -192,6 +193,12 @@ class MultiServerProvider extends ChangeNotifier with DisposableChangeNotifierMi
   MediaServerClient? getClientForServer(ServerId serverId) {
     return _serverManager.getClient(serverId);
   }
+
+  /// Get the backend type for a server (Plex, Jellyfin, Emby).
+  MediaBackend? serverBackend(ServerId serverId) => _serverManager.serverBackend(serverId);
+
+  /// Get the display name for a server.
+  String serverDisplayName(ServerId serverId) => _serverManager.serverDisplayName(serverId);
 
   /// Get the [PlexClient] for a server, or `null` if the server is Jellyfin
   /// (or not registered). Use for Plex-only flows that don't yet have a

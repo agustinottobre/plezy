@@ -38,7 +38,7 @@ List<T> buildLibraryServerEntries<T>(
         .toList();
   }
 
-  final grouped = groupLibrariesByFirstAppearance(libraries);
+  final grouped = groupLibrariesDeterministically(libraries);
   final entries = <T>[];
   for (final serverKey in grouped.serverOrder) {
     final bucket = grouped.byServer[serverKey]!;
